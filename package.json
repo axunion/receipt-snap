@@ -1,0 +1,29 @@
+{
+	"name": "receipt-snap",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc -b && vite build",
+		"preview": "vite preview",
+		"format": "biome format ./src",
+		"format:write": "biome format --write ./src",
+		"lint": "biome lint ./src",
+		"lint:write": "biome lint --write ./src",
+		"check": "biome check ./src",
+		"check:write": "biome check --write ./src",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"dependencies": {
+		"@tailwindcss/vite": "^4.1.8",
+		"solid-js": "^1.9.5",
+		"tailwindcss": "^4.1.8"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"typescript": "~5.8.3",
+		"vite": "^6.3.5",
+		"vite-plugin-solid": "^2.11.6"
+	}
+}
