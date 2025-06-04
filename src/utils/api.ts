@@ -1,16 +1,25 @@
-import type { ExpenseRequest, ExpenseResponse } from "../types/expense";
+import type { ExpenseRequest, ExpenseResponse } from "@/types/expense";
 
 /**
- * 経費申請をAPIに送信する関数
+ * 経費申請をAPIに送信する関数（モック機能付き）
  * @param expenseData 経費申請データ
  * @returns Promise<ExpenseResponse>
  */
 export async function submitExpense(
 	expenseData: ExpenseRequest,
 ): Promise<ExpenseResponse> {
-	const formData = new FormData();
+	// 開発環境ではモックレスポンスを返す
+	if (import.meta.env.DEV) {
+		await new Promise((resolve) => setTimeout(resolve, 1500));
+		return {
+			id: `exp_${Date.now()}`,
+			status: "success",
+			message: "経費申請が正常に送信されました",
+			submittedAt: new Date().toISOString(),
+		};
+	}
 
-	// フォームデータを構築
+	const formData = new FormData();
 	formData.append("name", expenseData.name);
 	formData.append("amount", expenseData.amount.toString());
 	formData.append("date", expenseData.date);
@@ -32,8 +41,7 @@ export async function submitExpense(
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 
-		const result: ExpenseResponse = await response.json();
-		return result;
+		return await response.json();
 	} catch (error) {
 		console.error("API呼び出しエラー:", error);
 		throw new Error("経費申請の送信に失敗しました");
@@ -76,16 +84,4 @@ export function validateImageFile(file: File): {
  */
 export function formatDateForInput(date: Date): string {
 	return date.toISOString().split("T")[0];
-}
-
-/**
- * 金額フォーマット関数
- * @param amount 金額
- * @returns 日本円フォーマットの文字列
- */
-export function formatCurrency(amount: number): string {
-	return new Intl.NumberFormat("ja-JP", {
-		style: "currency",
-		currency: "JPY",
-	}).format(amount);
 }

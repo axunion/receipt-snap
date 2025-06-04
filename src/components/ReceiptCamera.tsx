@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
-import { validateImageFile } from "../utils/api";
-import { Button } from "./Button";
-import { Label } from "./Label";
+import { validateImageFile } from "@/utils/api";
+import { Button } from "@/components/Button";
+import { Label } from "@/components/Label";
 
 interface ReceiptCameraProps {
 	onImageCapture: (file: File) => void;
@@ -67,8 +67,8 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 
 			{/* エラーメッセージ */}
 			{error() && (
-				<div class="p-3 bg-red-50 border border-red-200 rounded-lg">
-					<p class="text-sm text-red-800">{error()}</p>
+				<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+					<p class="text-sm font-medium text-red-800">{error()}</p>
 				</div>
 			)}
 
@@ -78,7 +78,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 						<img
 							src={imagePreview()}
 							alt="レシートプレビュー"
-							class="w-full max-w-sm mx-auto rounded-lg border border-gray-200"
+							class="w-full max-w-sm mx-auto rounded-lg border border-slate-200 shadow-sm"
 						/>
 					</div>
 					<div class="flex gap-2 justify-center">
@@ -91,9 +91,9 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 					</div>
 				</div>
 			) : (
-				<div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-					<div class="space-y-3">
-						<div class="mx-auto h-12 w-12 text-gray-400">
+				<div class="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center bg-slate-50/30">
+					<div class="space-y-4">
+						<div class="mx-auto h-12 w-12 text-slate-400">
 							<svg
 								fill="none"
 								viewBox="0 0 24 24"
@@ -115,7 +115,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 							</svg>
 						</div>
 						<div>
-							<p class="text-sm text-gray-600 mb-3">
+							<p class="text-sm text-slate-600 mb-4 font-medium">
 								レシートを撮影してください
 							</p>
 							<Button onClick={openCamera}>カメラを起動</Button>

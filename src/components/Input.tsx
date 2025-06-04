@@ -16,7 +16,7 @@ interface InputProps {
 
 export function Input(props: InputProps) {
 	const baseClasses =
-		"w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-100 disabled:cursor-not-allowed";
+		"w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-500 disabled:bg-slate-50 disabled:cursor-not-allowed transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300";
 
 	return (
 		<input

@@ -1,5 +1,14 @@
 // 経費申請に関する型定義
 
+export type ExpenseCategory =
+	| "transportation"
+	| "meals"
+	| "accommodation"
+	| "office_supplies"
+	| "communication"
+	| "entertainment"
+	| "other";
+
 export interface ExpenseRequest {
 	name: string;
 	amount: number;
@@ -15,15 +24,6 @@ export interface ExpenseResponse {
 	message: string;
 	submittedAt: string;
 }
-
-export type ExpenseCategory =
-	| "transportation"
-	| "meals"
-	| "accommodation"
-	| "office_supplies"
-	| "communication"
-	| "entertainment"
-	| "other";
 
 export interface ExpenseCategoryOption {
 	value: ExpenseCategory;

@@ -1,0 +1,24 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- レシート背景 -->
+  <rect x="6" y="4" width="20" height="26" rx="2" fill="#ffffff" stroke="#e2e8f0" stroke-width="1"/>
+  
+  <!-- レシート上部の穴 -->
+  <circle cx="9" cy="7" r="1" fill="#e2e8f0"/>
+  <circle cx="23" cy="7" r="1" fill="#e2e8f0"/>
+  
+  <!-- レシートの線（項目を表現） -->
+  <line x1="9" y1="11" x2="23" y2="11" stroke="#64748b" stroke-width="1"/>
+  <line x1="9" y1="14" x2="20" y2="14" stroke="#64748b" stroke-width="1"/>
+  <line x1="9" y1="17" x2="22" y2="17" stroke="#64748b" stroke-width="1"/>
+  <line x1="9" y1="20" x2="18" y2="20" stroke="#64748b" stroke-width="1"/>
+  
+  <!-- 合計線 -->
+  <line x1="9" y1="23" x2="23" y2="23" stroke="#1e293b" stroke-width="1.5"/>
+  <line x1="9" y1="25" x2="21" y2="25" stroke="#1e293b" stroke-width="1.5"/>
+  
+  <!-- カメラアイコン（小さく、右上） -->
+  <circle cx="24" cy="8" r="6" fill="#0ea5e9" opacity="0.9"/>
+  <rect x="21" y="5.5" width="6" height="5" rx="1" fill="#ffffff"/>
+  <circle cx="24" cy="8" r="1.5" fill="#0ea5e9"/>
+  <rect x="22.5" y="4.5" width="1" height="1" rx="0.5" fill="#ffffff"/>
+</svg>

@@ -8,7 +8,7 @@ interface LabelProps {
 }
 
 export function Label(props: LabelProps) {
-	const baseClasses = "block text-sm font-medium text-gray-700 mb-1";
+	const baseClasses = "block text-sm font-semibold text-slate-700 mb-2";
 
 	return (
 		<label for={props.for} class={`${baseClasses} ${props.class || ""}`}>

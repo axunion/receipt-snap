@@ -1,14 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #1e40af;      /* 落ち着いた深い青 */
-  --color-primary-light: #3b82f6; /* 少し明るい青 */
-  --color-primary-dark: #1e3a8a;  /* さらに深い青 */
-  --color-secondary: #64748b;     /* 落ち着いたグレー */
-  --color-success: #059669;       /* 落ち着いた緑 */
-  --color-error: #dc2626;         /* 落ち着いた赤 */
-  --color-warning: #d97706;       /* 落ち着いたオレンジ */
-  --color-background: #f8fafc;    /* 淡いグレーがかった白 */
-  --color-surface: #ffffff;       /* カード背景用の白 */
-  --color-border: #e2e8f0;        /* 境界線用の淡いグレー */
+  --color-primary: #0ea5e9;
+  --color-primary-light: #38bdf8;
+  --color-primary-dark: #0284c7;
+  --color-primary-subtle: #e0f2fe;
+  
+  --color-secondary: #475569;
+  --color-secondary-light: #64748b;
+  --color-secondary-dark: #334155;
+  
+  --color-success: #10b981;
+  --color-success-light: #34d399;
+  --color-error: #ef4444;
+  --color-error-light: #f87171;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fbbf24;
+  
+  --color-background: #f8fafc;
+  --color-surface: #ffffff;
+  --color-surface-subtle: #f1f5f9;
+  
+  --color-border: #e2e8f0;
+  --color-border-subtle: #f1f5f9;
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
 }
