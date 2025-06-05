@@ -130,16 +130,16 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 					</div>
 				</div>
 			) : (
-				<div>
+				<div class="border border-slate-200 rounded-md">
 					{/* タブナビゲーション */}
-					<div class="flex border-b border-slate-200 mb-6">
+					<div class="flex bg-slate-50 rounded-t-lg border-b border-slate-200">
 						<button
 							type="button"
 							onClick={() => setActiveTab("camera")}
-							class={`flex-1 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+							class={`flex-1 px-2 py-3 text-xs sm:text-sm font-medium rounded-tl-lg ${
 								activeTab() === "camera"
-									? "border-blue-500 text-blue-600"
-									: "border-transparent text-slate-500 hover:text-slate-700"
+									? "bg-white text-blue-600 border-b-2 border-white -mb-px"
+									: "bg-slate-50 text-slate-500 hover:text-slate-700 hover:bg-slate-100"
 							}`}
 						>
 							カメラ撮影
@@ -147,33 +147,33 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 						<button
 							type="button"
 							onClick={() => setActiveTab("file")}
-							class={`flex-1 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+							class={`flex-1 px-2 py-3 text-xs sm:text-sm font-medium border-l border-slate-200 ${
 								activeTab() === "file"
-									? "border-blue-500 text-blue-600"
-									: "border-transparent text-slate-500 hover:text-slate-700"
+									? "bg-white text-blue-600 border-b-2 border-b-white border-l-slate-200 -mb-px"
+									: "bg-slate-50 text-slate-500 hover:text-slate-700 hover:bg-slate-100"
 							}`}
 						>
-							ファイル選択
+							画像選択
 						</button>
 						<button
 							type="button"
 							onClick={() => setActiveTab("no-image")}
-							class={`flex-1 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+							class={`flex-1 px-2 py-3 text-xs sm:text-sm font-medium border-l border-slate-200 rounded-tr-lg ${
 								activeTab() === "no-image"
-									? "border-blue-500 text-blue-600"
-									: "border-transparent text-slate-500 hover:text-slate-700"
+									? "bg-white text-blue-600 border-b-2 border-b-white border-l-slate-200 -mb-px"
+									: "bg-slate-50 text-slate-500 hover:text-slate-700 hover:bg-slate-100"
 							}`}
 						>
 							画像なし
 						</button>
 					</div>
 
-					{/* タブコンテンツ - 固定の高さを設定 */}
-					<div class="min-h-[200px]">
+					{/* タブコンテンツ */}
+					<div class="p-6">
 						{activeTab() === "camera" && (
-							<div class="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center bg-slate-50/30">
+							<div class="border-2 border-dashed border-slate-300 rounded-lg h-48 text-center bg-slate-50/30 flex flex-col justify-center items-center p-6 sm:p-8">
 								<div class="space-y-4">
-									<div class="mx-auto h-12 w-12 text-slate-400">
+									<div class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-slate-400">
 										<svg
 											fill="none"
 											viewBox="0 0 24 24"
@@ -195,19 +195,21 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 										</svg>
 									</div>
 									<div>
-										<p class="text-sm text-slate-600 mb-4 font-medium">
+										<p class="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 font-medium">
 											レシートを撮影してください
 										</p>
-										<Button onClick={openCamera}>カメラを起動</Button>
+										<Button onClick={openCamera} class="w-40">
+											カメラを起動
+										</Button>
 									</div>
 								</div>
 							</div>
 						)}
 
 						{activeTab() === "file" && (
-							<div class="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center bg-slate-50/30">
+							<div class="border-2 border-dashed border-slate-300 rounded-lg h-48 text-center bg-slate-50/30 flex flex-col justify-center items-center p-6 sm:p-8">
 								<div class="space-y-4">
-									<div class="mx-auto h-12 w-12 text-slate-400">
+									<div class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-slate-400">
 										<svg
 											fill="none"
 											viewBox="0 0 24 24"
@@ -223,30 +225,32 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 										</svg>
 									</div>
 									<div>
-										<p class="text-sm text-slate-600 mb-4 font-medium">
-											レシート画像ファイルを選択してください
+										<p class="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 font-medium">
+											レシート画像を選択してください
 										</p>
-										<Button onClick={openFileDialog}>ファイルを選択</Button>
+										<Button onClick={openFileDialog} class="w-40">
+											ファイルを選択
+										</Button>
 									</div>
 								</div>
 							</div>
 						)}
 
 						{activeTab() === "no-image" && (
-							<div class="border border-slate-200 rounded-lg p-6 bg-slate-50/30">
-								<div class="space-y-4">
-									<div>
-										<p class="text-sm font-medium text-slate-700 mb-3">
-											レシート画像がない理由を入力してください
-										</p>
-										<Textarea
-											placeholder="理由を入力してください（例：紛失、電子レシート未対応、現金以外の支払いなど）"
-											value={noImageReason()}
-											onInput={handleReasonChange}
-											rows={4}
-											class="w-full"
-										/>
-									</div>
+							<div class="h-48 flex flex-col justify-between">
+								<div>
+									<p class="text-xs sm:text-sm text-slate-600 font-medium text-center">
+										レシート画像がない理由を入力してください
+									</p>
+								</div>
+								<div class="flex-1 flex flex-col justify-end">
+									<Textarea
+										placeholder="例：紛失、発行されていないなど"
+										value={noImageReason()}
+										onInput={handleReasonChange}
+										rows={6}
+										class="w-full"
+									/>
 								</div>
 							</div>
 						)}
