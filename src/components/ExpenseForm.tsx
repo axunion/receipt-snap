@@ -1,17 +1,17 @@
-import { createSignal } from "solid-js";
-import type {
-	ExpenseCategory,
-	ExpenseRequest,
-	ExpenseResponse,
-} from "@/types/expense";
-import { EXPENSE_CATEGORIES } from "@/types/expense";
-import { submitExpense, formatDateForInput } from "@/utils/api";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Label } from "@/components/Label";
 import { ReceiptCamera } from "@/components/ReceiptCamera";
 import { Select } from "@/components/Select";
 import { Textarea } from "@/components/Textarea";
+import type {
+	ExpenseCategory,
+	ExpenseRequest,
+	ExpenseResponse,
+} from "@/types/expense";
+import { EXPENSE_CATEGORIES } from "@/types/expense";
+import { formatDateForInput, submitExpense } from "@/utils/api";
+import { createSignal } from "solid-js";
 
 export function ExpenseForm() {
 	const [name, setName] = createSignal("");
@@ -82,11 +82,9 @@ export function ExpenseForm() {
 	return (
 		<div class="min-h-screen bg-slate-50">
 			<div class="max-w-md md:mx-auto shadow-md bg-white p-6">
-				<div class="mb-6">
-					<h1 class="text-2xl font-bold text-center text-slate-700">
-						Receipt Snap
-					</h1>
-				</div>
+				<h1 class="mb-6 font-serif font-bold text-2xl text-center text-slate-700">
+					Receipt Snap
+				</h1>
 
 				<form onSubmit={handleSubmit} class="space-y-6">
 					{/* レシート画像 */}
@@ -103,7 +101,7 @@ export function ExpenseForm() {
 						<Input
 							type="text"
 							id="name"
-							placeholder="申請者名を入力"
+							placeholder="名前を入力"
 							value={name()}
 							onInput={setName}
 							required
@@ -127,7 +125,7 @@ export function ExpenseForm() {
 					{/* 日付 */}
 					<div>
 						<Label for="date" required>
-							日付
+							支払日
 						</Label>
 						<Input
 							type="date"
@@ -163,7 +161,7 @@ export function ExpenseForm() {
 							placeholder="備考があれば入力してください"
 							value={notes()}
 							onInput={setNotes}
-							rows={3}
+							rows={4}
 						/>
 					</div>
 
@@ -189,8 +187,13 @@ export function ExpenseForm() {
 					)}
 
 					{/* 送信ボタン */}
-					<Button type="submit" disabled={isSubmitting()} class="w-full">
-						{isSubmitting() ? "送信中..." : "申請を送信"}
+					<Button
+						type="submit"
+						size="lg"
+						disabled={isSubmitting()}
+						class="w-full"
+					>
+						{isSubmitting() ? "送信中..." : "送信"}
 					</Button>
 				</form>
 			</div>
