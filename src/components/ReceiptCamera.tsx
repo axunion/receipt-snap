@@ -1,5 +1,4 @@
 import { Button } from "@/components/Button";
-import { Label } from "@/components/Label";
 import { Textarea } from "@/components/Textarea";
 import { validateImageFile } from "@/utils/api";
 import { createSignal } from "solid-js";
@@ -79,11 +78,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 
 	return (
 		<div class="space-y-4">
-			<Label required icon="material-symbols:receipt-outline">
-				レシート画像
-			</Label>
-
-			{/* カメラ用のinput（capture属性付き） */}
 			<input
 				ref={cameraInputRef}
 				type="file"
@@ -93,7 +87,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				class="hidden"
 			/>
 
-			{/* ファイル選択用のinput（capture属性なし） */}
 			<input
 				ref={fileInputRef}
 				type="file"
@@ -102,30 +95,29 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				class="hidden"
 			/>
 
-			{/* エラーメッセージ */}
 			{error() && (
 				<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
 					<p class="text-sm font-medium text-red-800">{error()}</p>
 				</div>
 			)}
 
-			{/* 画像がアップロード済みの場合 */}
 			{imagePreview() ? (
 				<div class="space-y-3">
-					<div class="relative">
+					<div class="flex justify-center">
 						<img
 							src={imagePreview()}
 							alt="レシートプレビュー"
-							class="w-full max-w-sm mx-auto rounded-lg border border-slate-200 shadow-sm"
+							class="w-auto h-60"
 						/>
 					</div>
+
 					<div class="flex gap-2 justify-center">
 						<Button
 							onClick={activeTab() === "camera" ? openCamera : openFileDialog}
 							variant="secondary"
 							size="sm"
 						>
-							撮り直し
+							{activeTab() === "camera" ? "撮り直し" : "別の画像を選択"}
 						</Button>
 						<Button onClick={clearImage} variant="secondary" size="sm">
 							削除
@@ -134,7 +126,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				</div>
 			) : (
 				<div class="border border-slate-200 rounded-md">
-					{/* タブナビゲーション */}
 					<div class="flex bg-slate-50 rounded-t-lg border-b border-slate-200">
 						<button
 							type="button"
@@ -171,7 +162,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 						</button>
 					</div>
 
-					{/* タブコンテンツ */}
 					<div class="p-6">
 						{activeTab() === "camera" && (
 							<div class="border-2 border-dashed border-slate-300 rounded-lg h-48 text-center bg-slate-50/30 flex flex-col justify-center items-center p-6 sm:p-8">

@@ -87,13 +87,14 @@ export function ExpenseForm() {
 				</h1>
 
 				<form onSubmit={handleSubmit} class="space-y-6">
-					{/* レシート画像 */}
+					<Label required icon="material-symbols:receipt-outline">
+						レシート画像
+					</Label>
 					<ReceiptCamera
 						onImageCapture={handleImageCapture}
 						currentImage={receiptImage() || undefined}
 					/>
 
-					{/* 名前 */}
 					<div>
 						<Label for="name" required icon="material-symbols:person-outline">
 							名前
@@ -108,7 +109,6 @@ export function ExpenseForm() {
 						/>
 					</div>
 
-					{/* カテゴリ */}
 					<div>
 						<Label
 							for="category"
@@ -126,7 +126,6 @@ export function ExpenseForm() {
 						/>
 					</div>
 
-					{/* 日付 */}
 					<div>
 						<Label
 							for="date"
@@ -144,7 +143,6 @@ export function ExpenseForm() {
 						/>
 					</div>
 
-					{/* 金額 */}
 					<div>
 						<Label
 							for="amount"
@@ -165,7 +163,6 @@ export function ExpenseForm() {
 						/>
 					</div>
 
-					{/* 備考 */}
 					<div>
 						<Label for="notes" icon="material-symbols:note-outline">
 							備考
@@ -179,7 +176,6 @@ export function ExpenseForm() {
 						/>
 					</div>
 
-					{/* 送信結果 */}
 					{submitResult() && (
 						<div
 							class={`p-4 rounded-lg border ${
@@ -200,7 +196,6 @@ export function ExpenseForm() {
 						</div>
 					)}
 
-					{/* 送信ボタン */}
 					<Button
 						type="submit"
 						size="lg"
