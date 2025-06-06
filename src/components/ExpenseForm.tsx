@@ -82,7 +82,7 @@ export function ExpenseForm() {
 	return (
 		<div class="min-h-screen bg-slate-50">
 			<div class="max-w-md md:mx-auto bg-white p-6 border-x border-slate-200 shadow-md">
-				<h1 class="mb-6 font-serif font-bold text-2xl text-center text-slate-700">
+				<h1 class="mb-6 font-['Bonheur_Royale',cursive] text-3xl text-center text-sky-500">
 					Receipt Snap
 				</h1>
 

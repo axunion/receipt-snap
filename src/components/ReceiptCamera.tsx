@@ -142,7 +142,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 									: "bg-slate-50 text-slate-500 hover:text-slate-700 hover:bg-slate-100"
 							}`}
 						>
-							カメラ撮影
+							撮影
 						</button>
 						<button
 							type="button"
@@ -164,7 +164,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 									: "bg-slate-50 text-slate-500 hover:text-slate-700 hover:bg-slate-100"
 							}`}
 						>
-							画像なし
+							なし
 						</button>
 					</div>
 
@@ -240,7 +240,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 							<div class="h-48 flex flex-col justify-between">
 								<div>
 									<p class="text-xs sm:text-sm text-slate-600 font-medium text-center">
-										レシート画像がない理由を入力してください
+										レシートがない理由を入力してください
 									</p>
 								</div>
 								<div class="flex-1 flex flex-col justify-end">
