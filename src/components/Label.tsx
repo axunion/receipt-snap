@@ -1,10 +1,12 @@
 import type { JSX } from "solid-js";
+import { Icon } from "@iconify-icon/solid";
 
 interface LabelProps {
 	children: JSX.Element;
 	for?: string;
 	required?: boolean;
 	class?: string;
+	icon?: string;
 }
 
 export function Label(props: LabelProps) {
@@ -12,8 +14,27 @@ export function Label(props: LabelProps) {
 
 	return (
 		<label for={props.for} class={`${baseClasses} ${props.class || ""}`}>
-			{props.children}
-			{props.required && <span class="text-red-500 ml-1">*</span>}
+			<div class="flex items-center gap-2">
+				{props.icon && (
+					<Icon
+						icon={props.icon}
+						width="16"
+						height="16"
+						class="text-slate-500"
+					/>
+				)}
+				<span class="flex">
+					{props.children}
+					{props.required && (
+						<Icon
+							icon="material-symbols:asterisk-rounded"
+							width="8"
+							height="8"
+							class="text-red-400 ml-1"
+						/>
+					)}
+				</span>
+			</div>
 		</label>
 	);
 }

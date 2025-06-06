@@ -3,6 +3,7 @@ import { Label } from "@/components/Label";
 import { Textarea } from "@/components/Textarea";
 import { validateImageFile } from "@/utils/api";
 import { createSignal } from "solid-js";
+import { Icon } from "@iconify-icon/solid";
 
 interface ReceiptCameraProps {
 	onImageCapture: (file: File) => void;
@@ -78,7 +79,9 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 
 	return (
 		<div class="space-y-4">
-			<Label required>レシート画像</Label>
+			<Label required icon="material-symbols:receipt-outline">
+				レシート画像
+			</Label>
 
 			{/* カメラ用のinput（capture属性付き） */}
 			<input
@@ -174,25 +177,11 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 							<div class="border-2 border-dashed border-slate-300 rounded-lg h-48 text-center bg-slate-50/30 flex flex-col justify-center items-center p-6 sm:p-8">
 								<div class="space-y-4">
 									<div class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-slate-400">
-										<svg
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											aria-hidden="true"
-										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-											/>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-											/>
-										</svg>
+										<Icon
+											icon="material-symbols:photo-camera-outline"
+											width="100%"
+											height="100%"
+										/>
 									</div>
 									<div>
 										<p class="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 font-medium">
@@ -210,19 +199,11 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 							<div class="border-2 border-dashed border-slate-300 rounded-lg h-48 text-center bg-slate-50/30 flex flex-col justify-center items-center p-6 sm:p-8">
 								<div class="space-y-4">
 									<div class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-slate-400">
-										<svg
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
-											aria-hidden="true"
-										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												stroke-width="2"
-												d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-											/>
-										</svg>
+										<Icon
+											icon="material-symbols:upload-file-outline-rounded"
+											width="100%"
+											height="100%"
+										/>
 									</div>
 									<div>
 										<p class="text-xs sm:text-sm text-slate-600 mb-3 sm:mb-4 font-medium">

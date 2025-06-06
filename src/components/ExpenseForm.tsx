@@ -95,7 +95,7 @@ export function ExpenseForm() {
 
 					{/* 名前 */}
 					<div>
-						<Label for="name" required>
+						<Label for="name" required icon="material-symbols:person-outline">
 							名前
 						</Label>
 						<Input
@@ -110,7 +110,11 @@ export function ExpenseForm() {
 
 					{/* カテゴリ */}
 					<div>
-						<Label for="category" required>
+						<Label
+							for="category"
+							required
+							icon="material-symbols:format-list-bulleted"
+						>
 							カテゴリ
 						</Label>
 						<Select
@@ -124,7 +128,11 @@ export function ExpenseForm() {
 
 					{/* 日付 */}
 					<div>
-						<Label for="date" required>
+						<Label
+							for="date"
+							required
+							icon="material-symbols:calendar-today-outline"
+						>
 							支払日
 						</Label>
 						<Input
@@ -138,7 +146,11 @@ export function ExpenseForm() {
 
 					{/* 金額 */}
 					<div>
-						<Label for="amount" required>
+						<Label
+							for="amount"
+							required
+							icon="material-symbols:payments-outline"
+						>
 							金額
 						</Label>
 						<Input
@@ -155,7 +167,9 @@ export function ExpenseForm() {
 
 					{/* 備考 */}
 					<div>
-						<Label for="notes">備考</Label>
+						<Label for="notes" icon="material-symbols:note-outline">
+							備考
+						</Label>
 						<Textarea
 							id="notes"
 							placeholder="備考があれば入力してください"
