@@ -88,7 +88,7 @@ export function ExpenseForm() {
 
 				<form onSubmit={handleSubmit} class="space-y-6">
 					<Label required icon="material-symbols:receipt-outline">
-						レシート画像
+						レシート
 					</Label>
 					<ReceiptCamera
 						onImageCapture={handleImageCapture}
@@ -96,12 +96,11 @@ export function ExpenseForm() {
 					/>
 
 					<div>
-						<Label for="name" required icon="material-symbols:person-outline">
+						<Label required icon="material-symbols:person-outline">
 							名前
 						</Label>
 						<Input
 							type="text"
-							id="name"
 							placeholder="名前を入力"
 							value={name()}
 							onInput={setName}
@@ -110,11 +109,7 @@ export function ExpenseForm() {
 					</div>
 
 					<div>
-						<Label
-							for="category"
-							required
-							icon="material-symbols:format-list-bulleted"
-						>
+						<Label required icon="material-symbols:format-list-bulleted">
 							カテゴリ
 						</Label>
 						<Select
@@ -127,33 +122,18 @@ export function ExpenseForm() {
 					</div>
 
 					<div>
-						<Label
-							for="date"
-							required
-							icon="material-symbols:calendar-today-outline"
-						>
+						<Label required icon="material-symbols:calendar-today-outline">
 							支払日
 						</Label>
-						<Input
-							type="date"
-							id="date"
-							value={date()}
-							onInput={setDate}
-							required
-						/>
+						<Input type="date" value={date()} onInput={setDate} required />
 					</div>
 
 					<div>
-						<Label
-							for="amount"
-							required
-							icon="material-symbols:payments-outline"
-						>
+						<Label required icon="material-symbols:payments-outline">
 							金額
 						</Label>
 						<Input
 							type="number"
-							id="amount"
 							placeholder="0"
 							value={amount()}
 							onInput={(value) => setAmount(Number.parseInt(value) || 0)}
@@ -164,11 +144,8 @@ export function ExpenseForm() {
 					</div>
 
 					<div>
-						<Label for="notes" icon="material-symbols:note-outline">
-							備考
-						</Label>
+						<Label icon="material-symbols:note-outline">備考</Label>
 						<Textarea
-							id="notes"
 							placeholder="備考があれば入力してください"
 							value={notes()}
 							onInput={setNotes}

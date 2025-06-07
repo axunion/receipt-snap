@@ -12,13 +12,13 @@ interface ButtonProps {
 
 export function Button(props: ButtonProps) {
 	const baseClasses =
-		"inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
+		"inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none border";
 
 	const getVariantClasses = () => {
 		if (props.variant === "secondary") {
-			return "bg-slate-50 text-slate-700 hover:bg-slate-100 focus:ring-sky-300 border border-slate-200 hover:border-slate-300";
+			return "bg-slate-50 text-slate-700 hover:bg-slate-100 focus:ring-sky-300 border-slate-200 hover:border-slate-300";
 		}
-		return "bg-sky-500 text-white hover:bg-sky-600 focus:ring-sky-300 shadow-sm hover:shadow-md";
+		return "bg-sky-500 text-white hover:bg-sky-600 focus:ring-sky-300 shadow-sm hover:shadow-md border-transparent";
 	};
 
 	const getSizeClasses = () => {

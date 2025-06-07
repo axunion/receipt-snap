@@ -14,7 +14,7 @@ export function Label(props: LabelProps) {
 
 	return (
 		<label for={props.for} class={`${baseClasses} ${props.class || ""}`}>
-			<div class="flex items-center gap-2">
+			<div class="flex items-center gap-1">
 				{props.icon && (
 					<Icon
 						icon={props.icon}

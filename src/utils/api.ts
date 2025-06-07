@@ -49,32 +49,54 @@ export async function submitExpense(
 }
 
 /**
- * 画像ファイルのバリデーション
+ * 画像ファイルのバリデーション（最適化版）
  * @param file アップロードされたファイル
  * @returns バリデーション結果
  */
 export function validateImageFile(file: File): {
 	isValid: boolean;
 	error?: string;
+	warning?: string;
 } {
-	const maxSize = 10 * 1024 * 1024; // 10MB
-	const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+	const maxSize = 100 * 1024 * 1024; // 100MB
+	const allowedTypes = [
+		"image/jpeg",
+		"image/jpg",
+		"image/png",
+		"image/webp",
+		"image/heic",
+		"image/heif",
+	];
 
 	if (!allowedTypes.includes(file.type)) {
 		return {
 			isValid: false,
-			error: "JPEG、PNG、WebP形式の画像ファイルのみ対応しています",
+			error: "JPEG、PNG、WebP、HEIC/HEIF形式の画像ファイルのみ対応しています",
 		};
 	}
 
 	if (file.size > maxSize) {
 		return {
 			isValid: false,
-			error: "ファイルサイズは10MB以下にしてください",
+			error: "ファイルサイズは100MB以下にしてください",
 		};
 	}
 
-	return { isValid: true };
+	// 大きなファイルに対する警告
+	const fileSizeMB = file.size / (1024 * 1024);
+	let warning: string | undefined;
+
+	if (fileSizeMB > 50) {
+		warning = "大きなファイルです。圧縮処理に時間がかかる場合があります。";
+	} else if (fileSizeMB > 80) {
+		warning =
+			"非常に大きなファイルです。段階的圧縮を行い、処理時間がかかります。";
+	}
+
+	return {
+		isValid: true,
+		warning,
+	};
 }
 
 /**
