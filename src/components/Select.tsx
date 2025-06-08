@@ -21,11 +21,11 @@ export function Select(props: SelectProps) {
 
 	return (
 		<select
-			value={props.value}
+			value={props.value ?? ""}
 			onChange={(e) => props.onSelect?.(e.currentTarget.value)}
 			required={props.required}
 			disabled={props.disabled}
-			class={`${baseClasses} ${props.class || ""}`}
+			class={`${baseClasses} ${props.class ?? ""}`}
 		>
 			{props.placeholder && (
 				<option value="" disabled>

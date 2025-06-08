@@ -1,5 +1,5 @@
-import type { JSX } from "solid-js";
 import { Icon } from "@iconify-icon/solid";
+import type { JSX } from "solid-js";
 
 interface LabelProps {
 	children: JSX.Element;
@@ -13,7 +13,7 @@ export function Label(props: LabelProps) {
 	const baseClasses = "block text-sm font-semibold text-slate-700 mb-2";
 
 	return (
-		<label for={props.for} class={`${baseClasses} ${props.class || ""}`}>
+		<label for={props.for} class={`${baseClasses} ${props.class ?? ""}`}>
 			<div class="flex items-center gap-1">
 				{props.icon && (
 					<Icon

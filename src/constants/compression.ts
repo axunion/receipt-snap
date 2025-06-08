@@ -1,7 +1,3 @@
-/**
- * 画像圧縮関連の定数定義
- */
-
 // ファイルサイズの閾値（MB）
 export const FILE_SIZE_THRESHOLDS = {
 	LARGE_FILE: 50, // 段階的圧縮を開始するサイズ

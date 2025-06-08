@@ -1,6 +1,8 @@
+type InputType = "text" | "email" | "password" | "number" | "date" | "file";
+
 interface InputProps {
 	id?: string;
-	type?: "text" | "email" | "password" | "number" | "date" | "file";
+	type?: InputType;
 	placeholder?: string;
 	value?: string | number;
 	onInput?: (value: string) => void;
@@ -21,7 +23,7 @@ export function Input(props: InputProps) {
 	return (
 		<input
 			id={props.id}
-			type={props.type || "text"}
+			type={props.type ?? "text"}
 			placeholder={props.placeholder}
 			value={props.value}
 			onInput={(e) => props.onInput?.(e.currentTarget.value)}
@@ -32,7 +34,7 @@ export function Input(props: InputProps) {
 			min={props.min}
 			max={props.max}
 			step={props.step}
-			class={`${baseClasses} ${props.class || ""}`}
+			class={`${baseClasses} ${props.class ?? ""}`}
 		/>
 	);
 }

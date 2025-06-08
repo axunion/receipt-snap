@@ -19,10 +19,10 @@ export function Textarea(props: TextareaProps) {
 			placeholder={props.placeholder}
 			value={props.value}
 			onInput={(e) => props.onInput?.(e.currentTarget.value)}
-			rows={props.rows || 3}
+			rows={props.rows ?? 3}
 			required={props.required}
 			disabled={props.disabled}
-			class={`${baseClasses} ${props.class || ""}`}
+			class={`${baseClasses} ${props.class ?? ""}`}
 		/>
 	);
 }
