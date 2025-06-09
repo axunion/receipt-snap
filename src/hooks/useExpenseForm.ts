@@ -11,7 +11,7 @@ import { createEffect, createSignal } from "solid-js";
 
 export function useExpenseForm() {
 	const [name, setName] = createSignal("");
-	const [amount, setAmount] = createSignal<number>(0);
+	const [amount, setAmount] = createSignal(0);
 	const [date, setDate] = createSignal(formatDateForInput(new Date()));
 	const [category, setCategory] = createSignal<ExpenseCategory>("other");
 	const [notes, setNotes] = createSignal("");
@@ -55,7 +55,7 @@ export function useExpenseForm() {
 		}
 
 		if (!image && !reason.trim()) {
-			setFormErrors(["レシート画像またはない理由のどちらかを入力してください"]);
+			setFormErrors(["Either receipt image or reason is required"]);
 			return;
 		}
 
@@ -82,11 +82,11 @@ export function useExpenseForm() {
 				resetForm();
 			}
 		} catch (error) {
-			console.error("送信エラー:", error);
+			console.error("Submit error:", error);
 			const errorResult: ExpenseResponse = {
 				id: "",
 				status: "error",
-				message: "送信中にエラーが発生しました。再度お試しください。",
+				message: "An error occurred during submission. Please try again.",
 				submittedAt: new Date().toISOString(),
 			};
 			setSubmitState({ isSubmitting: false, result: errorResult });

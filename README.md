@@ -201,20 +201,12 @@ npm run check
 
 1. **API呼び出し**:
    ```typescript
-   // 旧
-   import { submitExpense } from "@/utils/api";
-   
-   // 新（推奨）
    import { apiService } from "@/services/apiService";
    await apiService.submitExpense(data);
    ```
 
 2. **バリデーション**:
    ```typescript
-   // 旧
-   import { validateImageFile } from "@/utils/api";
-   
-   // 新（推奨）
    import { ValidationService } from "@/validators/validation";
    ValidationService.validateImageFile(file);
    ```

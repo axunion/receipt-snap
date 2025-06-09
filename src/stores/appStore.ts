@@ -14,20 +14,16 @@ const defaultSettings: AppSettings = {
 	debugMode: import.meta.env.DEV,
 };
 
-// グローバル設定状態
-const [appSettings, setAppSettings] =
-	createSignal<AppSettings>(defaultSettings);
+const [appSettings, setAppSettings] = createSignal(defaultSettings);
 
-// ユーザー情報状態
 const [currentUser, setCurrentUser] = createSignal<{
 	name: string;
 	department?: string;
 } | null>(null);
 
-// アプリケーション状態
-const [isOnline, setIsOnline] = createSignal<boolean>(navigator.onLine);
+const [isOnline, setIsOnline] = createSignal(navigator.onLine);
 
-// ネットワーク状態の監視
+// Network status monitoring
 if (typeof window !== "undefined") {
 	window.addEventListener("online", () => setIsOnline(true));
 	window.addEventListener("offline", () => setIsOnline(false));

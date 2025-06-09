@@ -1,7 +1,3 @@
-/**
- * UI関連の型定義
- */
-
 export interface CompressionProgress {
 	progress: number;
 	stage: string;

@@ -2,12 +2,13 @@ import type { CompressionOptions } from "@/types/image";
 import {
 	calculateCompressionRatio,
 	formatFileSize,
-	getDynamicCompressionOptions,
-	getPerformanceAdjustedOptions,
-	measureCompressionPerformance,
+	getReceiptCompressionOptions,
 	compressImage as utilCompressImage,
 } from "@/utils/imageCompression";
 
+/**
+ * Compress image with performance metrics
+ */
 export async function compressImage(
 	file: File,
 	options?: Partial<CompressionOptions>,
@@ -20,38 +21,41 @@ export async function compressImage(
 		duration: number;
 	};
 }> {
-	const fileSizeMB = file.size / (1024 * 1024);
+	const baseOptions = getReceiptCompressionOptions();
+	const finalOptions = { ...baseOptions, ...options };
 
-	// 最適な圧縮設定を取得
-	const baseOptions = getDynamicCompressionOptions(fileSizeMB);
-	const finalOptions = getPerformanceAdjustedOptions(
-		{ ...baseOptions, ...options },
-		fileSizeMB,
-	);
-
-	// 圧縮実行
 	const originalSize = file.size;
-	const { result: compressedFile, duration } =
-		await measureCompressionPerformance(
-			() => utilCompressImage(file, finalOptions),
-			`画像圧縮 (${fileSizeMB.toFixed(1)}MB)`,
-		);
+	const startTime = performance.now();
 
-	const compressedSize = compressedFile.size;
-	const compressionRatio = calculateCompressionRatio(
-		originalSize,
-		compressedSize,
-	);
+	try {
+		const compressedFile = await utilCompressImage(file, finalOptions);
+		const endTime = performance.now();
+		const duration = endTime - startTime;
 
-	return {
-		compressedFile,
-		metrics: {
+		const compressedSize = compressedFile.size;
+		const compressionRatio = calculateCompressionRatio(
 			originalSize,
 			compressedSize,
-			compressionRatio,
-			duration,
-		},
-	};
+		);
+
+		return {
+			compressedFile,
+			metrics: {
+				originalSize,
+				compressedSize,
+				compressionRatio,
+				duration,
+			},
+		};
+	} catch (error) {
+		const endTime = performance.now();
+		const duration = endTime - startTime;
+		console.error(
+			`Image compression failed after ${duration.toFixed(2)}ms:`,
+			error,
+		);
+		throw error;
+	}
 }
 
 export function formatImageFileSize(bytes: number): string {

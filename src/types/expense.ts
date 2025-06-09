@@ -1,5 +1,3 @@
-// 経費申請に関する型定義
-
 export type ExpenseCategory =
 	| "transportation"
 	| "meals"

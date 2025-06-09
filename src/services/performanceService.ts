@@ -1,9 +1,9 @@
-const metrics: Map<string, number[]> = new Map();
+const metrics = new Map<string, number[]>();
 
-async function measure<T>(
-	operation: () => Promise<T>,
-	operationName: string,
-): Promise<{ result: T; duration: number }> {
+/**
+ * Measure performance of async operations
+ */
+async function measure<T>(operation: () => Promise<T>, operationName: string) {
 	const startTime = performance.now();
 
 	try {
@@ -11,7 +11,6 @@ async function measure<T>(
 		const endTime = performance.now();
 		const duration = endTime - startTime;
 
-		// メトリクスを記録
 		recordMetric(operationName, duration);
 
 		if (import.meta.env.DEV) {
@@ -31,27 +30,22 @@ async function measure<T>(
 	}
 }
 
-function recordMetric(operationName: string, duration: number): void {
+function recordMetric(operationName: string, duration: number) {
 	if (!metrics.has(operationName)) {
 		metrics.set(operationName, []);
 	}
 
 	const operationMetrics = metrics.get(operationName);
-	if (!operationMetrics) return; // メトリクスが存在しない場合は何もしない
+	if (!operationMetrics) return;
 	operationMetrics.push(duration);
 
-	// 最新の100件のみ保持
+	// Keep only the latest 100 entries
 	if (operationMetrics.length > 100) {
 		operationMetrics.shift();
 	}
 }
 
-function getStats(operationName: string): {
-	count: number;
-	average: number;
-	min: number;
-	max: number;
-} | null {
+function getStats(operationName: string) {
 	const operationMetrics = metrics.get(operationName);
 	if (!operationMetrics || operationMetrics.length === 0) {
 		return null;
@@ -66,7 +60,7 @@ function getStats(operationName: string): {
 	return { count, average, min, max };
 }
 
-function getAllStats(): Record<string, ReturnType<typeof getStats>> {
+function getAllStats() {
 	const result: Record<string, ReturnType<typeof getStats>> = {};
 
 	for (const [operationName] of metrics) {
@@ -76,7 +70,7 @@ function getAllStats(): Record<string, ReturnType<typeof getStats>> {
 	return result;
 }
 
-function clearMetrics(operationName?: string): void {
+function clearMetrics(operationName?: string) {
 	if (operationName) {
 		metrics.delete(operationName);
 	} else {

@@ -25,15 +25,15 @@ export function validateImageFile(file: File): ImageValidationResult {
 		};
 	}
 
-	// 大きなファイルに対する警告
+	// Large file warning
 	const fileSizeMB = file.size / (1024 * 1024);
 	let warning: string | undefined;
 
 	if (fileSizeMB > 50) {
-		warning = "大きなファイルです。圧縮処理に時間がかかる場合があります。";
-	} else if (fileSizeMB > 80) {
+		warning = "大きなファイルです。処理に時間がかかる場合があります。";
+	} else if (file.type === "image/heic" || file.type === "image/heif") {
 		warning =
-			"非常に大きなファイルです。段階的圧縮を行い、処理時間がかかります。";
+			"HEIC/HEIF形式のファイルです。一部の環境で表示できない場合があります。";
 	}
 
 	return {
@@ -49,7 +49,7 @@ export function validateExpenseForm(data: {
 	category: string;
 	receiptImage?: File;
 	noImageReason?: string;
-}): { isValid: boolean; errors: string[] } {
+}) {
 	const errors: string[] = [];
 
 	if (!data.name.trim()) {
@@ -68,7 +68,7 @@ export function validateExpenseForm(data: {
 		errors.push("カテゴリは必須です");
 	}
 
-	// 画像またはなし理由のどちらかが必要
+	// Either image or reason is required
 	if (!data.receiptImage && !data.noImageReason?.trim()) {
 		errors.push("レシート画像またはない理由のどちらかを入力してください");
 	}
@@ -83,12 +83,12 @@ export function validateDate(dateString: string): boolean {
 	const date = new Date(dateString);
 	const now = new Date();
 
-	// 未来の日付は無効
+	// Future dates are invalid
 	if (date > now) {
 		return false;
 	}
 
-	// 1年以上前の日付は警告
+	// Dates older than 1 year trigger warning
 	const oneYearAgo = new Date();
 	oneYearAgo.setFullYear(now.getFullYear() - 1);
 
@@ -96,5 +96,5 @@ export function validateDate(dateString: string): boolean {
 }
 
 export function validateAmount(amount: number): boolean {
-	return amount > 0 && amount <= 1000000; // 100万円以下
+	return amount > 0 && amount <= 1000000; // Max 1M yen
 }

@@ -1,5 +1,3 @@
-import { createMemo } from "solid-js";
-
 interface TabButtonProps {
 	active: boolean;
 	onClick: () => void;
@@ -15,18 +13,16 @@ export function TabButton(props: TabButtonProps) {
 		center: "border-l border-slate-200",
 		right: "border-l border-slate-200 rounded-tr-lg",
 	};
-
-	const stateClasses = createMemo(() => {
-		return props.active
-			? "bg-white text-blue-600"
-			: "bg-slate-50 border-b border-slate-200 text-slate-500";
-	});
+	const stateClasses = {
+		active: "bg-white",
+		inactive: "bg-slate-50 border-b border-slate-200 text-slate-500",
+	};
 
 	return (
 		<button
 			type="button"
 			onClick={props.onClick}
-			class={`${baseClasses} ${positionClasses[props.position]} ${stateClasses()}`}
+			class={`${baseClasses} ${positionClasses[props.position]} ${stateClasses[props.active ? "active" : "inactive"]}`}
 		>
 			{props.children}
 		</button>

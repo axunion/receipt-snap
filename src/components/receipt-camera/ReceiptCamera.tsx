@@ -1,4 +1,5 @@
 import { useImageUpload } from "@/hooks/useImageUpload";
+import { formatImageFileSize } from "@/services/imageService";
 import { Icon } from "@iconify-icon/solid";
 import { ImagePreview } from "./ImagePreview";
 import { UploadTabs } from "./UploadTabs";
@@ -17,13 +18,11 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 		activeTab,
 		noImageReason,
 		isCompressing,
-		compressionProgress,
 		compressionInfo,
 		setActiveTab,
 		handleFileSelect,
 		clearImage,
 		handleReasonChange,
-		getProgressStageText,
 	} = useImageUpload(props.onImageCapture, props.onNoImageReason);
 
 	let cameraInputRef: HTMLInputElement | undefined;
@@ -102,27 +101,14 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 
 			{isCompressing() && (
 				<div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-					<div class="space-y-3">
-						<div class="flex items-center gap-2">
-							<Icon
-								icon="material-symbols:hourglass-top"
-								width="16"
-								height="16"
-								class="text-blue-600 animate-spin"
-							/>
-							<p class="text-sm font-medium text-blue-800">画像を圧縮中...</p>
-						</div>
-
-						<div class="w-full bg-blue-100 rounded-full h-2">
-							<div
-								class="bg-blue-500 h-2 rounded-full transition-all duration-300"
-								style={`width: ${compressionProgress()}%`}
-							/>
-						</div>
-
-						<div class="text-xs text-blue-600">
-							{getProgressStageText(compressionProgress())}
-						</div>
+					<div class="flex items-center gap-2">
+						<Icon
+							icon="material-symbols:hourglass-top"
+							width="16"
+							height="16"
+							class="text-blue-600 animate-spin"
+						/>
+						<p class="text-sm font-medium text-blue-800">画像を圧縮中...</p>
 					</div>
 				</div>
 			)}
@@ -142,11 +128,10 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 							</p>
 							<div class="mt-1 text-xs text-emerald-600">
 								{compressionInfo()?.originalSize &&
-									`${((compressionInfo()?.originalSize ?? 0) / (1024 * 1024)).toFixed(1)}MB → ${((compressionInfo()?.compressedSize ?? 0) / (1024 * 1024)).toFixed(1)}MB`}
+									`${formatImageFileSize(compressionInfo()?.originalSize ?? 0)} → ${formatImageFileSize(compressionInfo()?.compressedSize ?? 0)}`}
 								<span class="font-medium ml-1">
-									({compressionInfo()?.ratio || 0}%削減)
+									({Math.min(compressionInfo()?.ratio || 0, 99)}%削減)
 								</span>
-								{(compressionInfo()?.ratio || 0) >= 80 && " 🎉"}
 							</div>
 						</div>
 					</div>

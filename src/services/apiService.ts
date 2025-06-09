@@ -8,13 +8,13 @@ export class ApiService {
 	}
 
 	async submitExpense(expenseData: ExpenseRequest): Promise<ExpenseResponse> {
-		// 開発環境ではモックレスポンスを返す
+		// Simulate API response in development
 		if (import.meta.env.DEV) {
 			await this.simulateDelay(1500);
 			return {
 				id: `exp_${Date.now()}`,
 				status: "success",
-				message: "経費申請が正常に送信されました",
+				message: "Expense report submitted successfully.",
 				submittedAt: new Date().toISOString(),
 			};
 		}
@@ -33,8 +33,8 @@ export class ApiService {
 
 			return await response.json();
 		} catch (error) {
-			console.error("API呼び出しエラー:", error);
-			throw new Error("経費申請の送信に失敗しました");
+			console.error("API call error:", error);
+			throw new Error("Failed to submit expense report.");
 		}
 	}
 
