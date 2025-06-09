@@ -6,12 +6,29 @@ import type {
 } from "@/types/expense";
 import type { SubmitState } from "@/types/ui";
 import { formatDateForInput } from "@/utils/dateUtils";
-import { validateExpenseForm } from "@/validators/validation";
-import { createEffect, createSignal } from "solid-js";
+import {
+	validateExpenseForm,
+	validateNameField,
+	validateAmountField,
+	validateDateField,
+	validateCategoryField,
+	validateReceiptField,
+} from "@/validators/validation";
+import { createSignal, createEffect } from "solid-js";
+
+export interface FieldErrors {
+	name?: string;
+	amount?: string;
+	date?: string;
+	category?: string;
+	receipt?: string;
+}
+
+export type TouchedFields = Partial<Record<keyof FieldErrors, boolean>>;
 
 export function useExpenseForm() {
 	const [name, setName] = createSignal("");
-	const [amount, setAmount] = createSignal(0);
+	const [amount, setAmount] = createSignal("");
 	const [date, setDate] = createSignal(formatDateForInput(new Date()));
 	const [category, setCategory] = createSignal<ExpenseCategory>("other");
 	const [notes, setNotes] = createSignal("");
@@ -23,10 +40,16 @@ export function useExpenseForm() {
 		result: null,
 	});
 	const [formErrors, setFormErrors] = createSignal<string[]>([]);
+	const [fieldErrors, setFieldErrors] = createSignal<FieldErrors>({});
+	const [touchedFields, setTouchedFields] = createSignal<TouchedFields>({});
+
+	const markAsTouched = (fieldName: keyof FieldErrors) => {
+		setTouchedFields((prev) => ({ ...prev, [fieldName]: true }));
+	};
 
 	const resetForm = () => {
 		setName("");
-		setAmount(0);
+		setAmount("");
 		setDate(formatDateForInput(new Date()));
 		setCategory("other");
 		setNotes("");
@@ -34,41 +57,98 @@ export function useExpenseForm() {
 		setNoImageReason("");
 		setSubmitState({ isSubmitting: false, result: null });
 		setFormErrors([]);
+		setFieldErrors({});
+		setTouchedFields({}); // Reset touched state
 	};
 
-	const submitForm = async () => {
-		const image = receiptImage();
-		const reason = noImageReason();
+	const validateField = <T, R = undefined>(
+		fieldName: keyof FieldErrors,
+		value: T,
+		validator: (val: T, relatedVal?: R) => string | undefined,
+		relatedValue?: R,
+	) => {
+		const error = validator(value, relatedValue);
+		setFieldErrors((prev) => ({ ...prev, [fieldName]: error }));
+		return !error;
+	};
 
+	// Real-time validation effects
+	createEffect(() => {
+		validateField("name", name(), validateNameField);
+		if (name() !== "") markAsTouched("name"); // Mark as touched on change after initial
+	});
+	createEffect(() => {
+		const numericAmount = Number.parseFloat(amount());
+		validateField("amount", numericAmount, validateAmountField);
+		if (amount() !== "") markAsTouched("amount");
+	});
+	createEffect(() => {
+		validateField("date", date(), validateDateField);
+		if (date() !== formatDateForInput(new Date())) markAsTouched("date");
+	});
+	createEffect(() => {
+		validateField("category", category(), validateCategoryField);
+		if (category() !== "other") markAsTouched("category"); // Default is 'other'
+	});
+
+	const validateReceiptCallback = () => {
+		validateField(
+			"receipt",
+			receiptImage(),
+			(img, reason) =>
+				validateReceiptField(img ?? undefined, reason as string | undefined),
+			noImageReason(),
+		);
+		// Mark as touched if either image or reason changes
+		if (receiptImage() !== null || noImageReason() !== "") {
+			markAsTouched("receipt");
+		}
+	};
+
+	createEffect(validateReceiptCallback); // For receiptImage and noImageReason changes
+
+	const submitForm = async () => {
+		const currentAmount = Number.parseFloat(amount());
 		const validation = validateExpenseForm({
 			name: name(),
-			amount: amount(),
+			amount: Number.isNaN(currentAmount) ? 0 : currentAmount,
 			date: date(),
 			category: category(),
-			receiptImage: image || undefined,
-			noImageReason: reason || undefined,
+			receiptImage: receiptImage() || undefined,
+			noImageReason: noImageReason() || undefined,
 		});
 
+		setFieldErrors(validation.fieldErrors || {});
+		setFormErrors(validation.errors);
+
+		// Mark all fields as touched on submit attempt
+		const allFields: (keyof FieldErrors)[] = [
+			"name",
+			"amount",
+			"date",
+			"category",
+			"receipt",
+		];
+		const touchedUpdates: TouchedFields = {};
+		for (const field of allFields) {
+			touchedUpdates[field] = true;
+		}
+		setTouchedFields((prev) => ({ ...prev, ...touchedUpdates }));
+
 		if (!validation.isValid) {
-			setFormErrors(validation.errors);
 			return;
 		}
 
-		if (!image && !reason.trim()) {
-			setFormErrors(["Either receipt image or reason is required"]);
-			return;
-		}
-
-		setFormErrors([]);
 		setSubmitState({ isSubmitting: true, result: null });
 
 		try {
 			const finalImage =
-				image || new File([""], "no-receipt.txt", { type: "text/plain" });
+				receiptImage() ||
+				new File([""], "no-receipt.txt", { type: "text/plain" });
 
 			const expenseData: ExpenseRequest = {
 				name: name(),
-				amount: amount(),
+				amount: currentAmount,
 				date: date(),
 				category: category(),
 				notes: notes() || undefined,
@@ -93,26 +173,6 @@ export function useExpenseForm() {
 		}
 	};
 
-	createEffect(() => {
-		const validation = validateExpenseForm({
-			name: name(),
-			amount: amount(),
-			date: date(),
-			category: category(),
-			receiptImage: receiptImage() || undefined,
-			noImageReason: noImageReason() || undefined,
-		});
-
-		if (
-			!validation.isValid &&
-			(name() || amount() || receiptImage() || noImageReason())
-		) {
-			setFormErrors(validation.errors);
-		} else {
-			setFormErrors([]);
-		}
-	});
-
 	return {
 		name,
 		amount,
@@ -123,6 +183,8 @@ export function useExpenseForm() {
 		noImageReason,
 		submitState,
 		formErrors,
+		fieldErrors,
+		touchedFields,
 		setName,
 		setAmount,
 		setDate,
@@ -130,7 +192,6 @@ export function useExpenseForm() {
 		setNotes,
 		setReceiptImage,
 		setNoImageReason,
-		resetForm,
 		submitForm,
 	};
 }
