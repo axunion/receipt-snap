@@ -1,8 +1,8 @@
 import type { TabType } from "@/types/ui";
-import { TabButton } from "./TabButton";
 import { CameraTab } from "./CameraTab";
 import { FileTab } from "./FileTab";
 import { NoImageTab } from "./NoImageTab";
+import { TabButton } from "./TabButton";
 
 interface UploadTabsProps {
 	activeTab: TabType;

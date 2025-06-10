@@ -52,13 +52,14 @@ export function useImageUpload(
 			console.log(
 				`Compression complete: ${metrics.duration.toFixed(0)}ms, ${formatImageFileSize(metrics.originalSize)} → ${formatImageFileSize(metrics.compressedSize)} (${metrics.compressionRatio}% reduction)`,
 			);
-
 			setCompressionInfo({
 				originalSize: metrics.originalSize,
 				compressedSize: metrics.compressedSize,
 				ratio: metrics.compressionRatio,
 				duration: metrics.duration,
 			});
+
+			setWarning("");
 
 			onImageCapture?.(compressedFile);
 

@@ -69,6 +69,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				capture="environment"
 				onChange={handleFileInputChange}
 				class="hidden"
+				aria-label="レシートをカメラで撮影"
 			/>
 
 			<input
@@ -77,11 +78,28 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				accept="image/*,.heic,.heif"
 				onChange={handleFileInputChange}
 				class="hidden"
+				aria-label="レシートの画像ファイルを選択"
 			/>
 
 			{error() && (
-				<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
-					<p class="text-sm font-medium text-red-800">{error()}</p>
+				<div
+					class="p-4 bg-red-50 border border-red-200 rounded-lg"
+					role="alert"
+				>
+					<div class="flex items-start gap-2">
+						<Icon
+							icon="material-symbols:error-outline"
+							width="16"
+							height="16"
+							class="text-red-600 mt-0.5 flex-shrink-0"
+						/>
+						<div>
+							<p class="text-sm font-medium text-red-800">{error()}</p>
+							<p class="text-xs text-red-600 mt-1">
+								JPEGまたはPNG形式、10MB以下の画像をお選びください
+							</p>
+						</div>
+					</div>
 				</div>
 			)}
 
@@ -100,7 +118,10 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 			)}
 
 			{isCompressing() && (
-				<div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+				<div
+					class="p-4 bg-blue-50 border border-blue-200 rounded-lg"
+					aria-live="polite"
+				>
 					<div class="flex items-center gap-2">
 						<Icon
 							icon="material-symbols:hourglass-top"
@@ -114,7 +135,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 			)}
 
 			{compressionInfo() && (
-				<div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg">
+				<div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg transition-opacity duration-300">
 					<div class="flex items-start gap-2">
 						<Icon
 							icon="material-symbols:compress"

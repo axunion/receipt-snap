@@ -10,7 +10,7 @@ export type ExpenseCategory =
 export interface ExpenseRequest {
 	name: string;
 	amount: number;
-	date: string; // YYYY-MM-DD形式
+	date: string;
 	category: ExpenseCategory;
 	notes?: string;
 	receiptImage: File;

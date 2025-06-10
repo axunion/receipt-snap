@@ -5,16 +5,17 @@ import type {
 	ExpenseResponse,
 } from "@/types/expense";
 import type { SubmitState } from "@/types/ui";
-import { formatDateForInput } from "@/utils/dateUtils";
+import { getTodayDateString, formatDateForInput } from "@/utils/dateUtils";
+import { parseAmount } from "@/utils/formatUtils";
 import {
+	validateAmountField,
+	validateCategoryField,
+	validateDateField,
 	validateExpenseForm,
 	validateNameField,
-	validateAmountField,
-	validateDateField,
-	validateCategoryField,
 	validateReceiptField,
 } from "@/validators/validation";
-import { createSignal, createEffect } from "solid-js";
+import { createEffect, createSignal } from "solid-js";
 
 export interface FieldErrors {
 	name?: string;
@@ -29,7 +30,7 @@ export type TouchedFields = Partial<Record<keyof FieldErrors, boolean>>;
 export function useExpenseForm() {
 	const [name, setName] = createSignal("");
 	const [amount, setAmount] = createSignal("");
-	const [date, setDate] = createSignal(formatDateForInput(new Date()));
+	const [date, setDate] = createSignal(getTodayDateString());
 	const [category, setCategory] = createSignal<ExpenseCategory>("other");
 	const [notes, setNotes] = createSignal("");
 	const [receiptImage, setReceiptImage] = createSignal<File | null>(null);
@@ -50,7 +51,7 @@ export function useExpenseForm() {
 	const resetForm = () => {
 		setName("");
 		setAmount("");
-		setDate(formatDateForInput(new Date()));
+		setDate(getTodayDateString());
 		setCategory("other");
 		setNotes("");
 		setReceiptImage(null);
@@ -107,11 +108,12 @@ export function useExpenseForm() {
 
 	createEffect(validateReceiptCallback); // For receiptImage and noImageReason changes
 
-	const submitForm = async () => {
-		const currentAmount = Number.parseFloat(amount());
+	const submitForm = async (): Promise<ExpenseResponse | undefined> => {
+		// フォーマットされた金額から数値を取得
+		const currentAmount = parseAmount(amount());
 		const validation = validateExpenseForm({
 			name: name(),
-			amount: Number.isNaN(currentAmount) ? 0 : currentAmount,
+			amount: currentAmount,
 			date: date(),
 			category: category(),
 			receiptImage: receiptImage() || undefined,
@@ -136,8 +138,16 @@ export function useExpenseForm() {
 		setTouchedFields((prev) => ({ ...prev, ...touchedUpdates }));
 
 		if (!validation.isValid) {
-			return;
+			console.log("バリデーション失敗:", validation.errors);
+			return undefined;
 		}
+
+		console.log("送信開始 - データ:", {
+			name: name(),
+			amount: currentAmount,
+			date: date(),
+			category: category(),
+		});
 
 		setSubmitState({ isSubmitting: true, result: null });
 
@@ -156,11 +166,10 @@ export function useExpenseForm() {
 			};
 
 			const result = await apiService.submitExpense(expenseData);
+			console.log("APIから返却された結果:", result);
 			setSubmitState({ isSubmitting: false, result });
 
-			if (result.status === "success") {
-				resetForm();
-			}
+			return result;
 		} catch (error) {
 			console.error("Submit error:", error);
 			const errorResult: ExpenseResponse = {
@@ -170,6 +179,7 @@ export function useExpenseForm() {
 				submittedAt: new Date().toISOString(),
 			};
 			setSubmitState({ isSubmitting: false, result: errorResult });
+			return errorResult;
 		}
 	};
 
@@ -193,5 +203,6 @@ export function useExpenseForm() {
 		setReceiptImage,
 		setNoImageReason,
 		submitForm,
+		resetForm,
 	};
 }

@@ -2,13 +2,15 @@ import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { Label } from "@/components/Label";
 import { Select } from "@/components/Select";
+import { SuccessModal } from "@/components/SuccessModal";
 import { Textarea } from "@/components/Textarea";
 import { ReceiptCamera } from "@/components/receipt-camera/ReceiptCamera";
 import { useExpenseForm } from "@/hooks/useExpenseForm";
 import { MainLayout } from "@/layouts/MainLayout";
 import { EXPENSE_CATEGORIES } from "@/types/expense";
 import type { ExpenseCategory } from "@/types/expense";
-import { For, Show } from "solid-js";
+import { parseAmount } from "@/utils/formatUtils";
+import { For, Show, createSignal } from "solid-js";
 
 export function ExpenseForm() {
 	const {
@@ -21,7 +23,7 @@ export function ExpenseForm() {
 		submitState,
 		formErrors,
 		fieldErrors,
-		touchedFields, // Added from hook
+		touchedFields,
 		setName,
 		setAmount,
 		setDate,
@@ -30,18 +32,50 @@ export function ExpenseForm() {
 		setReceiptImage,
 		setNoImageReason,
 		submitForm,
+		resetForm,
 	} = useExpenseForm();
+
+	const [showSuccessModal, setShowSuccessModal] = createSignal(false);
+	const [submittedData, setSubmittedData] = createSignal<
+		| {
+				name: string;
+				amount: number;
+				category: string;
+		  }
+		| undefined
+	>();
 
 	const handleSubmit = async (event: Event) => {
 		event.preventDefault();
-		await submitForm();
+		const result = await submitForm();
+
+		if (result?.status === "success") {
+			const submissionData = {
+				name: name(),
+				amount: parseAmount(amount()),
+				category:
+					EXPENSE_CATEGORIES.find((cat) => cat.value === category())?.label ||
+					category(),
+			};
+			setSubmittedData(submissionData);
+			setShowSuccessModal(true);
+		}
+	};
+
+	const handleNewExpense = () => {
+		setShowSuccessModal(false);
+		setSubmittedData(undefined);
+		resetForm();
+	};
+
+	const handleCloseModal = () => {
+		setShowSuccessModal(false);
+		setSubmittedData(undefined);
 	};
 
 	return (
 		<MainLayout title="Receipt Snap">
-			<form onSubmit={handleSubmit} class="space-y-6 relative">
-				{" "}
-				{/* Added relative class */}
+			<form onSubmit={handleSubmit} class="space-y-6 relative form-container">
 				<div>
 					<Label required icon="material-symbols:receipt-outline">
 						レシート
@@ -92,8 +126,6 @@ export function ExpenseForm() {
 						onSelect={(value) => setCategory(value as ExpenseCategory)}
 						placeholder="カテゴリを選択"
 						required
-						// onBlur for Select might need custom handling if it doesn't support it directly
-						// For now, category is marked touched on change in hook or submit
 						aria-invalid={
 							!!(fieldErrors().category && touchedFields().category)
 						}
@@ -136,12 +168,10 @@ export function ExpenseForm() {
 						金額
 					</Label>
 					<Input
-						type="number"
+						type="amount"
 						placeholder="0"
 						value={amount()} // Kept as string from hook for input binding
 						onInput={setAmount}
-						min="0"
-						step="1"
 						required
 						aria-invalid={!!(fieldErrors().amount && touchedFields().amount)}
 						aria-describedby={
@@ -166,8 +196,8 @@ export function ExpenseForm() {
 						rows={4}
 					/>
 				</div>
-				{/* Show overall form errors only if there are errors AND they are not field-specific 
-					 AND at least one field has been touched or submit was attempted */}
+
+				{/* Show overall form errors and non-success results only */}
 				<Show
 					when={
 						formErrors().length > 0 &&
@@ -191,36 +221,33 @@ export function ExpenseForm() {
 						</ul>
 					</div>
 				</Show>
-				{submitState().result && (
-					<div
-						class={`p-4 rounded-lg border ${
-							submitState().result?.status === "success"
-								? "bg-green-50 border-green-200"
-								: "bg-red-50 border-red-200"
-						}`}
-					>
-						<p
-							class={`text-sm font-medium ${
-								submitState().result?.status === "success"
-									? "text-green-800"
-									: "text-red-800"
-							}`}
-						>
+
+				{/* Show error results only (success is handled by modal) */}
+				<Show
+					when={
+						submitState().result && submitState().result?.status === "error"
+					}
+				>
+					<div class="p-4 rounded-lg border bg-red-50 border-red-200">
+						<p class="text-sm font-medium text-red-800">
 							{submitState().result?.message}
 						</p>
 					</div>
-				)}
+				</Show>
+
 				<Button
 					type="submit"
 					disabled={submitState().isSubmitting}
 					class="w-full"
-					variant={submitState().isSubmitting ? "secondary" : "primary"} // Changed "default" to "primary"
+					variant={submitState().isSubmitting ? "secondary" : "primary"}
+					size="lg"
 				>
 					{submitState().isSubmitting ? "送信中..." : "登録する"}
 				</Button>
+
 				{/* Submission Loading Overlay */}
-				<Show when={submitState().isSubmitting}>
-					<div class="absolute inset-0 bg-white bg-opacity-80 flex flex-col items-center justify-center z-50 rounded-lg">
+				<Show when={true}>
+					<div class="fixed inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center z-50">
 						<svg
 							class="animate-spin h-8 w-8 text-blue-600"
 							xmlns="http://www.w3.org/2000/svg"
@@ -228,7 +255,7 @@ export function ExpenseForm() {
 							viewBox="0 0 24 24"
 							aria-hidden="true"
 						>
-							<title>Loading</title> {/* Added title for accessibility */}
+							<title>Loading</title>
 							<circle
 								class="opacity-25"
 								cx="12"
@@ -236,19 +263,23 @@ export function ExpenseForm() {
 								r="10"
 								stroke="currentColor"
 								stroke-width="4"
-							/>{" "}
-							{/* Self-closing */}
+							/>
 							<path
 								class="opacity-75"
 								fill="currentColor"
 								d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-							/>{" "}
-							{/* Self-closing */}
+							/>
 						</svg>
-						<p class="text-lg font-semibold mt-3">送信中...</p>
 					</div>
 				</Show>
 			</form>
+
+			<SuccessModal
+				isOpen={showSuccessModal()}
+				onClose={handleCloseModal}
+				onNewExpense={handleNewExpense}
+				submittedExpense={submittedData()}
+			/>
 		</MainLayout>
 	);
 }
