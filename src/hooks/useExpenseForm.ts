@@ -59,7 +59,7 @@ export function useExpenseForm() {
 		setSubmitState({ isSubmitting: false, result: null });
 		setFormErrors([]);
 		setFieldErrors({});
-		setTouchedFields({}); // Reset touched state
+		setTouchedFields({});
 	};
 
 	const validateField = <T, R = undefined>(
