@@ -10,6 +10,7 @@
 - ✅ **バリデーション**: リアルタイムフォームバリデーション
 - 🎨 **シンプルなUI**: フォーマルで使いやすいデザイン
 - 🏗️ **拡張可能な設計**: 保守性と拡張性を重視した設計
+- ⚡ **ストア統合**: SolidJSベストプラクティスに基づく直接シグナルアクセス
 
 ## 技術スタック
 
@@ -19,26 +20,37 @@
 - **言語**: TypeScript
 - **リンター**: Biome
 
-## 新しいプロジェクト構成（リファクタリング後）
+## 最適化されたプロジェクト構成
 
 ```
 src/
-├── components/              # プレゼンテーション層
-│   ├── Button.tsx          # ボタンコンポーネント
-│   ├── Input.tsx           # 入力フィールド
-│   ├── Label.tsx           # ラベル
-│   ├── Select.tsx          # セレクトボックス
-│   ├── Textarea.tsx        # テキストエリア
-│   ├── ReceiptCamera.refactored.tsx   # レシート撮影（リファクタリング版）
-│   └── ExpenseForm.refactored.tsx     # メインフォーム（リファクタリング版）
-├── hooks/                   # カスタムフック（状態管理）
-│   ├── useExpenseForm.ts   # 経費フォームの状態管理
-│   └── useImageUpload.ts   # 画像アップロード・圧縮の状態管理
+├── components/              # プレゼンテーション層（機能別階層化）
+│   ├── ui/                 # 汎用UIコンポーネント
+│   │   ├── Button.tsx      # ボタンコンポーネント
+│   │   ├── Input.tsx       # 入力フィールド
+│   │   ├── Label.tsx       # ラベル
+│   │   ├── Select.tsx      # セレクトボックス
+│   │   ├── Textarea.tsx    # テキストエリア
+│   │   └── loading/        # ローディングコンポーネント
+│   └── features/           # 機能別コンポーネント
+│       ├── expense/        # 経費申請関連
+│       │   ├── ExpenseForm.tsx         # メインフォーム（最適化版）
+│       │   ├── FormFields.tsx          # 個別フォームフィールド
+│       │   ├── FormFieldsContainer.tsx # フィールドコンテナ
+│       │   ├── FormSubmission.tsx      # 送信処理UI
+│       │   └── SuccessHandler.tsx      # 成功処理
+│       └── receipt-camera/ # レシート撮影関連
+│           ├── ReceiptCamera.tsx       # レシート撮影（最適化版）
+│           ├── NoImageTab.tsx          # レシートなし入力（ストア統合版）
+│           └── ...         # その他撮影関連コンポーネント
+├── hooks/                  # カスタムフック（ビジネスロジック）
+│   ├── useExpenseForm.ts   # 経費フォームのビジネスロジック
+│   ├── useFormValidation.ts # フォームバリデーション
+│   └── useImageUpload.ts   # 画像アップロード・圧縮
+├── stores/                 # グローバル状態管理（SolidJSベストプラクティス）
+│   ├── expenseFormStore.ts # 経費フォーム状態ストア
+│   └── appStore.ts        # アプリケーション共通状態
 ├── services/               # サービス層（通信・ビジネスロジック）
-│   ├── apiService.ts       # API通信サービス
-│   ├── imageService.ts     # 画像処理サービス
-│   └── performanceService.ts # パフォーマンス監視サービス
-├── stores/                 # グローバル状態管理
 │   └── appStore.ts         # アプリケーション全体の状態
 ├── validators/             # バリデーション機能
 │   └── validation.ts       # 入力値検証ロジック

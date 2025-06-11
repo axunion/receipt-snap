@@ -1,12 +1,12 @@
 import { useImageUpload } from "@/hooks/useImageUpload";
 import { formatImageFileSize } from "@/services/imageService";
+import { expenseFormStore } from "@/stores/expenseFormStore";
 import { Icon } from "@iconify-icon/solid";
 import { ImagePreview } from "./ImagePreview";
 import { UploadTabs } from "./UploadTabs";
 
 interface ReceiptCameraProps {
 	onImageCapture: (file: File) => void;
-	onNoImageReason?: (reason: string) => void;
 	currentImage?: File;
 }
 
@@ -16,14 +16,12 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 		error,
 		warning,
 		activeTab,
-		noImageReason,
 		isCompressing,
 		compressionInfo,
 		setActiveTab,
 		handleFileSelect,
 		clearImage,
-		handleReasonChange,
-	} = useImageUpload(props.onImageCapture, props.onNoImageReason);
+	} = useImageUpload(props.onImageCapture);
 
 	let cameraInputRef: HTMLInputElement | undefined;
 	let fileInputRef: HTMLInputElement | undefined;
@@ -52,6 +50,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 
 	const clearImageAndInputs = () => {
 		clearImage();
+		expenseFormStore.setNoImageReason("");
 		if (cameraInputRef) {
 			cameraInputRef.value = "";
 		}
@@ -172,8 +171,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 					onTabChange={setActiveTab}
 					onCameraClick={openCamera}
 					onFileClick={openFileDialog}
-					noImageReason={noImageReason()}
-					onReasonChange={handleReasonChange}
 					isCompressing={isCompressing()}
 				/>
 			)}

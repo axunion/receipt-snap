@@ -1,7 +1,7 @@
+import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 import { Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { LoadingSpinner } from "./LoadingSpinner";
-import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface LoadingOverlayProps {
 	isVisible: boolean;

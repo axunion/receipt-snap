@@ -8,10 +8,7 @@ import type { TabType } from "@/types/ui";
 import { validateImageFile } from "@/validators/validation";
 import { createSignal } from "solid-js";
 
-export function useImageUpload(
-	onImageCapture?: (file: File) => void,
-	onNoImageReason?: (reason: string) => void,
-) {
+export function useImageUpload(onImageCapture?: (file: File) => void) {
 	const [imagePreview, setImagePreview] = createSignal("");
 	const [error, setError] = createSignal("");
 	const [warning, setWarning] = createSignal("");
@@ -20,7 +17,6 @@ export function useImageUpload(
 	const handleTabChange = (tab: TabType) => {
 		setActiveTab(tab);
 	};
-	const [noImageReason, setNoImageReason] = createSignal("");
 
 	const [isCompressing, setIsCompressing] = createSignal(false);
 	const [compressionInfo, setCompressionInfo] =
@@ -82,15 +78,7 @@ export function useImageUpload(
 		setImagePreview("");
 		setError("");
 		setWarning("");
-		setNoImageReason("");
 		setCompressionInfo(null);
-	};
-
-	const handleReasonChange = (reason: string) => {
-		setNoImageReason(reason);
-		if (reason.trim() && onNoImageReason) {
-			onNoImageReason(reason.trim());
-		}
 	};
 
 	return {
@@ -98,12 +86,10 @@ export function useImageUpload(
 		error,
 		warning,
 		activeTab,
-		noImageReason,
 		isCompressing,
 		compressionInfo,
 		setActiveTab: handleTabChange,
 		handleFileSelect,
 		clearImage,
-		handleReasonChange,
 	};
 }

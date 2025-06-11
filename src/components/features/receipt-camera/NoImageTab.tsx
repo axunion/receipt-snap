@@ -1,11 +1,7 @@
 import { Textarea } from "@/components/ui/Textarea";
+import { expenseFormStore } from "@/stores/expenseFormStore";
 
-interface NoImageTabProps {
-	reason: string;
-	onReasonChange: (reason: string) => void;
-}
-
-export function NoImageTab(props: NoImageTabProps) {
+export function NoImageTab() {
 	return (
 		<div class="h-48 flex flex-col justify-between">
 			<div>
@@ -16,8 +12,8 @@ export function NoImageTab(props: NoImageTabProps) {
 			<div class="flex-1 flex flex-col justify-end">
 				<Textarea
 					placeholder="例：紛失、発行されていないなど"
-					value={props.reason}
-					onInput={props.onReasonChange}
+					value={expenseFormStore.noImageReason()}
+					onInput={expenseFormStore.setNoImageReason}
 					rows={6}
 					class="w-full"
 				/>
