@@ -12,4 +12,4 @@ export {
 } from "./FormFields";
 export { FormFieldsContainer } from "./FormFieldsContainer";
 export { FormSubmission } from "./FormSubmission";
-export { useSuccessHandler, SuccessModalWrapper } from "./SuccessHandler";
+export { SuccessModalWrapper } from "./SuccessHandler";

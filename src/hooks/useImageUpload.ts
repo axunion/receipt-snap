@@ -6,7 +6,8 @@ import {
 import type { CompressionResult } from "@/types/image";
 import type { TabType } from "@/types/ui";
 import { validateImageFile } from "@/validators/validation";
-import { createSignal } from "solid-js";
+import { createSignal, createEffect } from "solid-js";
+import { expenseFormStore } from "@/stores/expenseFormStore";
 
 export function useImageUpload(onImageCapture?: (file: File) => void) {
 	const [imagePreview, setImagePreview] = createSignal("");
@@ -21,6 +22,16 @@ export function useImageUpload(onImageCapture?: (file: File) => void) {
 	const [isCompressing, setIsCompressing] = createSignal(false);
 	const [compressionInfo, setCompressionInfo] =
 		createSignal<CompressionResult | null>(null);
+
+	// ストアのreceiptImageがnullになったら自動的にプレビューをクリア
+	createEffect(() => {
+		if (expenseFormStore.receiptImage() === null) {
+			setImagePreview("");
+			setError("");
+			setWarning("");
+			setCompressionInfo(null);
+		}
+	});
 
 	const handleFileSelect = async (file: File) => {
 		setError("");

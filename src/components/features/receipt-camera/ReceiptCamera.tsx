@@ -2,6 +2,7 @@ import { useImageUpload } from "@/hooks/useImageUpload";
 import { formatImageFileSize } from "@/services/imageService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 import { Icon } from "@iconify-icon/solid";
+import { createEffect } from "solid-js";
 import { ImagePreview } from "./ImagePreview";
 import { UploadTabs } from "./UploadTabs";
 
@@ -25,6 +26,18 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 
 	let cameraInputRef: HTMLInputElement | undefined;
 	let fileInputRef: HTMLInputElement | undefined;
+
+	// ストアのreceiptImageがnullになったら入力要素もクリア
+	createEffect(() => {
+		if (expenseFormStore.receiptImage() === null) {
+			if (cameraInputRef) {
+				cameraInputRef.value = "";
+			}
+			if (fileInputRef) {
+				fileInputRef.value = "";
+			}
+		}
+	});
 
 	const handleFileInputChange = async (event: Event) => {
 		const target = event.target as HTMLInputElement;
@@ -116,23 +129,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				</div>
 			)}
 
-			{isCompressing() && (
-				<div
-					class="p-4 bg-blue-50 border border-blue-200 rounded-lg"
-					aria-live="polite"
-				>
-					<div class="flex items-center gap-2">
-						<Icon
-							icon="material-symbols:hourglass-top"
-							width="16"
-							height="16"
-							class="text-blue-600 animate-spin"
-						/>
-						<p class="text-sm font-medium text-blue-800">画像を圧縮中...</p>
-					</div>
-				</div>
-			)}
-
 			{compressionInfo() && (
 				<div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg transition-opacity duration-300">
 					<div class="flex items-start gap-2">
@@ -158,20 +154,23 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				</div>
 			)}
 
-			{imagePreview() ? (
+			{/* 圧縮中または画像がある場合はプレビューエリアを表示 */}
+			{isCompressing() || imagePreview() ? (
 				<ImagePreview
 					imagePreview={imagePreview()}
 					activeTab={activeTab()}
 					onRetake={activeTab() === "camera" ? openCamera : openFileDialog}
 					onClear={clearImageAndInputs}
+					isLoading={isCompressing()}
 				/>
 			) : (
+				/* 画像がなく圧縮中でもない場合のみアップロードタブを表示 */
 				<UploadTabs
 					activeTab={activeTab()}
 					onTabChange={setActiveTab}
 					onCameraClick={openCamera}
 					onFileClick={openFileDialog}
-					isCompressing={isCompressing()}
+					isCompressing={false}
 				/>
 			)}
 		</div>
