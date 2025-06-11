@@ -1,4 +1,4 @@
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import { Icon } from "@iconify-icon/solid";
 
 interface CameraTabProps {

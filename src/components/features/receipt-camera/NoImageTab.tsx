@@ -1,4 +1,4 @@
-import { Textarea } from "@/components/Textarea";
+import { Textarea } from "@/components/ui/Textarea";
 
 interface NoImageTabProps {
 	reason: string;

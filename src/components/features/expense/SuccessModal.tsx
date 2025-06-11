@@ -1,6 +1,6 @@
 import { Show } from "solid-js";
-import { Button } from "@/components/Button";
-import { Modal } from "@/components/Modal";
+import { Button } from "@/components/ui/Button";
+import { Modal } from "@/components/ui/Modal";
 import { Icon } from "@iconify-icon/solid";
 
 interface SuccessModalProps {

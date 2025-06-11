@@ -1,4 +1,4 @@
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
 import type { TabType } from "@/types/ui";
 
 interface ImagePreviewProps {

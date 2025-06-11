@@ -1,6 +1,6 @@
 import { Show } from "solid-js";
 import { Portal } from "solid-js/web";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { LoadingSpinner } from "./LoadingSpinner";
 import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
 
 interface LoadingOverlayProps {

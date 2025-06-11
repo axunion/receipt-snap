@@ -1,4 +1,4 @@
-import { ExpenseForm } from "./components/ExpenseForm";
+import { ExpenseForm } from "./components/features/expense/ExpenseForm";
 
 function App() {
 	return <ExpenseForm />;
