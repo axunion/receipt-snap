@@ -1,11 +1,12 @@
-import type { ExpenseCategory } from "@/types/expense";
+import type { Purpose } from "@/types/expense";
 import { formatDateForInput } from "@/utils/dateUtils";
 import {
 	validateAmountField,
-	validateCategoryField,
 	validateDateField,
+	validateDetailsField,
 	validateExpenseForm,
 	validateNameField,
+	validatePurposeField,
 	validateReceiptField,
 } from "@/validators/validation";
 import { createEffect, createSignal } from "solid-js";
@@ -14,7 +15,8 @@ export interface FieldErrors {
 	name?: string;
 	amount?: string;
 	date?: string;
-	category?: string;
+	details?: string;
+	purpose?: string;
 	receipt?: string;
 }
 
@@ -44,7 +46,8 @@ export function useFormValidation() {
 		name: () => string,
 		amount: () => string,
 		date: () => string,
-		category: () => ExpenseCategory,
+		details: () => string,
+		purpose: () => Purpose,
 		receiptImage: () => File | null,
 		noImageReason: () => string,
 	) => {
@@ -66,8 +69,13 @@ export function useFormValidation() {
 		});
 
 		createEffect(() => {
-			validateField("category", category(), validateCategoryField);
-			if (category() !== "other") markAsTouched("category");
+			validateField("details", details(), validateDetailsField);
+			if (details() !== "") markAsTouched("details");
+		});
+
+		createEffect(() => {
+			validateField("purpose", purpose(), validatePurposeField);
+			if (purpose() !== "") markAsTouched("purpose");
 		});
 
 		const validateReceiptCallback = () => {
@@ -90,7 +98,8 @@ export function useFormValidation() {
 		name: string;
 		amount: number;
 		date: string;
-		category: ExpenseCategory;
+		details: string;
+		purpose: Purpose;
 		receiptImage?: File;
 		noImageReason?: string;
 	}) => {
@@ -103,14 +112,15 @@ export function useFormValidation() {
 			"name",
 			"amount",
 			"date",
-			"category",
+			"details",
+			"purpose",
 			"receipt",
 		];
-		const touchedUpdates: TouchedFields = {};
+		const touched: TouchedFields = {};
 		for (const field of allFields) {
-			touchedUpdates[field] = true;
+			touched[field] = true;
 		}
-		setTouchedFields((prev) => ({ ...prev, ...touchedUpdates }));
+		setTouchedFields(touched);
 
 		return validation.isValid;
 	};

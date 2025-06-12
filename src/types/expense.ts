@@ -1,39 +1,36 @@
-export type ExpenseCategory =
-	| "transportation"
-	| "meals"
-	| "accommodation"
-	| "office_supplies"
-	| "communication"
-	| "entertainment"
-	| "other";
+export type Purpose = string;
 
-export interface ExpenseRequest {
+export interface PurposeOption {
+	value: Purpose;
+	label: string;
+}
+
+export interface Expense {
+	id: string;
 	name: string;
 	amount: number;
 	date: string;
-	category: ExpenseCategory;
+	details: string;
+	purpose: Purpose;
 	notes?: string;
-	receiptImage: File;
+	receiptImageUrl?: string;
+	userId: string;
+	createdAt: string;
 }
 
-export interface ExpenseResponse {
+export interface ExpenseData {
+	name: string;
+	amount: string;
+	date: string;
+	details: string;
+	purpose: Purpose;
+	notes: string;
+	receiptImage: File | null;
+}
+
+export interface SubmitExpenseResult {
 	id: string;
 	status: "success" | "error";
 	message: string;
 	submittedAt: string;
 }
-
-export interface ExpenseCategoryOption {
-	value: ExpenseCategory;
-	label: string;
-}
-
-export const EXPENSE_CATEGORIES: ExpenseCategoryOption[] = [
-	{ value: "transportation", label: "交通費" },
-	{ value: "meals", label: "食事代" },
-	{ value: "accommodation", label: "宿泊費" },
-	{ value: "office_supplies", label: "事務用品" },
-	{ value: "communication", label: "通信費" },
-	{ value: "entertainment", label: "接待費" },
-	{ value: "other", label: "その他" },
-];

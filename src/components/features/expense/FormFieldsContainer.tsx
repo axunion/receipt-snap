@@ -1,9 +1,10 @@
 import {
 	AmountField,
-	CategoryField,
 	DateField,
+	DetailsField,
 	NameField,
 	NotesField,
+	PurposeField,
 	ReceiptField,
 } from "@/components/features/expense/FormFields";
 import type { FieldErrors, TouchedFields } from "@/hooks/useFormValidation";
@@ -17,15 +18,19 @@ interface FormFieldsContainerProps {
 export function FormFieldsContainer(props: FormFieldsContainerProps) {
 	return (
 		<>
+			<PurposeField
+				fieldErrors={props.fieldErrors}
+				touchedFields={props.touchedFields}
+			/>
 			<ReceiptField
 				fieldErrors={props.fieldErrors}
 				touchedFields={props.touchedFields}
 			/>
-			<NameField
+			<DetailsField
 				fieldErrors={props.fieldErrors}
 				touchedFields={props.touchedFields}
 			/>
-			<CategoryField
+			<NameField
 				fieldErrors={props.fieldErrors}
 				touchedFields={props.touchedFields}
 			/>

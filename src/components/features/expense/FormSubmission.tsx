@@ -3,7 +3,7 @@ import { LoadingOverlay } from "@/components/ui/loading/LoadingOverlay";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 
 export function FormSubmission() {
-	const isSubmitting = () => expenseFormStore.submitState().isSubmitting;
+	const isSubmitting = () => expenseFormStore.submitState().isLoading;
 
 	return (
 		<>

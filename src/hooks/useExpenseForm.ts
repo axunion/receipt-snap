@@ -1,6 +1,6 @@
-import { apiService } from "@/services/apiService";
+import { submitExpense } from "@/services/apiService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
-import type { ExpenseRequest, ExpenseResponse } from "@/types/expense";
+import type { ExpenseData, SubmitExpenseResult } from "@/types/expense";
 import { parseAmount } from "@/utils/formatUtils";
 import { useFormValidation } from "./useFormValidation";
 
@@ -15,7 +15,8 @@ export function useExpenseForm() {
 		expenseFormStore.name,
 		expenseFormStore.amount,
 		expenseFormStore.date,
-		expenseFormStore.category,
+		expenseFormStore.details,
+		expenseFormStore.purpose,
 		expenseFormStore.receiptImage,
 		expenseFormStore.noImageReason,
 	);
@@ -25,7 +26,7 @@ export function useExpenseForm() {
 		validation.resetValidation();
 	};
 
-	const submitForm = async (): Promise<ExpenseResponse | undefined> => {
+	const submitForm = async (): Promise<SubmitExpenseResult | undefined> => {
 		// Format amount for validation
 		const currentAmount = parseAmount(expenseFormStore.amount());
 
@@ -33,7 +34,8 @@ export function useExpenseForm() {
 			name: expenseFormStore.name(),
 			amount: currentAmount,
 			date: expenseFormStore.date(),
-			category: expenseFormStore.category(),
+			details: expenseFormStore.details(),
+			purpose: expenseFormStore.purpose(),
 			receiptImage: expenseFormStore.receiptImage() || undefined,
 			noImageReason: expenseFormStore.noImageReason() || undefined,
 		});
@@ -47,40 +49,37 @@ export function useExpenseForm() {
 			name: expenseFormStore.name(),
 			amount: currentAmount,
 			date: expenseFormStore.date(),
-			category: expenseFormStore.category(),
+			details: expenseFormStore.details(),
 		});
 
-		expenseFormStore.setSubmitState({ isSubmitting: true, result: null });
+		expenseFormStore.setSubmitState({ isLoading: true, result: null });
 
 		try {
-			const finalImage =
-				expenseFormStore.receiptImage() ||
-				new File([""], "no-receipt.txt", { type: "text/plain" });
-
-			const expenseData: ExpenseRequest = {
+			const expenseData: ExpenseData = {
 				name: expenseFormStore.name(),
-				amount: currentAmount,
+				amount: expenseFormStore.amount(),
 				date: expenseFormStore.date(),
-				category: expenseFormStore.category(),
-				notes: expenseFormStore.notes() || undefined,
-				receiptImage: finalImage,
+				details: expenseFormStore.details(),
+				purpose: expenseFormStore.purpose(),
+				notes: expenseFormStore.notes(),
+				receiptImage: expenseFormStore.receiptImage(),
 			};
 
-			const result = await apiService.submitExpense(expenseData);
+			const result = await submitExpense(expenseData);
 			console.log("Result from API:", result);
-			expenseFormStore.setSubmitState({ isSubmitting: false, result });
+			expenseFormStore.setSubmitState({ isLoading: false, result });
 
 			return result;
 		} catch (error) {
 			console.error("Submit error:", error);
-			const errorResult: ExpenseResponse = {
+			const errorResult: SubmitExpenseResult = {
 				id: "",
 				status: "error",
-				message: "An error occurred during submission. Please try again.",
+				message: "An error occurred during submission. Please try again",
 				submittedAt: new Date().toISOString(),
 			};
 			expenseFormStore.setSubmitState({
-				isSubmitting: false,
+				isLoading: false,
 				result: errorResult,
 			});
 			return errorResult;
@@ -92,7 +91,8 @@ export function useExpenseForm() {
 		name: expenseFormStore.name,
 		amount: expenseFormStore.amount,
 		date: expenseFormStore.date,
-		category: expenseFormStore.category,
+		details: expenseFormStore.details,
+		purpose: expenseFormStore.purpose,
 		notes: expenseFormStore.notes,
 		receiptImage: expenseFormStore.receiptImage,
 		noImageReason: expenseFormStore.noImageReason,
@@ -107,7 +107,8 @@ export function useExpenseForm() {
 		setName: expenseFormStore.setName,
 		setAmount: expenseFormStore.setAmount,
 		setDate: expenseFormStore.setDate,
-		setCategory: expenseFormStore.setCategory,
+		setDetails: expenseFormStore.setDetails,
+		setPurpose: expenseFormStore.setPurpose,
 		setNotes: expenseFormStore.setNotes,
 		setReceiptImage: expenseFormStore.setReceiptImage,
 		setNoImageReason: expenseFormStore.setNoImageReason,

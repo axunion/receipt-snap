@@ -4,10 +4,10 @@ import { Label } from "@/components/ui/Label";
 import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import type { FieldErrors, TouchedFields } from "@/hooks/useFormValidation";
+import { fetchPurposes } from "@/services/apiService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
-import { EXPENSE_CATEGORIES } from "@/types/expense";
-import type { ExpenseCategory } from "@/types/expense";
-import { For, Show } from "solid-js";
+import type { PurposeOption } from "@/types/expense";
+import { For, Show, createResource } from "solid-js";
 
 interface FormFieldProps {
 	fieldErrors: () => FieldErrors;
@@ -117,34 +117,63 @@ export function NotesField() {
 	);
 }
 
-export function CategoryField(props: FormFieldProps) {
+export function DetailsField(props: FormFieldProps) {
 	return (
 		<div>
 			<Label required icon="material-symbols:format-list-bulleted">
-				カテゴリ
+				内訳
 			</Label>
-			<Select
-				options={EXPENSE_CATEGORIES}
-				value={expenseFormStore.category()}
-				onSelect={(value) =>
-					expenseFormStore.setCategory(value as ExpenseCategory)
-				}
-				placeholder="カテゴリを選択"
+			<Input
+				type="text"
+				placeholder="内訳を入力"
+				value={expenseFormStore.details()}
+				onInput={expenseFormStore.setDetails}
 				required
 				aria-invalid={
-					!!(props.fieldErrors().category && props.touchedFields().category)
+					!!(props.fieldErrors().details && props.touchedFields().details)
 				}
 				aria-describedby={
-					props.fieldErrors().category && props.touchedFields().category
-						? "category-error"
+					props.fieldErrors().details && props.touchedFields().details
+						? "details-error"
 						: undefined
 				}
 			/>
-			<Show
-				when={props.fieldErrors().category && props.touchedFields().category}
-			>
-				<p id="category-error" class="text-sm text-red-600 mt-1">
-					{props.fieldErrors().category}
+			<Show when={props.fieldErrors().details && props.touchedFields().details}>
+				<p id="details-error" class="text-sm text-red-600 mt-1">
+					{props.fieldErrors().details}
+				</p>
+			</Show>
+		</div>
+	);
+}
+
+export function PurposeField(props: FormFieldProps) {
+	const [purposes] = createResource<PurposeOption[]>(fetchPurposes);
+
+	return (
+		<div>
+			<Label required icon="material-symbols:event-note-outline">
+				対象
+			</Label>
+			<Select
+				options={purposes() || []}
+				value={expenseFormStore.purpose()}
+				onSelect={expenseFormStore.setPurpose}
+				placeholder="対象を選択"
+				required
+				aria-invalid={
+					!!(props.fieldErrors().purpose && props.touchedFields().purpose)
+				}
+				aria-describedby={
+					props.fieldErrors().purpose && props.touchedFields().purpose
+						? "purpose-error"
+						: undefined
+				}
+				disabled={purposes.loading}
+			/>
+			<Show when={props.fieldErrors().purpose && props.touchedFields().purpose}>
+				<p id="purpose-error" class="text-sm text-red-600 mt-1">
+					{props.fieldErrors().purpose}
 				</p>
 			</Show>
 		</div>

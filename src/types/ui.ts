@@ -1,23 +1,13 @@
+import type { SubmitExpenseResult } from "./expense";
+
 export interface CompressionProgress {
 	progress: number;
 	stage: string;
 }
 
-export interface CompressionResult {
-	originalSize: number;
-	compressedSize: number;
-	ratio: number;
-}
-
-export interface ValidationResult {
-	isValid: boolean;
-	error?: string;
-	warning?: string;
-}
-
 export interface SubmitState {
-	isSubmitting: boolean;
-	result: import("./expense").ExpenseResponse | null;
+	isLoading: boolean;
+	result: SubmitExpenseResult | null;
 }
 
 export type TabType = "camera" | "file" | "no-image";

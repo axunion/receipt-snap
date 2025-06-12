@@ -1,3 +1,4 @@
+import type { FieldErrors } from "@/hooks/useFormValidation";
 import type { ImageValidationResult } from "@/types/image";
 
 export function validateImageFile(file: File): ImageValidationResult {
@@ -112,9 +113,16 @@ export function validateDateField(dateString: string): string | undefined {
 	return undefined;
 }
 
-export function validateCategoryField(category: string): string | undefined {
-	if (!category) {
-		return "Category is required.";
+export function validateDetailsField(details: string): string | undefined {
+	if (!details.trim()) {
+		return "Details are required.";
+	}
+	return undefined;
+}
+
+export function validatePurposeField(purpose: string): string | undefined {
+	if (!purpose) {
+		return "Purpose is required.";
 	}
 	return undefined;
 }
@@ -129,57 +137,52 @@ export function validateReceiptField(
 	return undefined;
 }
 
-export function validateExpenseForm(data: {
+export function validateExpenseForm(formData: {
 	name: string;
 	amount: number;
 	date: string;
-	category: string;
+	details: string; // Changed from category
+	purpose: string; // Added purpose
 	receiptImage?: File;
 	noImageReason?: string;
 }) {
 	const errors: string[] = [];
-	const nameError = validateNameField(data.name);
-	if (nameError) errors.push(nameError);
+	const fieldErrors: Partial<FieldErrors> = {}; // Use FieldErrors type from useFormValidation
 
-	const amountError = validateAmountField(data.amount);
-	if (amountError) errors.push(amountError);
+	const nameError = validateNameField(formData.name);
+	if (nameError) fieldErrors.name = nameError;
 
-	const dateError = validateDateField(data.date);
-	if (dateError) errors.push(dateError);
+	const amountError = validateAmountField(formData.amount);
+	if (amountError) fieldErrors.amount = amountError;
 
-	const categoryError = validateCategoryField(data.category);
-	if (categoryError) errors.push(categoryError);
+	const dateError = validateDateField(formData.date);
+	if (dateError) fieldErrors.date = dateError;
+
+	const detailsError = validateDetailsField(formData.details); // Changed from category
+	if (detailsError) fieldErrors.details = detailsError; // Changed from category
+
+	const purposeError = validatePurposeField(formData.purpose); // Added purpose
+	if (purposeError) fieldErrors.purpose = purposeError; // Added purpose
 
 	const receiptError = validateReceiptField(
-		data.receiptImage,
-		data.noImageReason,
+		formData.receiptImage,
+		formData.noImageReason,
 	);
-	if (receiptError) errors.push(receiptError);
+	if (receiptError) fieldErrors.receipt = receiptError;
+
+	// Consolidate all errors
+	for (const error of Object.values(fieldErrors)) {
+		if (error) {
+			errors.push(error);
+		}
+	}
+
+	// Add form-level errors if any (though currently all are field-specific)
+	// Example: if (!isPolicyAccepted) errors.push("You must accept the policy.");
 
 	return {
 		isValid: errors.length === 0,
 		errors,
-		fieldErrors: {
-			name: nameError,
-			amount: amountError,
-			date: dateError,
-			category: categoryError,
-			receipt: receiptError,
-		},
+		fieldErrors,
 	};
-}
-
-export function validateDate(dateString: string): boolean {
-	const date = new Date(dateString);
-	const now = new Date();
-
-	if (date > now) {
-		return false;
-	}
-
-	return true;
-}
-
-export function validateAmount(amount: number): boolean {
-	return !validateAmountField(amount);
 }

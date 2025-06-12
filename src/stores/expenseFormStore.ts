@@ -1,60 +1,80 @@
-import type { ExpenseCategory } from "@/types/expense";
-import type { SubmitState } from "@/types/ui";
-import { getTodayDateString } from "@/utils/dateUtils";
-import { createSignal } from "solid-js";
+import type {
+	ExpenseData,
+	Purpose,
+	SubmitExpenseResult,
+} from "@/types/expense";
+import { createRoot, createSignal } from "solid-js";
 
-// State signals
-const [name, setName] = createSignal("");
-const [amount, setAmount] = createSignal("");
-const [date, setDate] = createSignal(getTodayDateString());
-const [category, setCategory] = createSignal<ExpenseCategory>("other");
-const [notes, setNotes] = createSignal("");
-const [receiptImage, setReceiptImage] = createSignal<File | null>(null);
-const [noImageReason, setNoImageReason] = createSignal("");
-const [submitState, setSubmitState] = createSignal<SubmitState>({
-	isSubmitting: false,
-	result: null,
-});
-
-// Actions
-const resetForm = () => {
-	setName("");
-	setAmount("");
-	setDate(getTodayDateString());
-	setCategory("other");
-	setNotes("");
-	setReceiptImage(null);
-	setNoImageReason("");
-	setSubmitState({ isSubmitting: false, result: null });
+// Initial state for the form
+const initialState: ExpenseData = {
+	name: "",
+	amount: "",
+	date: new Date().toISOString().split("T")[0], // Default to today
+	details: "", // Changed from category
+	purpose: "", // Added purpose
+	notes: "",
+	receiptImage: null,
 };
 
-// Store export - SolidJS style with direct signal exposure
-export const expenseFormStore = {
-	// Direct signal access (SolidJS best practice)
-	name,
-	amount,
-	date,
-	category,
-	notes,
-	receiptImage,
-	noImageReason,
-	submitState,
+function createExpenseFormStore() {
+	const [name, setName] = createSignal(initialState.name);
+	const [amount, setAmount] = createSignal(initialState.amount);
+	const [date, setDate] = createSignal(initialState.date);
+	const [details, setDetails] = createSignal(initialState.details); // Changed from category
+	const [purpose, setPurpose] = createSignal<Purpose>(initialState.purpose); // Added purpose
+	const [notes, setNotes] = createSignal(initialState.notes);
+	const [noImageReason, setNoImageReason] = createSignal("");
+	const [receiptImage, setReceiptImage] = createSignal<File | null>(
+		initialState.receiptImage,
+	);
+	const [submitState, setSubmitState] = createSignal<{
+		isLoading: boolean;
+		result: SubmitExpenseResult | null;
+	}>({ isLoading: false, result: null });
 
-	// Setters
-	setName,
-	setAmount,
-	setDate,
-	setCategory,
-	setNotes,
-	setReceiptImage,
-	setNoImageReason,
-	setSubmitState,
+	// Reset form to initial state
+	const resetForm = () => {
+		setName(initialState.name);
+		setAmount(initialState.amount);
+		setDate(initialState.date);
+		setDetails(initialState.details); // Changed from category
+		setPurpose(initialState.purpose); // Added purpose
+		setNotes(initialState.notes);
+		setNoImageReason("");
+		setReceiptImage(initialState.receiptImage);
+		setSubmitState({ isLoading: false, result: null });
+	};
 
-	// Actions
-	resetForm,
+	return {
+		name,
+		setName,
+		amount,
+		setAmount,
+		date,
+		setDate,
+		details, // Changed from category
+		setDetails, // Changed from category
+		purpose, // Added purpose
+		setPurpose, // Added purpose
+		notes,
+		setNotes,
+		noImageReason,
+		setNoImageReason,
+		receiptImage,
+		setReceiptImage,
+		submitState,
+		setSubmitState,
+		resetForm,
+		getFormData: () => ({
+			name: name(),
+			amount: amount(),
+			date: date(),
+			details: details(), // Changed from category
+			purpose: purpose(), // Added purpose
+			notes: notes(),
+			receiptImage: receiptImage(),
+		}),
+	};
+}
 
-	// Computed values (using functions for clarity)
-	isFormEmpty: () =>
-		!name() && !amount() && !notes() && !receiptImage() && !noImageReason(),
-	hasRequiredFields: () => !!(name() && amount() && date() && category()),
-};
+export const expenseFormStore = createRoot(createExpenseFormStore);

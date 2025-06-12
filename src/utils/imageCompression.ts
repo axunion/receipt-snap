@@ -4,13 +4,7 @@ import {
 	RESOLUTION_PRESETS,
 	SUPPORTED_FORMATS,
 } from "@/constants/compression";
-
-export interface CompressionOptions {
-	maxWidth?: number;
-	maxHeight?: number;
-	quality?: number;
-	format?: "image/jpeg" | "image/webp" | "image/png";
-}
+import type { CompressionOptions } from "@/types/image";
 
 /**
  * Compress image file with memory optimization

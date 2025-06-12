@@ -10,7 +10,7 @@ interface SuccessModalProps {
 	submittedExpense?: {
 		name: string;
 		amount: number;
-		category: string;
+		details: string;
 	};
 }
 
@@ -56,7 +56,7 @@ export function SuccessModal(props: SuccessModalProps) {
 							<div class="flex justify-between">
 								<span class="text-gray-600">カテゴリ：</span>
 								<span class="font-medium">
-									{props.submittedExpense?.category}
+									{props.submittedExpense?.details}
 								</span>
 							</div>
 						</div>

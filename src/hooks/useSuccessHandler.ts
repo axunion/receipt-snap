@@ -1,13 +1,6 @@
 import { expenseFormStore } from "@/stores/expenseFormStore";
-import { EXPENSE_CATEGORIES } from "@/types/expense";
 import { parseAmount } from "@/utils/formatUtils";
 import { createSignal } from "solid-js";
-
-export interface SubmissionData {
-	name: string;
-	amount: number;
-	category: string;
-}
 
 export interface SuccessHandlerProps {
 	onReset: () => void;
@@ -15,20 +8,18 @@ export interface SuccessHandlerProps {
 
 export function useSuccessHandler(props: SuccessHandlerProps) {
 	const [showSuccessModal, setShowSuccessModal] = createSignal(false);
-	const [submittedData, setSubmittedData] = createSignal<
-		SubmissionData | undefined
-	>();
+	const [submittedData, setSubmittedData] = createSignal<{
+		name: string;
+		amount: number;
+		details: string;
+	}>();
 
 	const handleSuccess = () => {
-		const submissionData: SubmissionData = {
+		setSubmittedData({
 			name: expenseFormStore.name(),
 			amount: parseAmount(expenseFormStore.amount()),
-			category:
-				EXPENSE_CATEGORIES.find(
-					(cat) => cat.value === expenseFormStore.category(),
-				)?.label || expenseFormStore.category(),
-		};
-		setSubmittedData(submissionData);
+			details: expenseFormStore.details(),
+		});
 		setShowSuccessModal(true);
 	};
 

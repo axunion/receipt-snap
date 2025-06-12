@@ -1,9 +1,5 @@
+import type { SelectOption } from "@/types/ui";
 import { For } from "solid-js";
-
-interface SelectOption {
-	value: string;
-	label: string;
-}
 
 interface SelectProps {
 	options: SelectOption[];

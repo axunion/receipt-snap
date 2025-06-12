@@ -4,7 +4,6 @@ export {
 	NameField,
 	AmountField,
 	DateField,
-	CategoryField,
 	ReceiptField,
 	NotesField,
 	ErrorDisplay,
