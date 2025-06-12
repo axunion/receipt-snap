@@ -3,11 +3,11 @@ import {
 	createPreviewUrl,
 	formatImageFileSize,
 } from "@/services/imageService";
+import { expenseFormStore } from "@/stores/expenseFormStore";
 import type { CompressionResult } from "@/types/image";
 import type { TabType } from "@/types/ui";
 import { validateImageFile } from "@/validators/validation";
-import { createSignal, createEffect } from "solid-js";
-import { expenseFormStore } from "@/stores/expenseFormStore";
+import { createEffect, createSignal } from "solid-js";
 
 export function useImageUpload(onImageCapture?: (file: File) => void) {
 	const [imagePreview, setImagePreview] = createSignal("");
@@ -23,7 +23,7 @@ export function useImageUpload(onImageCapture?: (file: File) => void) {
 	const [compressionInfo, setCompressionInfo] =
 		createSignal<CompressionResult | null>(null);
 
-	// ストアのreceiptImageがnullになったら自動的にプレビューをクリア
+	// Automatically clear preview when receiptImage in store becomes null
 	createEffect(() => {
 		if (expenseFormStore.receiptImage() === null) {
 			setImagePreview("");
@@ -48,16 +48,13 @@ export function useImageUpload(onImageCapture?: (file: File) => void) {
 			setWarning(validation.warning);
 		}
 
-		const fileSizeMB = file.size / (1024 * 1024);
-		console.log(`Processing: ${file.name} (${fileSizeMB.toFixed(1)}MB)`);
-
 		setIsCompressing(true);
 
 		try {
 			const { compressedFile, metrics } = await compressImage(file);
 
 			console.log(
-				`Compression complete: ${metrics.duration.toFixed(0)}ms, ${formatImageFileSize(metrics.originalSize)} → ${formatImageFileSize(metrics.compressedSize)} (${metrics.compressionRatio}% reduction)`,
+				`Compression complete: ${metrics.duration.toFixed(0)}ms, ${formatImageFileSize(metrics.originalSize)} -> ${formatImageFileSize(metrics.compressedSize)} (${metrics.compressionRatio}% reduction)`,
 			);
 			setCompressionInfo({
 				originalSize: metrics.originalSize,
@@ -74,7 +71,7 @@ export function useImageUpload(onImageCapture?: (file: File) => void) {
 			setImagePreview(previewUrl);
 		} catch (compressionError) {
 			console.error("Image compression error:", compressionError);
-			setError("画像の圧縮に失敗しました。元の画像を使用します。");
+			setError("Image compression failed. Using original image.");
 
 			onImageCapture?.(file);
 

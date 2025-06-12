@@ -10,15 +10,15 @@ export class ApiService {
 	async submitExpense(expenseData: ExpenseRequest): Promise<ExpenseResponse> {
 		// Simulate API response in development
 		if (import.meta.env.DEV) {
-			console.log("開発環境: 経費送信シミュレート中...");
+			console.log("Development: Simulating expense submission...");
 			await this.simulateDelay(1500);
 			const result = {
 				id: `exp_${Date.now()}`,
 				status: "success" as const,
-				message: "経費申請が正常に送信されました。",
+				message: "Expense report submitted successfully.",
 				submittedAt: new Date().toISOString(),
 			};
-			console.log("送信完了:", result.id);
+			console.log("Submission complete:", result.id);
 			return result;
 		}
 

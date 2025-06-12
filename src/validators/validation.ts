@@ -14,14 +14,14 @@ export function validateImageFile(file: File): ImageValidationResult {
 	if (!allowedTypes.includes(file.type)) {
 		return {
 			isValid: false,
-			error: "JPEG、PNG、WebP、HEIC/HEIF形式の画像ファイルのみ対応しています",
+			error: "Only JPEG, PNG, WebP, HEIC/HEIF image files are supported.",
 		};
 	}
 
 	if (file.size > maxSize) {
 		return {
 			isValid: false,
-			error: "ファイルサイズは100MB以下にしてください",
+			error: "File size must be 100MB or less.",
 		};
 	}
 
@@ -30,10 +30,9 @@ export function validateImageFile(file: File): ImageValidationResult {
 	let warning: string | undefined;
 
 	if (fileSizeMB > 50) {
-		warning = "大きなファイルです。処理に時間がかかる場合があります。";
+		warning = "Large file. Processing may take some time.";
 	} else if (file.type === "image/heic" || file.type === "image/heif") {
-		warning =
-			"HEIC/HEIF形式のファイルです。一部の環境で表示できない場合があります。";
+		warning = "HEIC/HEIF file. May not be viewable in all environments.";
 	}
 
 	return {
@@ -44,24 +43,24 @@ export function validateImageFile(file: File): ImageValidationResult {
 
 export function validateNameField(name: string): string | undefined {
 	if (!name.trim()) {
-		return "名前は必須です";
+		return "Name is required.";
 	}
 	return undefined;
 }
 
 export function validateAmountField(amount: number): string | undefined {
 	if (Number.isNaN(amount) || amount <= 0) {
-		return "金額は0より大きい値を入力してください";
+		return "Amount must be greater than 0.";
 	}
 	if (amount > 1000000) {
-		return "金額は1,000,000円以下で入力してください";
+		return "Amount must be 1,000,000 or less.";
 	}
 	return undefined;
 }
 
 export function validateDateField(dateString: string): string | undefined {
 	if (!dateString) {
-		return "支払日は必須です";
+		return "Payment date is required.";
 	}
 
 	const parts = dateString.split("-");
@@ -71,7 +70,7 @@ export function validateDateField(dateString: string): string | undefined {
 		parts[1].length !== 2 ||
 		parts[2].length !== 2
 	) {
-		return "日付はYYYY-MM-DD形式で入力してください";
+		return "Date must be in YYYY-MM-DD format.";
 	}
 
 	const year = Number.parseInt(parts[0], 10);
@@ -79,15 +78,15 @@ export function validateDateField(dateString: string): string | undefined {
 	const day = Number.parseInt(parts[2], 10);
 
 	if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
-		return "有効な数値を日付に使用してください";
+		return "Please use valid numbers for the date.";
 	}
 
 	if (month < 1 || month > 12) {
-		return "月は1から12の間で入力してください";
+		return "Month must be between 1 and 12.";
 	}
 	if (day < 1 || day > 31) {
 		// Basic check, more complex validation follows
-		return "日は1から31の間で入力してください";
+		return "Day must be between 1 and 31.";
 	}
 
 	// Create Date object using local time zone at 00:00:00
@@ -100,14 +99,14 @@ export function validateDateField(dateString: string): string | undefined {
 		inputDate.getMonth() !== month - 1 || // Compare with 0-indexed month
 		inputDate.getDate() !== day
 	) {
-		return "有効な日付を入力してください (例: 2月30日は存在しません)";
+		return "Please enter a valid date (e.g., February 30th does not exist).";
 	}
 
 	const today = new Date();
 	today.setHours(0, 0, 0, 0); // Set to 00:00:00 local time of today
 
 	if (inputDate.getTime() > today.getTime()) {
-		return "未来の日付は入力できません";
+		return "Future dates are not allowed.";
 	}
 
 	return undefined;
@@ -115,7 +114,7 @@ export function validateDateField(dateString: string): string | undefined {
 
 export function validateCategoryField(category: string): string | undefined {
 	if (!category) {
-		return "カテゴリは必須です";
+		return "Category is required.";
 	}
 	return undefined;
 }
@@ -125,7 +124,7 @@ export function validateReceiptField(
 	noImageReason?: string,
 ): string | undefined {
 	if (!receiptImage && !noImageReason?.trim()) {
-		return "レシート画像または入力しない理由のどちらかを入力してください";
+		return "Either a receipt image or a reason for not providing one is required.";
 	}
 	return undefined;
 }
@@ -174,19 +173,13 @@ export function validateDate(dateString: string): boolean {
 	const date = new Date(dateString);
 	const now = new Date();
 
-	// Future dates are invalid
 	if (date > now) {
 		return false;
 	}
 
-	// Dates older than 1 year trigger warning - this logic is not used for blocking errors anymore
-	// const oneYearAgo = new Date();
-	// oneYearAgo.setFullYear(now.getFullYear() - 1);
-	// return date >= oneYearAgo;
-	return true; // Simplified as detailed validation is in validateDateField
+	return true;
 }
 
 export function validateAmount(amount: number): boolean {
-	// return amount > 0 && amount <= 1000000; // Max 1M yen - Simplified as detailed validation is in validateAmountField
 	return !validateAmountField(amount);
 }

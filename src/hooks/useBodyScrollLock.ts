@@ -1,8 +1,8 @@
 import { type Accessor, createEffect, onCleanup } from "solid-js";
 
 /**
- * ボディスクロールを制御するカスタムフック
- * モーダルやオーバーレイ表示時にバックグラウンドのスクロールを無効化する
+ * Custom hook to control body scroll.
+ * Disables background scroll when a modal or overlay is visible.
  */
 export function useBodyScrollLock(
 	isActive: Accessor<boolean> | boolean,
@@ -15,31 +15,31 @@ export function useBodyScrollLock(
 		const lock = typeof shouldLock === "function" ? shouldLock() : shouldLock;
 
 		if (active && lock) {
-			// 現在のスクロール位置を保存
+			// Save current scroll position
 			savedScrollY = window.scrollY;
 
-			// bodyのスクロールを無効化
+			// Disable body scroll
 			document.body.style.position = "fixed";
 			document.body.style.top = `-${savedScrollY}px`;
 			document.body.style.width = "100%";
 			document.body.style.overflow = "hidden";
 		} else if (!active && lock) {
-			// スクロールロックが解除された時のクリーンアップ
+			// Cleanup when scroll lock is released
 			if (document.body.style.position === "fixed") {
-				// bodyのスタイルをリセット
+				// Reset body style
 				document.body.style.position = "";
 				document.body.style.top = "";
 				document.body.style.width = "";
 				document.body.style.overflow = "";
 
-				// 元のスクロール位置に戻す
+				// Restore original scroll position
 				window.scrollTo(0, savedScrollY);
 			}
 		}
 	});
 
 	onCleanup(() => {
-		// コンポーネントがアンマウントされた時のクリーンアップ
+		// Cleanup when component unmounts
 		if (document.body.style.position === "fixed") {
 			document.body.style.position = "";
 			document.body.style.top = "";

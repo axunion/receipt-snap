@@ -4,7 +4,6 @@ import type { ExpenseRequest, ExpenseResponse } from "@/types/expense";
 import { parseAmount } from "@/utils/formatUtils";
 import { useFormValidation } from "./useFormValidation";
 
-// Re-export types for backward compatibility
 export type { FieldErrors, TouchedFields } from "./useFormValidation";
 
 export function useExpenseForm() {
@@ -40,11 +39,11 @@ export function useExpenseForm() {
 		});
 
 		if (!isValid) {
-			console.log("バリデーション失敗:", validation.formErrors());
+			console.log("Validation failed:", validation.formErrors());
 			return undefined;
 		}
 
-		console.log("送信開始 - データ:", {
+		console.log("Submission started - Data:", {
 			name: expenseFormStore.name(),
 			amount: currentAmount,
 			date: expenseFormStore.date(),
@@ -68,7 +67,7 @@ export function useExpenseForm() {
 			};
 
 			const result = await apiService.submitExpense(expenseData);
-			console.log("APIから返却された結果:", result);
+			console.log("Result from API:", result);
 			expenseFormStore.setSubmitState({ isSubmitting: false, result });
 
 			return result;
