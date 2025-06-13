@@ -1,4 +1,4 @@
-import type { SubmitExpenseResult } from "./expense";
+import type { SubmitResponse } from "./api";
 
 export interface CompressionProgress {
 	progress: number;
@@ -7,7 +7,7 @@ export interface CompressionProgress {
 
 export interface SubmitState {
 	isLoading: boolean;
-	result: SubmitExpenseResult | null;
+	result: SubmitResponse | null;
 }
 
 export type TabType = "camera" | "file" | "no-image";

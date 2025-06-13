@@ -1,8 +1,5 @@
-import type {
-	ExpenseData,
-	Purpose,
-	SubmitExpenseResult,
-} from "@/types/expense";
+import type { SubmitResponse } from "@/types/api";
+import type { ExpenseData, Purpose } from "@/types/expense";
 import { createRoot, createSignal } from "solid-js";
 
 const initialState: ExpenseData = {
@@ -28,7 +25,7 @@ function createExpenseFormStore() {
 	);
 	const [submitState, setSubmitState] = createSignal<{
 		isLoading: boolean;
-		result: SubmitExpenseResult | null;
+		result: SubmitResponse | null;
 	}>({ isLoading: false, result: null });
 
 	const resetForm = () => {

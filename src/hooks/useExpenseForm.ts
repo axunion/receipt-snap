@@ -1,6 +1,7 @@
 import { submitExpense } from "@/services/apiService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
-import type { ExpenseData, SubmitExpenseResult } from "@/types/expense";
+import type { SubmitResponse } from "@/types/api";
+import type { ExpenseData } from "@/types/expense";
 import { parseAmount } from "@/utils";
 import { useFormValidation } from "./useFormValidation";
 
@@ -24,7 +25,7 @@ export function useExpenseForm() {
 		validation.resetValidation();
 	};
 
-	const submitForm = async (): Promise<SubmitExpenseResult | undefined> => {
+	const submitForm = async (): Promise<SubmitResponse | undefined> => {
 		// Format amount for validation
 		const currentAmount = parseAmount(expenseFormStore.amount());
 
@@ -70,11 +71,12 @@ export function useExpenseForm() {
 			return result;
 		} catch (error) {
 			console.error("Submit error:", error);
-			const errorResult: SubmitExpenseResult = {
-				id: "",
-				status: "error",
-				message: "An error occurred during submission. Please try again",
-				submittedAt: new Date().toISOString(),
+			const errorResult: SubmitResponse = {
+				success: false,
+				error: {
+					code: "SUBMIT_ERROR",
+					message: "An error occurred during submission. Please try again",
+				},
 			};
 			expenseFormStore.setSubmitState({
 				isLoading: false,

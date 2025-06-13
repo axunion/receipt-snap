@@ -237,12 +237,13 @@ export function SubmissionErrorDisplay() {
 		<Show
 			when={
 				expenseFormStore.submitState().result &&
-				expenseFormStore.submitState().result?.status === "error"
+				!expenseFormStore.submitState().result?.success
 			}
 		>
 			<div class="p-4 rounded-lg border bg-red-50 border-red-200">
 				<p class="text-sm font-medium text-red-800">
-					{expenseFormStore.submitState().result?.message}
+					{expenseFormStore.submitState().result?.error?.message ||
+						"An error occurred"}
 				</p>
 			</div>
 		</Show>

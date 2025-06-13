@@ -27,10 +27,3 @@ export interface ExpenseData {
 	notes: string;
 	receiptImage: File | null;
 }
-
-export interface SubmitExpenseResult {
-	id: string;
-	status: "success" | "error";
-	message: string;
-	submittedAt: string;
-}
