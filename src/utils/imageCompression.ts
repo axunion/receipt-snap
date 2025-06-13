@@ -139,9 +139,6 @@ function generateFileName(originalName: string, format: string): string {
 	return `${nameWithoutExt}_compressed.${extension}`;
 }
 
-/**
- * Format file size in human readable format
- */
 export function formatFileSize(bytes: number): string {
 	if (bytes === 0) return "0 Bytes";
 
@@ -152,9 +149,6 @@ export function formatFileSize(bytes: number): string {
 	return `${Number.parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
 }
 
-/**
- * Calculate compression ratio percentage
- */
 export function calculateCompressionRatio(
 	originalSize: number,
 	compressedSize: number,
@@ -163,9 +157,6 @@ export function calculateCompressionRatio(
 	return Math.round(((originalSize - compressedSize) / originalSize) * 100);
 }
 
-/**
- * Get recommended compression options for receipts
- */
 export function getReceiptCompressionOptions(): CompressionOptions {
 	return {
 		maxWidth: RESOLUTION_PRESETS.VERY_HIGH.width,

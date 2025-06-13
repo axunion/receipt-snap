@@ -1,6 +1,7 @@
 import type { Purpose } from "@/types/expense";
-import { formatDateForInput } from "@/utils/dateUtils";
+import type { FieldErrors, TouchedFields } from "@/types/validation";
 import {
+	formatDateForInput,
 	validateAmountField,
 	validateDateField,
 	validateDetailsField,
@@ -8,19 +9,8 @@ import {
 	validateNameField,
 	validatePurposeField,
 	validateReceiptField,
-} from "@/validators/validation";
+} from "@/utils";
 import { createEffect, createSignal } from "solid-js";
-
-export interface FieldErrors {
-	name?: string;
-	amount?: string;
-	date?: string;
-	details?: string;
-	purpose?: string;
-	receipt?: string;
-}
-
-export type TouchedFields = Partial<Record<keyof FieldErrors, boolean>>;
 
 export function useFormValidation() {
 	const [fieldErrors, setFieldErrors] = createSignal<FieldErrors>({});

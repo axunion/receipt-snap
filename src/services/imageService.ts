@@ -4,7 +4,7 @@ import {
 	formatFileSize,
 	getReceiptCompressionOptions,
 	compressImage as utilCompressImage,
-} from "@/utils/imageCompression";
+} from "@/utils";
 import { measureAsync } from "./performanceService";
 
 export async function compressImage(
@@ -54,6 +54,4 @@ export function revokePreviewUrl(url: string): void {
 	}
 }
 
-export function formatImageFileSize(bytes: number): string {
-	return formatFileSize(bytes);
-}
+export const formatImageFileSize = formatFileSize;

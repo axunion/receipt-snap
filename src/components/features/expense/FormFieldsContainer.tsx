@@ -7,7 +7,7 @@ import {
 	PurposeField,
 	ReceiptField,
 } from "@/components/features/expense/FormFields";
-import type { FieldErrors, TouchedFields } from "@/hooks/useFormValidation";
+import type { FieldErrors, TouchedFields } from "@/types/validation";
 import type { Accessor } from "solid-js";
 
 interface FormFieldsContainerProps {
@@ -30,7 +30,7 @@ export function FormFieldsContainer(props: FormFieldsContainerProps) {
 				fieldErrors={props.fieldErrors}
 				touchedFields={props.touchedFields}
 			/>
-			<NameField
+			<AmountField
 				fieldErrors={props.fieldErrors}
 				touchedFields={props.touchedFields}
 			/>
@@ -38,7 +38,7 @@ export function FormFieldsContainer(props: FormFieldsContainerProps) {
 				fieldErrors={props.fieldErrors}
 				touchedFields={props.touchedFields}
 			/>
-			<AmountField
+			<NameField
 				fieldErrors={props.fieldErrors}
 				touchedFields={props.touchedFields}
 			/>

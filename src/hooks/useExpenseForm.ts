@@ -1,10 +1,8 @@
 import { submitExpense } from "@/services/apiService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 import type { ExpenseData, SubmitExpenseResult } from "@/types/expense";
-import { parseAmount } from "@/utils/formatUtils";
+import { parseAmount } from "@/utils";
 import { useFormValidation } from "./useFormValidation";
-
-export type { FieldErrors, TouchedFields } from "./useFormValidation";
 
 export function useExpenseForm() {
 	// Use validation hook

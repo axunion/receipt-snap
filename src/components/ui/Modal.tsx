@@ -1,4 +1,4 @@
-import { useBodyScrollLock } from "@/hooks/useBodyScrollLock";
+import { useBodyScrollLock } from "@/hooks";
 import { type JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 

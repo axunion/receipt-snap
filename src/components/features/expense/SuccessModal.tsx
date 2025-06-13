@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/Button";
-import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui";
+import { Modal } from "@/components/ui";
 import { Icon } from "@iconify-icon/solid";
 import { Show } from "solid-js";
 
@@ -37,7 +37,7 @@ export function SuccessModal(props: SuccessModalProps) {
 				</div>
 
 				<h2 class="text-lg font-semibold text-gray-900 mb-2">
-					登録完了しました！
+					送信完了しました！
 				</h2>
 
 				<Show when={props.submittedExpense}>

@@ -1,5 +1,5 @@
 import { expenseFormStore } from "@/stores/expenseFormStore";
-import { parseAmount } from "@/utils/formatUtils";
+import { parseAmount } from "@/utils";
 import { createSignal } from "solid-js";
 
 export interface SuccessHandlerProps {

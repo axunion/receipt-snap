@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/Button";
-import { LoadingOverlay } from "@/components/ui/loading/LoadingOverlay";
+import { Button, LoadingOverlay } from "@/components/ui";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 
 export function FormSubmission() {
@@ -14,7 +13,7 @@ export function FormSubmission() {
 				variant={isSubmitting() ? "secondary" : "primary"}
 				size="lg"
 			>
-				{isSubmitting() ? "送信中..." : "登録する"}
+				{isSubmitting() ? "送信中..." : "送信する"}
 			</Button>
 
 			<LoadingOverlay isVisible={isSubmitting()} message="送信中..." />

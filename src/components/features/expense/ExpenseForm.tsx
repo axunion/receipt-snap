@@ -5,8 +5,7 @@ import {
 import { FormFieldsContainer } from "@/components/features/expense/FormFieldsContainer";
 import { FormSubmission } from "@/components/features/expense/FormSubmission";
 import { SuccessModalWrapper } from "@/components/features/expense/SuccessHandler";
-import { useExpenseForm } from "@/hooks/useExpenseForm";
-import { useSuccessHandler } from "@/hooks/useSuccessHandler";
+import { useExpenseForm, useSuccessHandler } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
 
 export function ExpenseForm() {

@@ -1,4 +1,4 @@
-import { Textarea } from "@/components/ui/Textarea";
+import { Textarea } from "@/components/ui";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 
 export function NoImageTab() {

@@ -1,4 +1,4 @@
-import { formatAmount } from "@/utils/formatUtils";
+import { formatAmount } from "@/utils";
 
 type InputType =
 	| "text"

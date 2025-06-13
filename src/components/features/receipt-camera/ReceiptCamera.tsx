@@ -1,4 +1,4 @@
-import { useImageUpload } from "@/hooks/useImageUpload";
+import { useImageUpload } from "@/hooks";
 import { formatImageFileSize } from "@/services/imageService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 import { Icon } from "@iconify-icon/solid";

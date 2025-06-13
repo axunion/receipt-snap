@@ -6,7 +6,7 @@ import {
 import { expenseFormStore } from "@/stores/expenseFormStore";
 import type { CompressionResult } from "@/types/image";
 import type { TabType } from "@/types/ui";
-import { validateImageFile } from "@/validators/validation";
+import { validateImageFile } from "@/utils";
 import { createEffect, createSignal } from "solid-js";
 
 export function useImageUpload(onImageCapture?: (file: File) => void) {
