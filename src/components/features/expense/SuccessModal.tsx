@@ -8,9 +8,9 @@ interface SuccessModalProps {
 	onClose: () => void;
 	onNewExpense: () => void;
 	submittedExpense?: {
-		name: string;
-		amount: number;
+		purpose: string;
 		details: string;
+		amount: number;
 	};
 }
 
@@ -20,11 +20,11 @@ export function SuccessModal(props: SuccessModalProps) {
 			isOpen={props.isOpen}
 			onClose={props.onClose}
 			backdropClass="bg-black/50 backdrop-blur-sm p-4"
-			contentClass="bg-white rounded-lg p-6 max-w-sm w-full mx-4 fade-in"
+			contentClass="bg-white rounded-lg px-6 py-8 max-w-sm w-full mx-4 fade-in"
 		>
 			<div class="text-center">
 				<div
-					class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"
+					class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"
 					role="presentation"
 				>
 					<Icon
@@ -36,41 +36,27 @@ export function SuccessModal(props: SuccessModalProps) {
 					/>
 				</div>
 
-				<h2 class="text-lg font-semibold text-gray-900 mb-2">
-					送信完了しました！
-				</h2>
+				<h2 class="font-semibold mb-3">送信完了しました！</h2>
 
 				<Show when={props.submittedExpense}>
-					<div class="bg-gray-50 rounded-lg p-3 mb-4 text-sm text-left">
-						<div class="space-y-1">
-							<div class="flex justify-between">
-								<span class="text-gray-600">名前：</span>
-								<span class="font-medium">{props.submittedExpense?.name}</span>
+					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-6">
+						<div class="space-y-3 text-center">
+							<div class="text-2xl font-bold text-green-800">
+								¥{props.submittedExpense?.amount.toLocaleString()}
 							</div>
-							<div class="flex justify-between">
-								<span class="text-gray-600">金額：</span>
-								<span class="font-medium">
-									¥{props.submittedExpense?.amount.toLocaleString()}
-								</span>
+							<div class="text-lg font-medium text-gray-800">
+								{props.submittedExpense?.purpose}
 							</div>
-							<div class="flex justify-between">
-								<span class="text-gray-600">カテゴリ：</span>
-								<span class="font-medium">
-									{props.submittedExpense?.details}
-								</span>
+							<div class="text-sm text-gray-600 bg-white/70 rounded-lg px-3 py-2">
+								{props.submittedExpense?.details}
 							</div>
 						</div>
 					</div>
 				</Show>
 
-				<p class="text-gray-600 mb-6">経費申請が正常に送信されました。</p>
-
 				<div class="space-y-3">
 					<Button onClick={props.onNewExpense} class="w-full" variant="primary">
-						新しい申請を作成
-					</Button>
-					<Button onClick={props.onClose} class="w-full" variant="secondary">
-						閉じる
+						新しいレシートを作成
 					</Button>
 				</div>
 			</div>

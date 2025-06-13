@@ -1,4 +1,3 @@
-// Simple performance measurement utility
 export async function measureAsync<T>(
 	operation: () => Promise<T>,
 	operationName?: string,

@@ -4,7 +4,7 @@ import {
 } from "@/components/features/expense/FormFields";
 import { FormFieldsContainer } from "@/components/features/expense/FormFieldsContainer";
 import { FormSubmission } from "@/components/features/expense/FormSubmission";
-import { SuccessModalWrapper } from "@/components/features/expense/SuccessHandler";
+import { SuccessModal } from "@/components/features/expense/SuccessModal";
 import { useExpenseForm, useSuccessHandler } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
 
@@ -50,11 +50,11 @@ export function ExpenseForm() {
 				<FormSubmission />
 			</form>
 
-			<SuccessModalWrapper
-				showSuccessModal={showSuccessModal}
-				submittedData={submittedData}
+			<SuccessModal
+				isOpen={showSuccessModal()}
 				onClose={handleCloseModal}
 				onNewExpense={handleNewExpense}
+				submittedExpense={submittedData()}
 			/>
 		</MainLayout>
 	);

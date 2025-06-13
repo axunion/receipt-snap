@@ -9,16 +9,16 @@ export interface SuccessHandlerProps {
 export function useSuccessHandler(props: SuccessHandlerProps) {
 	const [showSuccessModal, setShowSuccessModal] = createSignal(false);
 	const [submittedData, setSubmittedData] = createSignal<{
-		name: string;
-		amount: number;
+		purpose: string;
 		details: string;
+		amount: number;
 	}>();
 
 	const handleSuccess = () => {
 		setSubmittedData({
-			name: expenseFormStore.name(),
-			amount: parseAmount(expenseFormStore.amount()),
+			purpose: expenseFormStore.purpose(),
 			details: expenseFormStore.details(),
+			amount: parseAmount(expenseFormStore.amount()),
 		});
 		setShowSuccessModal(true);
 	};

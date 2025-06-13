@@ -5,13 +5,12 @@ import type {
 } from "@/types/expense";
 import { createRoot, createSignal } from "solid-js";
 
-// Initial state for the form
 const initialState: ExpenseData = {
 	name: "",
 	amount: "",
-	date: new Date().toISOString().split("T")[0], // Default to today
-	details: "", // Changed from category
-	purpose: "", // Added purpose
+	date: new Date().toISOString().split("T")[0],
+	details: "",
+	purpose: "",
 	notes: "",
 	receiptImage: null,
 };
@@ -20,8 +19,8 @@ function createExpenseFormStore() {
 	const [name, setName] = createSignal(initialState.name);
 	const [amount, setAmount] = createSignal(initialState.amount);
 	const [date, setDate] = createSignal(initialState.date);
-	const [details, setDetails] = createSignal(initialState.details); // Changed from category
-	const [purpose, setPurpose] = createSignal<Purpose>(initialState.purpose); // Added purpose
+	const [details, setDetails] = createSignal(initialState.details);
+	const [purpose, setPurpose] = createSignal<Purpose>(initialState.purpose);
 	const [notes, setNotes] = createSignal(initialState.notes);
 	const [noImageReason, setNoImageReason] = createSignal("");
 	const [receiptImage, setReceiptImage] = createSignal<File | null>(
@@ -32,13 +31,12 @@ function createExpenseFormStore() {
 		result: SubmitExpenseResult | null;
 	}>({ isLoading: false, result: null });
 
-	// Reset form to initial state
 	const resetForm = () => {
 		setName(initialState.name);
 		setAmount(initialState.amount);
 		setDate(initialState.date);
-		setDetails(initialState.details); // Changed from category
-		setPurpose(initialState.purpose); // Added purpose
+		setDetails(initialState.details);
+		setPurpose(initialState.purpose);
 		setNotes(initialState.notes);
 		setNoImageReason("");
 		setReceiptImage(initialState.receiptImage);
@@ -52,10 +50,10 @@ function createExpenseFormStore() {
 		setAmount,
 		date,
 		setDate,
-		details, // Changed from category
-		setDetails, // Changed from category
-		purpose, // Added purpose
-		setPurpose, // Added purpose
+		details,
+		setDetails,
+		purpose,
+		setPurpose,
 		notes,
 		setNotes,
 		noImageReason,
@@ -69,8 +67,8 @@ function createExpenseFormStore() {
 			name: name(),
 			amount: amount(),
 			date: date(),
-			details: details(), // Changed from category
-			purpose: purpose(), // Added purpose
+			details: details(),
+			purpose: purpose(),
 			notes: notes(),
 			receiptImage: receiptImage(),
 		}),

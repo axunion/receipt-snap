@@ -13,7 +13,6 @@ export interface UserInfo {
 	email?: string;
 }
 
-// Default settings
 const defaultSettings: AppSettings = {
 	compressionQuality: 0.7,
 	autoCompress: true,
@@ -21,14 +20,12 @@ const defaultSettings: AppSettings = {
 	debugMode: import.meta.env.DEV,
 };
 
-// State signals
 const [appSettings, setAppSettings] =
 	createSignal<AppSettings>(defaultSettings);
 const [currentUser, setCurrentUser] = createSignal<UserInfo | null>(null);
 const [isOnline, setIsOnline] = createSignal(navigator.onLine);
 const [isLoading, setIsLoading] = createSignal(false);
 
-// Utility functions
 const loadFromStorage = (key: string) => {
 	if (typeof window === "undefined") return null;
 	try {
@@ -53,11 +50,10 @@ const saveToStorage = (key: string, value: unknown) => {
 	}
 };
 
-// Initialize from localStorage
 const initializeStore = () => {
 	const savedSettings = loadFromStorage("app-settings");
 	if (savedSettings) {
-		setAppSettings((prev) => ({ ...prev, ...savedSettings }));
+		setAppSettings((prev: AppSettings) => ({ ...prev, ...savedSettings }));
 	}
 
 	const savedUser = loadFromStorage("current-user");
@@ -79,15 +75,12 @@ if (typeof window !== "undefined") {
 	createEffect(() => saveToStorage("current-user", currentUser()));
 }
 
-// Store export - SolidJS style
 export const appStore = {
-	// Direct signal access
 	settings: appSettings,
 	currentUser,
 	isOnline,
 	isLoading,
 
-	// Actions
 	updateSettings: (newSettings: Partial<AppSettings>) => {
 		setAppSettings((prev) => ({ ...prev, ...newSettings }));
 	},
@@ -108,7 +101,6 @@ export const appStore = {
 		setCurrentUser(null);
 	},
 
-	// Computed values
 	isDebugMode: () => appSettings().debugMode,
 	compressionQuality: () => appSettings().compressionQuality,
 	shouldAutoCompress: () => appSettings().autoCompress,

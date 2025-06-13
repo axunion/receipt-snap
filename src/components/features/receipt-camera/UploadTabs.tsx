@@ -1,8 +1,7 @@
 import type { TabType } from "@/types/ui";
-import { CameraTab } from "./CameraTab";
-import { FileTab } from "./FileTab";
 import { NoImageTab } from "./NoImageTab";
 import { TabButton } from "./TabButton";
+import { UploadButton } from "./UploadButton";
 
 interface UploadTabsProps {
 	activeTab: TabType;
@@ -41,15 +40,17 @@ export function UploadTabs(props: UploadTabsProps) {
 
 			<div class="p-6 bg-white">
 				{props.activeTab === "camera" && (
-					<CameraTab
-						onCameraClick={props.onCameraClick}
+					<UploadButton
+						type="camera"
+						onClick={props.onCameraClick}
 						isCompressing={props.isCompressing}
 					/>
 				)}
 
 				{props.activeTab === "file" && (
-					<FileTab
-						onFileClick={props.onFileClick}
+					<UploadButton
+						type="file"
+						onClick={props.onFileClick}
 						isCompressing={props.isCompressing}
 					/>
 				)}
