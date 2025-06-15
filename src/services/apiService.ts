@@ -1,5 +1,9 @@
-import type { SubmitRequest, SubmitResponse } from "@/types/api";
-import type { ExpenseData, PurposeOption } from "@/types/expense";
+import type {
+	PurposeResponse,
+	SubmitRequest,
+	SubmitResponse,
+} from "@/types/api";
+import type { ExpenseFormData, PurposeOption } from "@/types/expense";
 import { handleApiResponse, handleFetchError } from "@/utils/apiUtils";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -11,13 +15,17 @@ async function simulateDelay(ms: number): Promise<void> {
 export async function fetchPurposes(): Promise<PurposeOption[]> {
 	// Use mock data only if no API URL is configured
 	if (import.meta.env.DEV && !import.meta.env.VITE_API_BASE_URL) {
-		console.log("Using mock purposes data - no API URL configured");
 		await simulateDelay(500);
-		return [
-			{ value: "value1", label: "イベント" },
-			{ value: "value2", label: "修理代" },
-			{ value: "value3", label: "交通費" },
-		];
+		const result: PurposeResponse = {
+			result: "done",
+			data: [
+				{ value: "value1", label: "イベント" },
+				{ value: "value2", label: "修理代" },
+				{ value: "value3", label: "交通費" },
+			],
+		};
+		console.log("Mock purposes data fetched", result);
+		return result.data || [];
 	}
 
 	try {
@@ -30,36 +38,22 @@ export async function fetchPurposes(): Promise<PurposeOption[]> {
 	}
 }
 
-function buildSubmitRequest(expenseData: ExpenseData): SubmitRequest {
-	return {
-		name: expenseData.name,
-		amount: expenseData.amount,
-		date: expenseData.date,
-		details: expenseData.details,
-		purpose: expenseData.purpose,
-		...(expenseData.notes && { notes: expenseData.notes }),
-		...(expenseData.receiptImage && { receiptImage: expenseData.receiptImage }),
-		...(expenseData.noImageReason && {
-			noImageReason: expenseData.noImageReason,
-		}),
-	};
-}
-
 export async function submitExpense(
-	expenseData: ExpenseData,
+	expenseData: ExpenseFormData,
 ): Promise<SubmitResponse> {
 	// Use mock response only if no API URL is configured
 	if (import.meta.env.DEV && !import.meta.env.VITE_API_BASE_URL) {
-		console.log("Using mock expense submission - no API URL configured");
+		console.log("Using mock expense submission:", expenseData);
 		await simulateDelay(1500);
 		const result: SubmitResponse = {
 			result: "done",
 		};
-		console.log("Mock submission complete");
+		console.log("Mock submission complete:", result);
 		return result;
 	}
 
-	const requestBody = buildSubmitRequest(expenseData);
+	// Convert form data to API request format (currently identical)
+	const requestBody: SubmitRequest = expenseData;
 
 	try {
 		const response = await fetch(`${BASE_URL}/expenses`, {

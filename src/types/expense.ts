@@ -1,7 +1,5 @@
-export type Purpose = string;
-
 export interface PurposeOption {
-	value: Purpose;
+	value: string;
 	label: string;
 }
 
@@ -11,20 +9,20 @@ export interface Expense {
 	amount: number;
 	date: string;
 	details: string;
-	purpose: Purpose;
+	purpose: string;
 	notes?: string;
 	receiptImageUrl?: string;
 	userId: string;
 	createdAt: string;
 }
 
-export interface ExpenseData {
+export interface ExpenseFormData {
 	name: string;
 	amount: string;
 	date: string;
 	details: string;
-	purpose: Purpose;
-	notes: string;
-	receiptImage: File | null;
+	purpose: string;
+	notes?: string;
+	receiptImage?: File | null;
 	noImageReason?: string;
 }

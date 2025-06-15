@@ -1,8 +1,9 @@
 import type { SubmitResponse } from "@/types/api";
-import type { ExpenseData, Purpose } from "@/types/expense";
+import type { ExpenseFormData } from "@/types/expense";
+import { submitExpense } from "@/services/apiService";
 import { createRoot, createSignal } from "solid-js";
 
-const initialState: ExpenseData = {
+const initialState: ExpenseFormData = {
 	name: "",
 	amount: "",
 	date: new Date().toISOString().split("T")[0],
@@ -18,11 +19,13 @@ function createExpenseFormStore() {
 	const [amount, setAmount] = createSignal(initialState.amount);
 	const [date, setDate] = createSignal(initialState.date);
 	const [details, setDetails] = createSignal(initialState.details);
-	const [purpose, setPurpose] = createSignal<Purpose>(initialState.purpose);
-	const [notes, setNotes] = createSignal(initialState.notes);
-	const [noImageReason, setNoImageReason] = createSignal("");
+	const [purpose, setPurpose] = createSignal(initialState.purpose);
+	const [notes, setNotes] = createSignal(initialState.notes || "");
+	const [noImageReason, setNoImageReason] = createSignal(
+		initialState.noImageReason || "",
+	);
 	const [receiptImage, setReceiptImage] = createSignal<File | null>(
-		initialState.receiptImage,
+		initialState.receiptImage || null,
 	);
 	const [submitState, setSubmitState] = createSignal<{
 		isLoading: boolean;
@@ -35,11 +38,44 @@ function createExpenseFormStore() {
 		setDate(initialState.date);
 		setDetails(initialState.details);
 		setPurpose(initialState.purpose);
-		setNotes(initialState.notes);
-		setNoImageReason("");
-		setReceiptImage(initialState.receiptImage);
+		setNotes(initialState.notes || "");
+		setNoImageReason(initialState.noImageReason || "");
+		setReceiptImage(initialState.receiptImage || null);
 		setSubmitState({ isLoading: false, result: null });
 	};
+
+	const submitForm = async (): Promise<SubmitResponse | undefined> => {
+		setSubmitState({ isLoading: true, result: null });
+
+		try {
+			const formData = getFormData();
+			const result = await submitExpense(formData);
+			setSubmitState({ isLoading: false, result });
+			return result;
+		} catch (error) {
+			console.error("Submit error:", error);
+			const errorResult: SubmitResponse = {
+				result: "error",
+				error: "An error occurred during submission. Please try again",
+			};
+			setSubmitState({
+				isLoading: false,
+				result: errorResult,
+			});
+			return errorResult;
+		}
+	};
+
+	const getFormData = (): ExpenseFormData => ({
+		name: name(),
+		amount: amount(),
+		date: date(),
+		details: details(),
+		purpose: purpose(),
+		notes: notes(),
+		receiptImage: receiptImage(),
+		noImageReason: noImageReason(),
+	});
 
 	return {
 		name,
@@ -61,16 +97,8 @@ function createExpenseFormStore() {
 		submitState,
 		setSubmitState,
 		resetForm,
-		getFormData: () => ({
-			name: name(),
-			amount: amount(),
-			date: date(),
-			details: details(),
-			purpose: purpose(),
-			notes: notes(),
-			receiptImage: receiptImage(),
-			noImageReason: noImageReason(),
-		}),
+		submitForm,
+		getFormData,
 	};
 }
 

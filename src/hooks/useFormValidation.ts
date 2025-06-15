@@ -1,4 +1,3 @@
-import type { Purpose } from "@/types/expense";
 import type { FieldErrors, TouchedFields } from "@/types/validation";
 import {
 	formatDateForInput,
@@ -37,7 +36,7 @@ export function useFormValidation() {
 		amount: () => string,
 		date: () => string,
 		details: () => string,
-		purpose: () => Purpose,
+		purpose: () => string,
 		receiptImage: () => File | null,
 		noImageReason: () => string,
 	) => {
@@ -89,7 +88,7 @@ export function useFormValidation() {
 		amount: number;
 		date: string;
 		details: string;
-		purpose: Purpose;
+		purpose: string;
 		receiptImage?: File;
 		noImageReason?: string;
 	}) => {
