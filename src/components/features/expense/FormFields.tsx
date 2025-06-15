@@ -23,6 +23,7 @@ export function NameField(props: FormFieldProps) {
 				value={expenseFormStore.name()}
 				onInput={expenseFormStore.setName}
 				required
+				maxLength={24}
 				aria-invalid={
 					!!(props.fieldErrors().name && props.touchedFields().name)
 				}
@@ -53,6 +54,7 @@ export function AmountField(props: FormFieldProps) {
 				value={expenseFormStore.amount()}
 				onInput={expenseFormStore.setAmount}
 				required
+				maxLength={8}
 				aria-invalid={
 					!!(props.fieldErrors().amount && props.touchedFields().amount)
 				}
@@ -109,6 +111,7 @@ export function NotesField() {
 				value={expenseFormStore.notes()}
 				onInput={expenseFormStore.setNotes}
 				rows={4}
+				maxLength={1024}
 			/>
 		</div>
 	);
@@ -126,6 +129,7 @@ export function DetailsField(props: FormFieldProps) {
 				value={expenseFormStore.details()}
 				onInput={expenseFormStore.setDetails}
 				required
+				maxLength={64}
 				aria-invalid={
 					!!(props.fieldErrors().details && props.touchedFields().details)
 				}
@@ -237,13 +241,12 @@ export function SubmissionErrorDisplay() {
 		<Show
 			when={
 				expenseFormStore.submitState().result &&
-				!expenseFormStore.submitState().result?.success
+				expenseFormStore.submitState().result?.result === "error"
 			}
 		>
 			<div class="p-4 rounded-lg border bg-red-50 border-red-200">
 				<p class="text-sm font-medium text-red-800">
-					{expenseFormStore.submitState().result?.error?.message ||
-						"An error occurred"}
+					{expenseFormStore.submitState().result?.error || "An error occurred"}
 				</p>
 			</div>
 		</Show>

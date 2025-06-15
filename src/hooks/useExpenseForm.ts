@@ -72,11 +72,8 @@ export function useExpenseForm() {
 		} catch (error) {
 			console.error("Submit error:", error);
 			const errorResult: SubmitResponse = {
-				success: false,
-				error: {
-					code: "SUBMIT_ERROR",
-					message: "An error occurred during submission. Please try again",
-				},
+				result: "error",
+				error: "An error occurred during submission. Please try again",
 			};
 			expenseFormStore.setSubmitState({
 				isLoading: false,

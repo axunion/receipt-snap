@@ -27,7 +27,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 	let cameraInputRef: HTMLInputElement | undefined;
 	let fileInputRef: HTMLInputElement | undefined;
 
-	// ストアのreceiptImageがnullになったら入力要素もクリア
 	createEffect(() => {
 		if (expenseFormStore.receiptImage() === null) {
 			if (cameraInputRef) {

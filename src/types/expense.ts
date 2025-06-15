@@ -26,4 +26,5 @@ export interface ExpenseData {
 	purpose: Purpose;
 	notes: string;
 	receiptImage: File | null;
+	noImageReason?: string;
 }

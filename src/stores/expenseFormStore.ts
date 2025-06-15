@@ -10,6 +10,7 @@ const initialState: ExpenseData = {
 	purpose: "",
 	notes: "",
 	receiptImage: null,
+	noImageReason: "",
 };
 
 function createExpenseFormStore() {
@@ -68,6 +69,7 @@ function createExpenseFormStore() {
 			purpose: purpose(),
 			notes: notes(),
 			receiptImage: receiptImage(),
+			noImageReason: noImageReason(),
 		}),
 	};
 }

@@ -8,10 +8,10 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
 	const data = await response.json();
 
 	// Check for submit response format
-	if (data && typeof data === "object" && "success" in data) {
+	if (data && typeof data === "object" && "result" in data) {
 		const submitResponse = data as SubmitResponse;
-		if (!submitResponse.success) {
-			const errorMessage = submitResponse.error?.message || "Submit failed";
+		if (submitResponse.result === "error") {
+			const errorMessage = submitResponse.error || "Submit failed";
 			throw new Error(errorMessage);
 		}
 	}

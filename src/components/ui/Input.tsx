@@ -23,6 +23,9 @@ interface InputProps {
 	min?: string | number;
 	max?: string | number;
 	step?: string | number;
+	maxLength?: number;
+	minLength?: number;
+	pattern?: string;
 	"aria-invalid"?: boolean;
 	"aria-describedby"?: string;
 }
@@ -59,6 +62,9 @@ export function Input(props: InputProps) {
 			min={props.min}
 			max={props.max}
 			step={props.step}
+			maxLength={props.maxLength}
+			minLength={props.minLength}
+			pattern={props.pattern}
 			aria-invalid={props["aria-invalid"]}
 			aria-describedby={props["aria-describedby"]}
 			class={`${baseClasses} ${props.class ?? ""}`}

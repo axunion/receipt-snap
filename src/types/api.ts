@@ -1,4 +1,10 @@
-export interface PurposeResponse {
+export type PurposeResponse = {
+	result: "done" | "error";
+	data?: PurposeItem[];
+	error?: string;
+};
+
+export interface PurposeItem {
 	value: string;
 	label: string;
 }
@@ -10,12 +16,11 @@ export interface SubmitRequest {
 	details: string;
 	purpose: string;
 	notes?: string;
+	receiptImage?: File | null;
+	noImageReason?: string;
 }
 
 export interface SubmitResponse {
-	success: boolean;
-	error?: {
-		code: string;
-		message: string;
-	};
+	result: "done" | "error";
+	error?: string;
 }

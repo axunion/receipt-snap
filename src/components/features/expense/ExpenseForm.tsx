@@ -26,7 +26,7 @@ export function ExpenseForm() {
 		event.preventDefault();
 		const result = await submitForm();
 
-		if (result?.success) {
+		if (result?.result === "done") {
 			handleSuccess();
 		}
 	};

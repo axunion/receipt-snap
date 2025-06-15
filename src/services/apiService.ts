@@ -38,6 +38,10 @@ function buildSubmitRequest(expenseData: ExpenseData): SubmitRequest {
 		details: expenseData.details,
 		purpose: expenseData.purpose,
 		...(expenseData.notes && { notes: expenseData.notes }),
+		...(expenseData.receiptImage && { receiptImage: expenseData.receiptImage }),
+		...(expenseData.noImageReason && {
+			noImageReason: expenseData.noImageReason,
+		}),
 	};
 }
 
@@ -49,7 +53,7 @@ export async function submitExpense(
 		console.log("Using mock expense submission - no API URL configured");
 		await simulateDelay(1500);
 		const result: SubmitResponse = {
-			success: true,
+			result: "done",
 		};
 		console.log("Mock submission complete");
 		return result;
@@ -72,11 +76,8 @@ export async function submitExpense(
 		const handledError = handleFetchError(error);
 
 		return {
-			success: false,
-			error: {
-				code: "SUBMIT_FAILED",
-				message: handledError.message,
-			},
+			result: "error",
+			error: handledError.message,
 		};
 	}
 }

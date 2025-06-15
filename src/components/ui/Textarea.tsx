@@ -7,6 +7,8 @@ interface TextareaProps {
 	required?: boolean;
 	disabled?: boolean;
 	class?: string;
+	maxLength?: number;
+	minLength?: number;
 }
 
 export function Textarea(props: TextareaProps) {
@@ -23,6 +25,8 @@ export function Textarea(props: TextareaProps) {
 			required={props.required}
 			disabled={props.disabled}
 			class={`${baseClasses} ${props.class ?? ""}`}
+			maxLength={props.maxLength}
+			minLength={props.minLength}
 		/>
 	);
 }
