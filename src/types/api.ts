@@ -1,4 +1,4 @@
-import type { PurposeOption, ExpenseFormData } from "./expense";
+import type { ExpenseFormData, PurposeOption } from "./expense";
 
 export type PurposeResponse = {
 	result: "done" | "error";

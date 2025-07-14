@@ -1,6 +1,6 @@
+import { submitExpense } from "@/services/apiService";
 import type { SubmitResponse } from "@/types/api";
 import type { ExpenseFormData } from "@/types/expense";
-import { submitExpense } from "@/services/apiService";
 import { createRoot, createSignal } from "solid-js";
 
 const initialState: ExpenseFormData = {

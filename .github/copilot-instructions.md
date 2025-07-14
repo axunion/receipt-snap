@@ -1,88 +1,51 @@
-# Receipt Snap - GitHub Copilot Instructions
+# Receipt Snap - Development Guidelines
 
-SolidJS製モバイルファーストレシート登録アプリ。最適化済みアーキテクチャに従って開発してください。
+SolidJSモバイルファーストレシートアプリ。確立されたパターンとベストプラクティスに従う。
 
-## 技術スタック
-- **SolidJS** + **TypeScript** + **Tailwind CSS** + **Vite**
-- **アーキテクチャ**: 3層分離（UI・ロジック・状態）
+## Core Principles
+- **Simplicity**: コードを最小限で明確に保つ
+- **Best Practices**: SolidJS、TypeScript、Tailwindの規約に従う
+- **Incremental Changes**: 慎重に計画し、段階的に実装する
+- **Minimal Structure**: 不要なファイルや複雑性を避ける
 
-## ディレクトリ構造
+## Tech Stack Best Practices
+
+### SolidJS
+- プロップドリリングよりもストア直接アクセス
+- リアクティブ同期にはcreateEffectを使用
+- カスタムフックは複雑なビジネスロジックのみ
+- コンポーネントは100行以下、単一責任
+
+### TypeScript
+- 厳密な型安全性、`any`禁止
+- 必要に応じてtype-onlyインポート
+- オブジェクト形状にはinterface、ユニオンにはtype
+
+### Tailwind CSS
+- モバイルファースト設計
+- ユーティリティクラス優先
+- カスタムCSSは最小限
+
+## Architecture
 ```
 src/
-├── components/ui/       # 汎用UIコンポーネント
-├── components/features/ # 機能別コンポーネント（expense/, receipt-camera/）
+├── components/ui/       # 再利用可能UIコンポーネント
+├── components/features/ # 機能固有コンポーネント
 ├── hooks/              # ビジネスロジック
-├── stores/             # グローバル状態管理
+├── stores/             # グローバル状態
 ├── services/           # 外部API
-├── types/              # TypeScript型
-└── utils/              # ユーティリティ
+├── types/              # 型定義
+└── utils/              # 純粋関数
 ```
 
-## SolidJSパターン
+## Code Quality
+- 複雑なロジックのみ英語でコメント
+- 自明なコメントや変更履歴コメント禁止
+- コンソールログは英語、開発環境のみ
+- 適切なARIA属性を配置
 
-### ✅ 推奨パターン
-```typescript
-// ストア直接アクセス
-function MyComponent() {
-  return <input value={store.value()} onInput={store.setValue} />;
-}
-
-// 複雑なロジックのみフック化
-export function useExpenseForm() {
-  const validation = useFormValidation();
-  const submitForm = async () => { /* 複雑なロジック */ };
-  return { validation, submitForm };
-}
-
-// createEffectで自動同期
-createEffect(() => {
-  if (store.resetTrigger()) {
-    // 自動クリーンアップ
-  }
-});
-```
-
-### ❌ 禁止パターン
-```typescript
-// プロップス地獄（5個以上）
-function BadComponent(props: { name: string; amount: string; onChange1: ...; onChange2: ...; }) { }
-
-// ストアとフックの混在
-export const badStore = { useValue: () => createSignal("") };
-
-// 直接DOM操作
-document.getElementById("input").value = "";
-```
-
-## 品質基準
-- **SolidJS**: 哲学を守りベストプラクティスに従う
-- **コンポーネント**: 100行以下、単一責任
-- **型安全性**: `any`型禁止、type-onlyインポート
-- **リアクティビティ**: ストア直接アクセス、createEffect活用
-- **UI/UX**: モバイルファースト、適切なARIA属性
-- **コメント**: わかりきったコメント禁止、変更履歴をコメントにしない、重要なコメントは英語で記述
-- **コンソール出力**: console.log等のテキストは英語で統一、出力するのは開発環境のみ
-
-## コメント・ログ規約
-
-### ✅ 推奨パターン
-```typescript
-// Complex business logic explanation in English
-const calculateCompression = (file: File) => {
-  // Implementation without obvious comments
-  return compressedFile;
-};
-
-console.log("Image compression completed:", metrics);
-console.error("Failed to process image:", error.message);
-```
-
-### ❌ 禁止パターン
-```typescript
-// ❌ わかりきったコメント
-const name = "田中"; // 名前を設定
-
-// ❌ 日本語コンソール出力
-console.log("画像を圧縮中...");
-console.error("エラーが発生しました");
-```
+## Change Management
+- **Plan First**: 実装前に影響を分析
+- **Step-by-Step**: 増分変更と検証
+- **Simplify**: 新ファイル・複雑性が本当に必要か検討
+- **Confirm**: 重要な変更は承認を得る
