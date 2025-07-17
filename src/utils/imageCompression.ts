@@ -33,7 +33,9 @@ export async function compressImage(
 				canvas.width = 0;
 				canvas.height = 0;
 			} catch (e) {
-				console.warn("Cleanup error:", e);
+				if (import.meta.env.DEV) {
+					console.warn("Cleanup error:", e);
+				}
 			}
 		};
 

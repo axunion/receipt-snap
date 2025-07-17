@@ -1,7 +1,7 @@
 export { useBodyScrollLock } from "./useBodyScrollLock";
 export { useExpenseForm } from "./useExpenseForm";
 export { useFormValidation } from "./useFormValidation";
-export { useImageUpload } from "./useImageUpload";
+export { useImage } from "./useImage";
 export {
 	useSuccessHandler,
 	type SuccessHandlerProps,

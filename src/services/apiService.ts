@@ -8,14 +8,9 @@ import { handleApiResponse, handleFetchError } from "@/utils/apiUtils";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-async function simulateDelay(ms: number): Promise<void> {
-	return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 export async function fetchPurposes(): Promise<PurposeOption[]> {
-	// Use mock data only if no API URL is configured
-	if (import.meta.env.DEV && !import.meta.env.VITE_API_BASE_URL) {
-		await simulateDelay(500);
+	if (import.meta.env.DEV) {
+		await new Promise((resolve) => setTimeout(resolve, 500));
 		const result: PurposeResponse = {
 			result: "done",
 			data: [
@@ -41,13 +36,10 @@ export async function fetchPurposes(): Promise<PurposeOption[]> {
 export async function submitExpense(
 	expenseData: ExpenseFormData,
 ): Promise<SubmitResponse> {
-	// Use mock response only if no API URL is configured
-	if (import.meta.env.DEV && !import.meta.env.VITE_API_BASE_URL) {
+	if (import.meta.env.DEV) {
+		await new Promise((resolve) => setTimeout(resolve, 1500));
+		const result: SubmitResponse = { result: "done" };
 		console.log("Using mock expense submission:", expenseData);
-		await simulateDelay(1500);
-		const result: SubmitResponse = {
-			result: "done",
-		};
 		console.log("Mock submission complete:", result);
 		return result;
 	}
@@ -58,9 +50,6 @@ export async function submitExpense(
 	try {
 		const response = await fetch(`${BASE_URL}/expenses`, {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
 			body: JSON.stringify(requestBody),
 		});
 

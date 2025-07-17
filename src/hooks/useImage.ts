@@ -9,7 +9,7 @@ import type { TabType } from "@/types/ui";
 import { validateImageFile } from "@/utils";
 import { createEffect, createSignal } from "solid-js";
 
-export function useImageUpload(onImageCapture?: (file: File) => void) {
+export function useImage(onImageCapture?: (file: File) => void) {
 	const [imagePreview, setImagePreview] = createSignal("");
 	const [error, setError] = createSignal("");
 	const [warning, setWarning] = createSignal("");
@@ -53,9 +53,12 @@ export function useImageUpload(onImageCapture?: (file: File) => void) {
 		try {
 			const { compressedFile, metrics } = await compressImage(file);
 
-			console.log(
-				`Compression complete: ${metrics.duration.toFixed(0)}ms, ${formatImageFileSize(metrics.originalSize)} -> ${formatImageFileSize(metrics.compressedSize)} (${metrics.compressionRatio}% reduction)`,
-			);
+			if (import.meta.env.DEV) {
+				console.log(
+					`Compression complete: ${metrics.duration.toFixed(0)}ms, ${formatImageFileSize(metrics.originalSize)} -> ${formatImageFileSize(metrics.compressedSize)} (${metrics.compressionRatio}% reduction)`,
+				);
+			}
+
 			setCompressionInfo({
 				originalSize: metrics.originalSize,
 				compressedSize: metrics.compressedSize,

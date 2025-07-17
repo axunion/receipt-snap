@@ -1,4 +1,4 @@
-import { useImageUpload } from "@/hooks";
+import { useImage } from "@/hooks";
 import { formatImageFileSize } from "@/services/imageService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 import { Icon } from "@iconify-icon/solid";
@@ -22,7 +22,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 		setActiveTab,
 		handleFileSelect,
 		clearImage,
-	} = useImageUpload(props.onImageCapture);
+	} = useImage(props.onImageCapture);
 
 	let cameraInputRef: HTMLInputElement | undefined;
 	let fileInputRef: HTMLInputElement | undefined;

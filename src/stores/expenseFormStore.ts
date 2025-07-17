@@ -1,4 +1,3 @@
-import { submitExpense } from "@/services/apiService";
 import type { SubmitResponse } from "@/types/api";
 import type { ExpenseFormData } from "@/types/expense";
 import { createRoot, createSignal } from "solid-js";
@@ -44,28 +43,6 @@ function createExpenseFormStore() {
 		setSubmitState({ isLoading: false, result: null });
 	};
 
-	const submitForm = async (): Promise<SubmitResponse | undefined> => {
-		setSubmitState({ isLoading: true, result: null });
-
-		try {
-			const formData = getFormData();
-			const result = await submitExpense(formData);
-			setSubmitState({ isLoading: false, result });
-			return result;
-		} catch (error) {
-			console.error("Submit error:", error);
-			const errorResult: SubmitResponse = {
-				result: "error",
-				error: "An error occurred during submission. Please try again",
-			};
-			setSubmitState({
-				isLoading: false,
-				result: errorResult,
-			});
-			return errorResult;
-		}
-	};
-
 	const getFormData = (): ExpenseFormData => ({
 		name: name(),
 		amount: amount(),
@@ -97,7 +74,6 @@ function createExpenseFormStore() {
 		submitState,
 		setSubmitState,
 		resetForm,
-		submitForm,
 		getFormData,
 	};
 }

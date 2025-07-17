@@ -1,9 +1,10 @@
+import { submitExpense } from "@/services/apiService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
+import type { SubmitResponse } from "@/types/api";
 import { parseAmount } from "@/utils";
 import { useFormValidation } from "./useFormValidation";
 
 export function useExpenseForm() {
-	// Use validation hook for form validation logic
 	const validation = useFormValidation();
 
 	// Setup real-time validation using store signals
@@ -20,7 +21,6 @@ export function useExpenseForm() {
 	const submitForm = async () => {
 		// Validate before submission
 		const currentAmount = parseAmount(expenseFormStore.amount());
-
 		const isValid = validation.validateFullForm({
 			name: expenseFormStore.name(),
 			amount: currentAmount,
@@ -32,12 +32,31 @@ export function useExpenseForm() {
 		});
 
 		if (!isValid) {
-			console.log("Validation failed:", validation.formErrors());
+			if (import.meta.env.DEV) {
+				console.log("Validation failed:", validation.formErrors());
+			}
 			return undefined;
 		}
 
-		// Delegate to store for actual submission
-		return await expenseFormStore.submitForm();
+		expenseFormStore.setSubmitState({ isLoading: true, result: null });
+
+		try {
+			const formData = expenseFormStore.getFormData();
+			const result = await submitExpense(formData);
+			expenseFormStore.setSubmitState({ isLoading: false, result });
+			return result;
+		} catch (error) {
+			console.error("Submit error:", error);
+			const errorResult: SubmitResponse = {
+				result: "error",
+				error: "An error occurred during submission. Please try again",
+			};
+			expenseFormStore.setSubmitState({
+				isLoading: false,
+				result: errorResult,
+			});
+			return errorResult;
+		}
 	};
 
 	const resetForm = () => {
@@ -46,12 +65,9 @@ export function useExpenseForm() {
 	};
 
 	return {
-		// Validation state
 		formErrors: validation.formErrors,
 		fieldErrors: validation.fieldErrors,
 		touchedFields: validation.touchedFields,
-
-		// Form actions
 		submitForm,
 		resetForm,
 	};
