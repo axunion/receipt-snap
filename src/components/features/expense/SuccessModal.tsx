@@ -8,7 +8,7 @@ interface SuccessModalProps {
 	onClose: () => void;
 	onNewExpense: () => void;
 	submittedExpense?: {
-		purpose: string;
+		purposeLabel: string;
 		details: string;
 		amount: number;
 	};
@@ -45,7 +45,7 @@ export function SuccessModal(props: SuccessModalProps) {
 								¥{props.submittedExpense?.amount.toLocaleString()}
 							</div>
 							<div class="text-lg font-medium text-gray-800">
-								{props.submittedExpense?.purpose}
+								{props.submittedExpense?.purposeLabel}
 							</div>
 							<div class="text-sm text-gray-600 bg-white/70 rounded-lg px-3 py-2">
 								{props.submittedExpense?.details}

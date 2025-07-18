@@ -1,4 +1,4 @@
-import { expenseFormStore } from "@/stores/expenseFormStore";
+import { expenseFormStore, purposeStore } from "@/stores";
 import { parseAmount } from "@/utils";
 import { createSignal } from "solid-js";
 
@@ -9,14 +9,17 @@ export interface SuccessHandlerProps {
 export function useSuccessHandler(props: SuccessHandlerProps) {
 	const [showSuccessModal, setShowSuccessModal] = createSignal(false);
 	const [submittedData, setSubmittedData] = createSignal<{
-		purpose: string;
+		purposeLabel: string;
 		details: string;
 		amount: number;
 	}>();
 
 	const handleSuccess = () => {
+		const purposeValue = expenseFormStore.purpose();
+		const purposeLabel = purposeStore.getPurposeLabel(purposeValue);
+
 		setSubmittedData({
-			purpose: expenseFormStore.purpose(),
+			purposeLabel: purposeLabel,
 			details: expenseFormStore.details(),
 			amount: parseAmount(expenseFormStore.amount()),
 		});

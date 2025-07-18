@@ -1,10 +1,8 @@
 import { ReceiptCamera } from "@/components/features/receipt-camera/ReceiptCamera";
 import { Input, Label, Select, Textarea } from "@/components/ui";
-import { fetchPurposes } from "@/services/apiService";
-import { expenseFormStore } from "@/stores/expenseFormStore";
-import type { PurposeOption } from "@/types/expense";
+import { expenseFormStore, purposeStore } from "@/stores";
 import type { FieldErrors, TouchedFields } from "@/types/validation";
-import { For, Show, createResource } from "solid-js";
+import { For, Show } from "solid-js";
 
 interface FormFieldProps {
 	fieldErrors: () => FieldErrors;
@@ -149,15 +147,13 @@ export function DetailsField(props: FormFieldProps) {
 }
 
 export function PurposeField(props: FormFieldProps) {
-	const [purposes] = createResource<PurposeOption[]>(fetchPurposes);
-
 	return (
 		<div>
 			<Label required icon="material-symbols:event-note-outline">
 				対象
 			</Label>
 			<Select
-				options={purposes() || []}
+				options={purposeStore.purposes() || []}
 				value={expenseFormStore.purpose()}
 				onSelect={expenseFormStore.setPurpose}
 				placeholder="対象を選択"
@@ -170,7 +166,7 @@ export function PurposeField(props: FormFieldProps) {
 						? "purpose-error"
 						: undefined
 				}
-				disabled={purposes.loading}
+				disabled={purposeStore.purposes.loading}
 			/>
 			<Show when={props.fieldErrors().purpose && props.touchedFields().purpose}>
 				<p id="purpose-error" class="text-sm text-red-600 mt-1">
