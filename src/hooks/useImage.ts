@@ -1,13 +1,24 @@
-import {
-	compressImage,
-	createPreviewUrl,
-	formatImageFileSize,
-} from "@/services/imageService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 import type { CompressionResult } from "@/types/image";
 import type { TabType } from "@/types/ui";
-import { validateImageFile } from "@/utils";
+import {
+	calculateCompressionRatio,
+	compressImage,
+	formatFileSize,
+	getReceiptCompressionOptions,
+	validateImageFile,
+} from "@/utils";
 import { createEffect, createSignal } from "solid-js";
+
+// Helper function for creating preview URLs
+function createPreviewUrl(file: File): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = (e) => resolve(e.target?.result as string);
+		reader.onerror = reject;
+		reader.readAsDataURL(file);
+	});
+}
 
 export function useImage(onImageCapture?: (file: File) => void) {
 	const [imagePreview, setImagePreview] = createSignal("");
@@ -51,19 +62,25 @@ export function useImage(onImageCapture?: (file: File) => void) {
 		setIsCompressing(true);
 
 		try {
-			const { compressedFile, metrics } = await compressImage(file);
+			const baseOptions = getReceiptCompressionOptions();
+			const compressedFile = await compressImage(file, baseOptions);
+
+			const compressionRatio = calculateCompressionRatio(
+				file.size,
+				compressedFile.size,
+			);
 
 			if (import.meta.env.DEV) {
 				console.log(
-					`Compression complete: ${metrics.duration.toFixed(0)}ms, ${formatImageFileSize(metrics.originalSize)} -> ${formatImageFileSize(metrics.compressedSize)} (${metrics.compressionRatio}% reduction)`,
+					`Image compression complete: ${formatFileSize(file.size)} -> ${formatFileSize(compressedFile.size)} (${compressionRatio}% reduction)`,
 				);
 			}
 
 			setCompressionInfo({
-				originalSize: metrics.originalSize,
-				compressedSize: metrics.compressedSize,
-				ratio: metrics.compressionRatio,
-				duration: metrics.duration,
+				originalSize: file.size,
+				compressedSize: compressedFile.size,
+				ratio: compressionRatio,
+				duration: 0, // Direct compression doesn't track duration
 			});
 
 			setWarning("");

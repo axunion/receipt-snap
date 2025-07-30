@@ -1,8 +1,4 @@
-import type {
-	PurposeResponse,
-	SubmitRequest,
-	SubmitResponse,
-} from "@/types/api";
+import type { PurposeResponse, SubmitResponse } from "@/types/api";
 import type { ExpenseFormData, PurposeOption } from "@/types/expense";
 import { handleApiResponse, handleFetchError } from "@/utils/apiUtils";
 
@@ -44,13 +40,10 @@ export async function submitExpense(
 		return result;
 	}
 
-	// Convert form data to API request format (currently identical)
-	const requestBody: SubmitRequest = expenseData;
-
 	try {
 		const response = await fetch(`${BASE_URL}/expenses`, {
 			method: "POST",
-			body: JSON.stringify(requestBody),
+			body: JSON.stringify(expenseData),
 		});
 
 		return await handleApiResponse<SubmitResponse>(response);

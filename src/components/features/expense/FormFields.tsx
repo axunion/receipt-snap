@@ -2,7 +2,7 @@ import { ReceiptCamera } from "@/components/features/receipt-camera/ReceiptCamer
 import { Input, Label, Select, Textarea } from "@/components/ui";
 import { expenseFormStore, purposeStore } from "@/stores";
 import type { FieldErrors, TouchedFields } from "@/types/validation";
-import { For, Show } from "solid-js";
+import { Show } from "solid-js";
 
 interface FormFieldProps {
 	fieldErrors: () => FieldErrors;
@@ -193,58 +193,5 @@ export function ReceiptField(props: FormFieldProps) {
 				</p>
 			</Show>
 		</div>
-	);
-}
-
-export function ErrorDisplay(props: {
-	formErrors: () => string[];
-	fieldErrors: () => FieldErrors;
-	touchedFields: () => TouchedFields;
-}) {
-	return (
-		<Show
-			when={
-				props.formErrors().length > 0 &&
-				Object.values(props.touchedFields()).some(Boolean) &&
-				props
-					.formErrors()
-					.some(
-						(fe: string) => !Object.values(props.fieldErrors()).includes(fe),
-					)
-			}
-		>
-			<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
-				<p class="text-sm font-medium text-red-800 mb-2">入力エラー:</p>
-				<ul class="text-sm text-red-700 list-disc list-inside space-y-1">
-					<For
-						each={props
-							.formErrors()
-							.filter(
-								(fe: string) =>
-									!Object.values(props.fieldErrors()).includes(fe),
-							)}
-					>
-						{(error) => <li>{error}</li>}
-					</For>
-				</ul>
-			</div>
-		</Show>
-	);
-}
-
-export function SubmissionErrorDisplay() {
-	return (
-		<Show
-			when={
-				expenseFormStore.submitState().result &&
-				expenseFormStore.submitState().result?.result === "error"
-			}
-		>
-			<div class="p-4 rounded-lg border bg-red-50 border-red-200">
-				<p class="text-sm font-medium text-red-800">
-					{expenseFormStore.submitState().result?.error || "An error occurred"}
-				</p>
-			</div>
-		</Show>
 	);
 }

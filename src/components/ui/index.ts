@@ -4,4 +4,5 @@ export { Label } from "./Label";
 export { Modal } from "./Modal";
 export { Select } from "./Select";
 export { Textarea } from "./Textarea";
-export { LoadingOverlay, LoadingSpinner } from "./loading";
+export { LoadingOverlay } from "./loading/LoadingOverlay";
+export { LoadingSpinner } from "./loading/LoadingSpinner";

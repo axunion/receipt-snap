@@ -1,6 +1,6 @@
 import { useImage } from "@/hooks";
-import { formatImageFileSize } from "@/services/imageService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
+import { formatFileSize } from "@/utils";
 import { Icon } from "@iconify-icon/solid";
 import { createEffect } from "solid-js";
 import { ImagePreview } from "./ImagePreview";
@@ -143,7 +143,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 							</p>
 							<div class="mt-1 text-xs text-emerald-600">
 								{compressionInfo()?.originalSize &&
-									`${formatImageFileSize(compressionInfo()?.originalSize ?? 0)} → ${formatImageFileSize(compressionInfo()?.compressedSize ?? 0)}`}
+									`${formatFileSize(compressionInfo()?.originalSize ?? 0)} → ${formatFileSize(compressionInfo()?.compressedSize ?? 0)}`}
 								<span class="font-medium ml-1">
 									({Math.min(compressionInfo()?.ratio || 0, 99)}%削減)
 								</span>
