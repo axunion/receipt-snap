@@ -1,6 +1,6 @@
 import { ReceiptCamera } from "@/components/features/receipt-camera/ReceiptCamera";
 import { Input, Label, Select, Textarea } from "@/components/ui";
-import { expenseFormStore, purposeStore } from "@/stores";
+import { destinationStore, expenseFormStore } from "@/stores";
 import type { FieldErrors, TouchedFields } from "@/types/validation";
 import { Show } from "solid-js";
 
@@ -146,31 +146,37 @@ export function DetailsField(props: FormFieldProps) {
 	);
 }
 
-export function PurposeField(props: FormFieldProps) {
+export function DestinationField(props: FormFieldProps) {
 	return (
 		<div>
 			<Label required icon="material-symbols:event-note-outline">
 				対象
 			</Label>
 			<Select
-				options={purposeStore.purposes() || []}
-				value={expenseFormStore.purpose()}
-				onSelect={expenseFormStore.setPurpose}
+				options={destinationStore.destinations() || []}
+				value={expenseFormStore.destination()}
+				onSelect={expenseFormStore.setDestination}
 				placeholder="対象を選択"
 				required
 				aria-invalid={
-					!!(props.fieldErrors().purpose && props.touchedFields().purpose)
+					!!(
+						props.fieldErrors().destination && props.touchedFields().destination
+					)
 				}
 				aria-describedby={
-					props.fieldErrors().purpose && props.touchedFields().purpose
-						? "purpose-error"
+					props.fieldErrors().destination && props.touchedFields().destination
+						? "destination-error"
 						: undefined
 				}
-				disabled={purposeStore.purposes.loading}
+				disabled={destinationStore.destinations.loading}
 			/>
-			<Show when={props.fieldErrors().purpose && props.touchedFields().purpose}>
-				<p id="purpose-error" class="text-sm text-red-600 mt-1">
-					{props.fieldErrors().purpose}
+			<Show
+				when={
+					props.fieldErrors().destination && props.touchedFields().destination
+				}
+			>
+				<p id="destination-error" class="text-sm text-red-600 mt-1">
+					{props.fieldErrors().destination}
 				</p>
 			</Show>
 		</div>

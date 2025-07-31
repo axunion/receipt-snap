@@ -1,2 +1,2 @@
 export { expenseFormStore } from "./expenseFormStore";
-export { purposeStore } from "./purposeStore";
+export { destinationStore } from "./destinationStore";

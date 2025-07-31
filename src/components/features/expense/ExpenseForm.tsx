@@ -1,17 +1,18 @@
 import {
 	AmountField,
 	DateField,
+	DestinationField,
 	DetailsField,
 	NameField,
 	NotesField,
-	PurposeField,
 	ReceiptField,
 } from "@/components/features/expense/FormFields";
 import { SuccessModal } from "@/components/features/expense/SuccessModal";
 import { Button, LoadingOverlay } from "@/components/ui";
 import { useExpenseForm } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
-import { expenseFormStore, purposeStore } from "@/stores";
+import { destinationStore, expenseFormStore } from "@/stores";
+import type { SubmitErrorResponse } from "@/types";
 import { parseAmount } from "@/utils";
 import { For, createSignal } from "solid-js";
 
@@ -20,20 +21,20 @@ export function ExpenseForm() {
 	const { formErrors, fieldErrors, touchedFields, submitForm, resetForm } =
 		useExpenseForm();
 
-	// Success modal state management
 	const [showSuccessModal, setShowSuccessModal] = createSignal(false);
 	const [submittedData, setSubmittedData] = createSignal<{
-		purposeLabel: string;
+		destinationLabel: string;
 		details: string;
 		amount: number;
 	}>();
 
 	const handleSuccess = () => {
-		const purposeValue = expenseFormStore.purpose();
-		const purposeLabel = purposeStore.getPurposeLabel(purposeValue);
+		const destinationValue = expenseFormStore.destination();
+		const destinationLabel =
+			destinationStore.getDestinationLabel(destinationValue);
 
 		setSubmittedData({
-			purposeLabel: purposeLabel,
+			destinationLabel: destinationLabel,
 			details: expenseFormStore.details(),
 			amount: parseAmount(expenseFormStore.amount()),
 		});
@@ -54,7 +55,7 @@ export function ExpenseForm() {
 	const renderErrors = () => {
 		const submitError =
 			expenseFormStore.submitState().result?.result === "error"
-				? expenseFormStore.submitState().result?.error
+				? (expenseFormStore.submitState().result as SubmitErrorResponse).error
 				: null;
 
 		const validationErrors =
@@ -98,7 +99,10 @@ export function ExpenseForm() {
 	return (
 		<MainLayout title="Receipt Snap">
 			<form onSubmit={handleSubmit} class="space-y-6 relative form-container">
-				<PurposeField fieldErrors={fieldErrors} touchedFields={touchedFields} />
+				<DestinationField
+					fieldErrors={fieldErrors}
+					touchedFields={touchedFields}
+				/>
 				<ReceiptField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<DetailsField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<AmountField fieldErrors={fieldErrors} touchedFields={touchedFields} />
@@ -118,7 +122,7 @@ export function ExpenseForm() {
 					{isSubmitting() ? "送信中..." : "送信する"}
 				</Button>
 
-				<LoadingOverlay isVisible={isSubmitting()} message="送信中..." />
+				<LoadingOverlay isVisible={isSubmitting()} />
 			</form>
 
 			<SuccessModal

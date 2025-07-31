@@ -3,7 +3,7 @@ export interface FieldErrors {
 	amount?: string;
 	date?: string;
 	details?: string;
-	purpose?: string;
+	destination?: string;
 	receipt?: string;
 }
 

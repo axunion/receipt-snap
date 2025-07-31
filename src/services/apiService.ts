@@ -1,12 +1,12 @@
 import { CONFIG } from "@/constants/config";
-import type { PurposeResponse, SubmitResponse } from "@/types/api";
-import type { ExpenseFormData, PurposeOption } from "@/types/expense";
+import type { DestinationResponse, SubmitResponse } from "@/types/api";
+import type { ExpenseFormData } from "@/types/expense";
+import type { SelectOption } from "@/types/ui";
 import { handleApiResponse, handleFetchError } from "@/utils/apiUtils";
 
-export async function fetchPurposes(): Promise<PurposeOption[]> {
+export async function fetchDestinations(): Promise<SelectOption[]> {
 	if (import.meta.env.DEV) {
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		const result: PurposeResponse = {
+		const result: DestinationResponse = {
 			result: "done",
 			data: [
 				{ value: "value1", label: "イベント" },
@@ -14,15 +14,15 @@ export async function fetchPurposes(): Promise<PurposeOption[]> {
 				{ value: "value3", label: "交通費" },
 			],
 		};
-		console.log("Mock purposes data fetched", result);
+		console.log("Mock destinations data fetched", result);
 		return result.data || [];
 	}
 
 	try {
-		const response = await fetch(`${CONFIG.API.BASE_URL}/purposes`);
-		return await handleApiResponse<PurposeOption[]>(response);
+		const response = await fetch(`${CONFIG.API.BASE_URL}/destinations`);
+		return await handleApiResponse<SelectOption[]>(response);
 	} catch (error) {
-		console.error("Error fetching purposes from API:", error);
+		console.error("Error fetching destinations from API:", error);
 		const handledError = handleFetchError(error);
 		throw handledError;
 	}

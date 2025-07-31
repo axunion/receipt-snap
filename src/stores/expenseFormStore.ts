@@ -7,7 +7,7 @@ const initialState: ExpenseFormData = {
 	amount: "",
 	date: new Date().toISOString().split("T")[0],
 	details: "",
-	purpose: "",
+	destination: "",
 	notes: "",
 	receiptImage: null,
 	noImageReason: "",
@@ -18,7 +18,7 @@ function createExpenseFormStore() {
 	const [amount, setAmount] = createSignal(initialState.amount);
 	const [date, setDate] = createSignal(initialState.date);
 	const [details, setDetails] = createSignal(initialState.details);
-	const [purpose, setPurpose] = createSignal(initialState.purpose);
+	const [destination, setDestination] = createSignal(initialState.destination);
 	const [notes, setNotes] = createSignal(initialState.notes || "");
 	const [noImageReason, setNoImageReason] = createSignal(
 		initialState.noImageReason || "",
@@ -36,7 +36,7 @@ function createExpenseFormStore() {
 		setAmount(initialState.amount);
 		setDate(initialState.date);
 		setDetails(initialState.details);
-		setPurpose(initialState.purpose);
+		setDestination(initialState.destination);
 		setNotes(initialState.notes || "");
 		setNoImageReason(initialState.noImageReason || "");
 		setReceiptImage(initialState.receiptImage || null);
@@ -48,7 +48,7 @@ function createExpenseFormStore() {
 		amount: amount(),
 		date: date(),
 		details: details(),
-		purpose: purpose(),
+		destination: destination(),
 		notes: notes(),
 		receiptImage: receiptImage(),
 		noImageReason: noImageReason(),
@@ -63,8 +63,8 @@ function createExpenseFormStore() {
 		setDate,
 		details,
 		setDetails,
-		purpose,
-		setPurpose,
+		destination,
+		setDestination,
 		notes,
 		setNotes,
 		noImageReason,

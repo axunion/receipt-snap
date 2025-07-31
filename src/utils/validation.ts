@@ -22,7 +22,7 @@ const VALIDATION_MESSAGES = {
 			"Please enter a valid date (e.g., February 30th does not exist).",
 		FUTURE_DATE: "Future dates are not allowed.",
 		DETAILS_REQUIRED: "Details are required.",
-		PURPOSE_REQUIRED: "Purpose is required.",
+		DESTINATION_REQUIRED: "Destination is required.",
 		RECEIPT_REQUIRED:
 			"Either a receipt image or a reason for not providing one is required.",
 	},
@@ -141,8 +141,12 @@ export function validateDetailsField(details: string): string | undefined {
 		: undefined;
 }
 
-export function validatePurposeField(purpose: string): string | undefined {
-	return !purpose ? VALIDATION_MESSAGES.FORM.PURPOSE_REQUIRED : undefined;
+export function validateDestinationField(
+	destination: string,
+): string | undefined {
+	return !destination
+		? VALIDATION_MESSAGES.FORM.DESTINATION_REQUIRED
+		: undefined;
 }
 
 export function validateReceiptField(
@@ -159,7 +163,7 @@ export function validateExpenseForm(formData: {
 	amount: number;
 	date: string;
 	details: string;
-	purpose: string;
+	destination: string;
 	receiptImage?: File;
 	noImageReason?: string;
 }) {
@@ -176,8 +180,8 @@ export function validateExpenseForm(formData: {
 			validator: () => validateDetailsField(formData.details),
 		},
 		{
-			field: "purpose",
-			validator: () => validatePurposeField(formData.purpose),
+			field: "destination",
+			validator: () => validateDestinationField(formData.destination),
 		},
 		{
 			field: "receipt",

@@ -1,39 +1,122 @@
 import { submitExpense } from "@/services/apiService";
 import { expenseFormStore } from "@/stores/expenseFormStore";
 import type { SubmitResponse } from "@/types/api";
-import { parseAmount } from "@/utils";
-import { useFormValidation } from "./useFormValidation";
+import type { FieldErrors, TouchedFields } from "@/types/validation";
+import {
+	formatDateForInput,
+	parseAmount,
+	validateAmountField,
+	validateDateField,
+	validateDestinationField,
+	validateDetailsField,
+	validateExpenseForm,
+	validateNameField,
+	validateReceiptField,
+} from "@/utils";
+import { createEffect, createSignal } from "solid-js";
 
 export function useExpenseForm() {
-	const validation = useFormValidation();
+	const [fieldErrors, setFieldErrors] = createSignal<FieldErrors>({});
+	const [touchedFields, setTouchedFields] = createSignal<TouchedFields>({});
+	const [formErrors, setFormErrors] = createSignal<string[]>([]);
 
-	// Setup real-time validation using store signals
-	validation.setupRealtimeValidation(
-		expenseFormStore.name,
-		expenseFormStore.amount,
-		expenseFormStore.date,
-		expenseFormStore.details,
-		expenseFormStore.purpose,
-		expenseFormStore.receiptImage,
-		expenseFormStore.noImageReason,
-	);
+	const markAsTouched = (fieldName: keyof FieldErrors) => {
+		setTouchedFields((prev) => ({ ...prev, [fieldName]: true }));
+	};
+
+	const validateField = <T, R = undefined>(
+		fieldName: keyof FieldErrors,
+		value: T,
+		validator: (val: T, relatedVal?: R) => string | undefined,
+		relatedValue?: R,
+	) => {
+		const error = validator(value, relatedValue);
+		setFieldErrors((prev) => ({ ...prev, [fieldName]: error }));
+		return !error;
+	};
+
+	// Real-time validation effects
+	createEffect(() => {
+		validateField("name", expenseFormStore.name(), validateNameField);
+		if (expenseFormStore.name() !== "") markAsTouched("name");
+	});
+
+	createEffect(() => {
+		const numericAmount = Number.parseFloat(expenseFormStore.amount());
+		validateField("amount", numericAmount, validateAmountField);
+		if (expenseFormStore.amount() !== "") markAsTouched("amount");
+	});
+
+	createEffect(() => {
+		validateField("date", expenseFormStore.date(), validateDateField);
+		if (expenseFormStore.date() !== formatDateForInput(new Date())) {
+			markAsTouched("date");
+		}
+	});
+
+	createEffect(() => {
+		validateField("details", expenseFormStore.details(), validateDetailsField);
+		if (expenseFormStore.details() !== "") markAsTouched("details");
+	});
+
+	createEffect(() => {
+		validateField(
+			"destination",
+			expenseFormStore.destination(),
+			validateDestinationField,
+		);
+		if (expenseFormStore.destination() !== "") markAsTouched("destination");
+	});
+
+	createEffect(() => {
+		validateField(
+			"receipt",
+			expenseFormStore.receiptImage(),
+			(img, reason) =>
+				validateReceiptField(img ?? undefined, reason as string | undefined),
+			expenseFormStore.noImageReason(),
+		);
+		if (
+			expenseFormStore.receiptImage() !== null ||
+			expenseFormStore.noImageReason() !== ""
+		) {
+			markAsTouched("receipt");
+		}
+	});
 
 	const submitForm = async () => {
 		// Validate before submission
 		const currentAmount = parseAmount(expenseFormStore.amount());
-		const isValid = validation.validateFullForm({
+		const validation = validateExpenseForm({
 			name: expenseFormStore.name(),
 			amount: currentAmount,
 			date: expenseFormStore.date(),
 			details: expenseFormStore.details(),
-			purpose: expenseFormStore.purpose(),
+			destination: expenseFormStore.destination(),
 			receiptImage: expenseFormStore.receiptImage() || undefined,
 			noImageReason: expenseFormStore.noImageReason() || undefined,
 		});
 
-		if (!isValid) {
+		setFieldErrors(validation.fieldErrors || {});
+		setFormErrors(validation.errors);
+
+		const allFields: (keyof FieldErrors)[] = [
+			"name",
+			"amount",
+			"date",
+			"details",
+			"destination",
+			"receipt",
+		];
+		const touched: TouchedFields = {};
+		for (const field of allFields) {
+			touched[field] = true;
+		}
+		setTouchedFields(touched);
+
+		if (!validation.isValid) {
 			if (import.meta.env.DEV) {
-				console.log("Validation failed:", validation.formErrors());
+				console.log("Validation failed:", validation.errors);
 			}
 			return undefined;
 		}
@@ -61,13 +144,15 @@ export function useExpenseForm() {
 
 	const resetForm = () => {
 		expenseFormStore.resetForm();
-		validation.resetValidation();
+		setFieldErrors({});
+		setTouchedFields({});
+		setFormErrors([]);
 	};
 
 	return {
-		formErrors: validation.formErrors,
-		fieldErrors: validation.fieldErrors,
-		touchedFields: validation.touchedFields,
+		formErrors,
+		fieldErrors,
+		touchedFields,
 		submitForm,
 		resetForm,
 	};

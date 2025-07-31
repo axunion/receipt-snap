@@ -1,12 +1,27 @@
-import type { PurposeOption } from "./expense";
-
-export type PurposeResponse = {
-	result: "done" | "error";
-	data?: PurposeOption[];
-	error?: string;
+export type DestinationSuccessResponse = {
+	result: "done";
+	data: {
+		value: string;
+		label: string;
+	}[];
 };
 
-export interface SubmitResponse {
-	result: "done" | "error";
-	error?: string;
-}
+export type DestinationErrorResponse = {
+	result: "error";
+	error: string;
+};
+
+export type DestinationResponse =
+	| DestinationSuccessResponse
+	| DestinationErrorResponse;
+
+export type SubmitSuccessResponse = {
+	result: "done";
+};
+
+export type SubmitErrorResponse = {
+	result: "error";
+	error: string;
+};
+
+export type SubmitResponse = SubmitSuccessResponse | SubmitErrorResponse;
