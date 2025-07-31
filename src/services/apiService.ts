@@ -1,8 +1,7 @@
+import { CONFIG } from "@/constants/config";
 import type { PurposeResponse, SubmitResponse } from "@/types/api";
 import type { ExpenseFormData, PurposeOption } from "@/types/expense";
 import { handleApiResponse, handleFetchError } from "@/utils/apiUtils";
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export async function fetchPurposes(): Promise<PurposeOption[]> {
 	if (import.meta.env.DEV) {
@@ -20,7 +19,7 @@ export async function fetchPurposes(): Promise<PurposeOption[]> {
 	}
 
 	try {
-		const response = await fetch(`${BASE_URL}/purposes`);
+		const response = await fetch(`${CONFIG.API.BASE_URL}/purposes`);
 		return await handleApiResponse<PurposeOption[]>(response);
 	} catch (error) {
 		console.error("Error fetching purposes from API:", error);
@@ -41,7 +40,7 @@ export async function submitExpense(
 	}
 
 	try {
-		const response = await fetch(`${BASE_URL}/expenses`, {
+		const response = await fetch(`${CONFIG.API.BASE_URL}/expenses`, {
 			method: "POST",
 			body: JSON.stringify(expenseData),
 		});
