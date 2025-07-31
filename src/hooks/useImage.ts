@@ -1,13 +1,12 @@
 import { expenseFormStore } from "@/stores/expenseFormStore";
 import type { CompressionResult } from "@/types/image";
 import type { TabType } from "@/types/ui";
+import { calculateCompressionRatio, formatFileSize } from "@/utils/formatUtils";
 import {
-	calculateCompressionRatio,
 	compressImage,
-	formatFileSize,
 	getReceiptCompressionOptions,
-	validateImageFile,
-} from "@/utils";
+} from "@/utils/imageCompression";
+import { validateImageFile } from "@/utils/validation";
 import { createEffect, createSignal } from "solid-js";
 
 // Helper function for creating preview URLs

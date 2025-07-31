@@ -1,3 +1,4 @@
+import { ERROR_MESSAGES } from "@/constants/errorMessages";
 import type { SubmitResponse } from "@/types/api";
 
 export async function handleApiResponse<T>(response: Response): Promise<T> {
@@ -21,14 +22,12 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
 
 export function handleFetchError(error: unknown): Error {
 	if (error instanceof TypeError && error.message.includes("fetch")) {
-		return new Error(
-			"ネットワークに接続できません。インターネット接続を確認してください。",
-		);
+		return new Error(ERROR_MESSAGES.NETWORK);
 	}
 
 	if (error instanceof Error) {
 		return error;
 	}
 
-	return new Error("予期しないエラーが発生しました。");
+	return new Error(ERROR_MESSAGES.UNEXPECTED);
 }
