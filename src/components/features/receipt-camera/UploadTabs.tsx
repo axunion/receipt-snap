@@ -1,4 +1,4 @@
-import type { TabType } from "@/types/ui";
+import type { TabType } from "@/types";
 import { NoImageTab } from "./NoImageTab";
 import { TabButton } from "./TabButton";
 import { UploadButton } from "./UploadButton";

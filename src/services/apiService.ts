@@ -1,8 +1,11 @@
 import { CONFIG } from "@/constants/config";
-import type { DestinationResponse, SubmitResponse } from "@/types/api";
-import type { ExpenseFormData } from "@/types/expense";
-import type { SelectOption } from "@/types/ui";
-import { handleApiResponse, handleFetchError } from "@/utils/apiUtils";
+import type {
+	DestinationResponse,
+	ExpenseFormData,
+	SelectOption,
+	SubmitResponse,
+} from "@/types";
+import { handleApiResponse, handleFetchError } from "@/utils";
 
 export async function fetchDestinations(): Promise<SelectOption[]> {
 	if (import.meta.env.DEV) {
@@ -35,6 +38,7 @@ export async function submitExpense(
 		await new Promise((resolve) => setTimeout(resolve, 1500));
 		const result: SubmitResponse = { result: "done" };
 		console.log("Using mock expense submission:", expenseData);
+		console.log(JSON.stringify(expenseData, null, 2));
 		console.log("Mock submission complete:", result);
 		return result;
 	}

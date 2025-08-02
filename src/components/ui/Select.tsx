@@ -1,4 +1,4 @@
-import type { SelectOption } from "@/types/ui";
+import type { SelectOption } from "@/types";
 import { For } from "solid-js";
 
 interface SelectProps {

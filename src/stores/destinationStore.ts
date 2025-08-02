@@ -1,5 +1,5 @@
 import { fetchDestinations } from "@/services/apiService";
-import type { SelectOption } from "@/types/ui";
+import type { SelectOption } from "@/types";
 import { createResource, createRoot } from "solid-js";
 
 function createDestinationStore() {

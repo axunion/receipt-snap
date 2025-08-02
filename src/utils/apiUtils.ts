@@ -1,5 +1,5 @@
 import { ERROR_MESSAGES } from "@/constants/errorMessages";
-import type { SubmitResponse } from "@/types/api";
+import type { SubmitResponse } from "@/types";
 
 export async function handleApiResponse<T>(response: Response): Promise<T> {
 	if (!response.ok) {
@@ -8,7 +8,6 @@ export async function handleApiResponse<T>(response: Response): Promise<T> {
 
 	const data = await response.json();
 
-	// Check for submit response format
 	if (data && typeof data === "object" && "result" in data) {
 		const submitResponse = data as SubmitResponse;
 		if (submitResponse.result === "error") {

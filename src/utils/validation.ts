@@ -1,6 +1,5 @@
 import { VALIDATION_MESSAGES } from "@/constants/validationMessages";
-import type { ImageValidationResult } from "@/types/image";
-import type { FieldErrors } from "@/types/validation";
+import type { FieldErrors, ImageValidationResult } from "@/types";
 
 export function validateImageFile(file: File): ImageValidationResult {
 	const maxSize = 100 * 1024 * 1024; // 100MB

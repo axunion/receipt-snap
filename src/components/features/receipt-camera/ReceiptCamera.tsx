@@ -1,6 +1,6 @@
 import { useImage } from "@/hooks";
-import { expenseFormStore } from "@/stores/expenseFormStore";
-import { formatFileSize } from "@/utils/formatUtils";
+import { expenseFormStore } from "@/stores";
+import { formatFileSize } from "@/utils";
 import { Icon } from "@iconify-icon/solid";
 import { createEffect } from "solid-js";
 import { ImagePreview } from "./ImagePreview";

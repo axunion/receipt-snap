@@ -1,7 +1,7 @@
 import { ReceiptCamera } from "@/components/features/receipt-camera/ReceiptCamera";
 import { Input, Label, Select, Textarea } from "@/components/ui";
 import { destinationStore, expenseFormStore } from "@/stores";
-import type { FieldErrors, TouchedFields } from "@/types/validation";
+import type { FieldErrors, TouchedFields } from "@/types";
 import { Show } from "solid-js";
 
 interface FormFieldProps {

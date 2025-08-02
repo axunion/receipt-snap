@@ -1,5 +1,4 @@
-import type { SubmitResponse } from "@/types/api";
-import type { ExpenseFormData } from "@/types/expense";
+import type { ExpenseFormData, SubmitResponse } from "@/types";
 import { createRoot, createSignal } from "solid-js";
 
 const initialState: ExpenseFormData = {

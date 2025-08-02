@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui";
-import type { TabType } from "@/types/ui";
+import type { TabType } from "@/types";
 import { Icon } from "@iconify-icon/solid";
 
 interface ImagePreviewProps {

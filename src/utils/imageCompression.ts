@@ -4,7 +4,7 @@ import {
 	RESOLUTION_PRESETS,
 	SUPPORTED_FORMATS,
 } from "@/constants/compression";
-import type { CompressionOptions } from "@/types/image";
+import type { CompressionOptions } from "@/types";
 
 /**
  * Compress image file with memory optimization

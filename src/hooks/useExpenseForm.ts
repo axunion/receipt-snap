@@ -1,7 +1,6 @@
 import { submitExpense } from "@/services/apiService";
-import { expenseFormStore } from "@/stores/expenseFormStore";
-import type { SubmitResponse } from "@/types/api";
-import type { FieldErrors, TouchedFields } from "@/types/validation";
+import { expenseFormStore } from "@/stores";
+import type { FieldErrors, SubmitResponse, TouchedFields } from "@/types";
 import {
 	formatDateForInput,
 	parseAmount,

@@ -1,4 +1,4 @@
-import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import { LoadingSpinner } from "@/components/ui";
 import { useBodyScrollLock } from "@/hooks";
 import { Show } from "solid-js";
 import { Portal } from "solid-js/web";

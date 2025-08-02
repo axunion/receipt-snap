@@ -1,5 +1,5 @@
 import { Textarea } from "@/components/ui";
-import { expenseFormStore } from "@/stores/expenseFormStore";
+import { expenseFormStore } from "@/stores";
 
 export function NoImageTab() {
 	return (
