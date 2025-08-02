@@ -7,8 +7,7 @@ import { ImagePreview } from "./ImagePreview";
 import { UploadTabs } from "./UploadTabs";
 
 interface ReceiptCameraProps {
-	onImageCapture: (file: File) => void;
-	currentImage?: File;
+	onImageCapture: (base64: string) => void;
 }
 
 export function ReceiptCamera(props: ReceiptCameraProps) {
@@ -153,7 +152,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				</div>
 			)}
 
-			{/* 圧縮中または画像がある場合はプレビューエリアを表示 */}
 			{isCompressing() || imagePreview() ? (
 				<ImagePreview
 					imagePreview={imagePreview()}
@@ -163,7 +161,6 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 					isLoading={isCompressing()}
 				/>
 			) : (
-				/* 画像がなく圧縮中でもない場合のみアップロードタブを表示 */
 				<UploadTabs
 					activeTab={activeTab()}
 					onTabChange={setActiveTab}

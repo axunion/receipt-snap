@@ -123,7 +123,7 @@ export function validateDestinationField(
 }
 
 export function validateReceiptField(
-	receiptImage?: File,
+	receiptImage?: string,
 	noImageReason?: string,
 ): string | undefined {
 	return !receiptImage && !noImageReason?.trim()
@@ -137,8 +137,8 @@ export function validateExpenseForm(formData: {
 	date: string;
 	details: string;
 	destination: string;
-	receiptImage?: File;
-	noImageReason?: string;
+	receiptImage: string;
+	noImageReason: string;
 }) {
 	const errors: string[] = [];
 	const fieldErrors: Partial<FieldErrors> = {};

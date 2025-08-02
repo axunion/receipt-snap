@@ -189,10 +189,7 @@ export function ReceiptField(props: FormFieldProps) {
 			<Label required icon="material-symbols:receipt-outline">
 				レシート
 			</Label>
-			<ReceiptCamera
-				onImageCapture={expenseFormStore.setReceiptImage}
-				currentImage={expenseFormStore.receiptImage() || undefined}
-			/>
+			<ReceiptCamera onImageCapture={expenseFormStore.setReceiptImage} />
 			<Show when={props.fieldErrors().receipt && props.touchedFields().receipt}>
 				<p id="receipt-error" class="text-sm text-red-600 mt-1">
 					{props.fieldErrors().receipt}

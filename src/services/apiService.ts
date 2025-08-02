@@ -17,7 +17,8 @@ export async function fetchDestinations(): Promise<SelectOption[]> {
 				{ value: "value3", label: "交通費" },
 			],
 		};
-		console.log("Mock destinations data fetched", result);
+		console.log("Mock destinations data fetched:");
+		console.log(result);
 		return result.data || [];
 	}
 
@@ -37,7 +38,7 @@ export async function submitExpense(
 	if (import.meta.env.DEV) {
 		await new Promise((resolve) => setTimeout(resolve, 1500));
 		const result: SubmitResponse = { result: "done" };
-		console.log("Using mock expense submission:", expenseData);
+		console.log("Using mock expense submission:");
 		console.log(JSON.stringify(expenseData, null, 2));
 		console.log("Mock submission complete:", result);
 		return result;

@@ -4,7 +4,7 @@ export interface ExpenseFormData {
 	date: string;
 	details: string;
 	destination: string;
-	notes?: string;
-	receiptImage?: File | null;
-	noImageReason?: string;
+	notes: string;
+	receiptImage: string;
+	noImageReason: string;
 }

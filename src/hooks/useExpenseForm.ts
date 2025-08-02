@@ -71,12 +71,11 @@ export function useExpenseForm() {
 		validateField(
 			"receipt",
 			expenseFormStore.receiptImage(),
-			(img, reason) =>
-				validateReceiptField(img ?? undefined, reason as string | undefined),
+			(img, reason) => validateReceiptField(img, reason),
 			expenseFormStore.noImageReason(),
 		);
 		if (
-			expenseFormStore.receiptImage() !== null ||
+			expenseFormStore.receiptImage() !== "" ||
 			expenseFormStore.noImageReason() !== ""
 		) {
 			markAsTouched("receipt");
@@ -84,7 +83,6 @@ export function useExpenseForm() {
 	});
 
 	const submitForm = async () => {
-		// Validate before submission
 		const currentAmount = parseAmount(expenseFormStore.amount());
 		const validation = validateExpenseForm({
 			name: expenseFormStore.name(),
@@ -92,8 +90,8 @@ export function useExpenseForm() {
 			date: expenseFormStore.date(),
 			details: expenseFormStore.details(),
 			destination: expenseFormStore.destination(),
-			receiptImage: expenseFormStore.receiptImage() || undefined,
-			noImageReason: expenseFormStore.noImageReason() || undefined,
+			receiptImage: expenseFormStore.receiptImage(),
+			noImageReason: expenseFormStore.noImageReason(),
 		});
 
 		setFieldErrors(validation.fieldErrors || {});

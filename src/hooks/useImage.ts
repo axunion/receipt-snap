@@ -7,9 +7,9 @@ import {
 	getReceiptCompressionOptions,
 	validateImageFile,
 } from "@/utils";
+import { fileToBase64 } from "@/utils/imageUtils";
 import { createEffect, createSignal } from "solid-js";
 
-// Helper function for creating preview URLs
 function createPreviewUrl(file: File): Promise<string> {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
@@ -19,7 +19,7 @@ function createPreviewUrl(file: File): Promise<string> {
 	});
 }
 
-export function useImage(onImageCapture?: (file: File) => void) {
+export function useImage(onImageCapture?: (base64: string) => void) {
 	const [imagePreview, setImagePreview] = createSignal("");
 	const [error, setError] = createSignal("");
 	const [warning, setWarning] = createSignal("");
@@ -79,12 +79,13 @@ export function useImage(onImageCapture?: (file: File) => void) {
 				originalSize: file.size,
 				compressedSize: compressedFile.size,
 				ratio: compressionRatio,
-				duration: 0, // Direct compression doesn't track duration
+				duration: 0,
 			});
 
 			setWarning("");
 
-			onImageCapture?.(compressedFile);
+			const base64 = await fileToBase64(compressedFile);
+			onImageCapture?.(base64);
 
 			const previewUrl = await createPreviewUrl(compressedFile);
 			setImagePreview(previewUrl);
@@ -92,7 +93,7 @@ export function useImage(onImageCapture?: (file: File) => void) {
 			console.error("Image compression error:", compressionError);
 			setError("Image compression failed. Using original image.");
 
-			onImageCapture?.(file);
+			onImageCapture?.("");
 
 			const previewUrl = await createPreviewUrl(file);
 			setImagePreview(previewUrl);
