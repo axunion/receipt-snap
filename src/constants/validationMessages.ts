@@ -20,6 +20,6 @@ export const VALIDATION_MESSAGES = {
 		DETAILS_REQUIRED: "内訳は必須項目です。",
 		DESTINATION_REQUIRED: "対象は必須項目です。",
 		RECEIPT_REQUIRED:
-			"レシート書画像または未提出理由のいずれかを入力してください。",
+			"レシート画像または未提出理由のいずれかを入力してください。",
 	},
 } as const;

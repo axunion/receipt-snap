@@ -25,3 +25,5 @@ export type SubmitErrorResponse = {
 };
 
 export type SubmitResponse = SubmitSuccessResponse | SubmitErrorResponse;
+
+export type ApiResponse = DestinationResponse | SubmitResponse;

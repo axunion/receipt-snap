@@ -3,15 +3,17 @@ import type { SelectOption } from "@/types";
 import { createResource, createRoot } from "solid-js";
 
 function createDestinationStore() {
-	const [destinations] = createResource<SelectOption[]>(fetchDestinations);
+	const [destinations, { refetch }] =
+		createResource<SelectOption[]>(fetchDestinations);
 
 	const getDestinationLabel = (value: string): string => {
 		const destination = destinations()?.find((d) => d.value === value);
-		return destination?.label || value;
+		return destination?.label || "";
 	};
 
 	return {
 		destinations,
+		refetch,
 		getDestinationLabel,
 	};
 }

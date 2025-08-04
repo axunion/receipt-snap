@@ -1,34 +1,29 @@
 import { CONFIG } from "@/constants/config";
-import type {
-	DestinationResponse,
-	ExpenseFormData,
-	SelectOption,
-	SubmitResponse,
-} from "@/types";
+import type { ExpenseFormData, SelectOption, SubmitResponse } from "@/types";
 import { handleApiResponse, handleFetchError } from "@/utils";
 
 export async function fetchDestinations(): Promise<SelectOption[]> {
 	if (import.meta.env.DEV) {
-		const result: DestinationResponse = {
-			result: "done",
-			data: [
-				{ value: "value1", label: "イベント" },
-				{ value: "value2", label: "修理代" },
-				{ value: "value3", label: "交通費" },
-			],
-		};
+		const data = [
+			{ value: "value1", label: "イベント" },
+			{ value: "value2", label: "交通費" },
+		];
+		const resultDone = { result: "done", data };
 		console.log("Mock destinations data fetched:");
-		console.log(result);
-		return result.data || [];
+		console.log(resultDone);
+
+		if (Math.random() < 0.5) {
+			throw new Error("Dummy error message.");
+		}
+
+		return resultDone.data;
 	}
 
 	try {
 		const response = await fetch(`${CONFIG.API.BASE_URL}/destinations`);
 		return await handleApiResponse<SelectOption[]>(response);
 	} catch (error) {
-		console.error("Error fetching destinations from API:", error);
-		const handledError = handleFetchError(error);
-		throw handledError;
+		throw handleFetchError(error);
 	}
 }
 
@@ -37,11 +32,13 @@ export async function submitExpense(
 ): Promise<SubmitResponse> {
 	if (import.meta.env.DEV) {
 		await new Promise((resolve) => setTimeout(resolve, 1500));
-		const result: SubmitResponse = { result: "done" };
+		const resultDone = { result: "done" };
+		const resultError = { result: "error", error: "Dummy error message." };
+		const result = Math.random() < 0.5 ? resultDone : resultError;
 		console.log("Using mock expense submission:");
 		console.log(JSON.stringify(expenseData, null, 2));
 		console.log("Mock submission complete:", result);
-		return result;
+		return result as SubmitResponse;
 	}
 
 	try {
@@ -52,7 +49,6 @@ export async function submitExpense(
 
 		return await handleApiResponse<SubmitResponse>(response);
 	} catch (error) {
-		console.error("API call error:", error);
 		const handledError = handleFetchError(error);
 
 		return {
