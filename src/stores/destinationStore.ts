@@ -1,6 +1,6 @@
+import { createResource, createRoot } from "solid-js";
 import { fetchDestinations } from "@/services/apiService";
 import type { SelectOption } from "@/types";
-import { createResource, createRoot } from "solid-js";
 
 function createDestinationStore() {
 	const [destinations, { refetch }] =

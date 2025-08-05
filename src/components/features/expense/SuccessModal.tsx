@@ -1,7 +1,6 @@
-import { Button } from "@/components/ui";
-import { Modal } from "@/components/ui";
 import { Icon } from "@iconify-icon/solid";
 import { Show } from "solid-js";
+import { Button, Modal } from "@/components/ui";
 
 interface SuccessModalProps {
 	isOpen: boolean;

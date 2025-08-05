@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui";
 import { Icon } from "@iconify-icon/solid";
+import { Button } from "@/components/ui";
 
 interface UploadButtonProps {
 	type: "camera" | "file";

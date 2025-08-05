@@ -1,5 +1,5 @@
-import type { ExpenseFormData, SubmitResponse } from "@/types";
 import { createRoot, createSignal } from "solid-js";
+import type { ExpenseFormData, SubmitResponse } from "@/types";
 
 const initialState: ExpenseFormData = {
 	name: "",

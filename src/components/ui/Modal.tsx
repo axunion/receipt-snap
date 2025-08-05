@@ -1,6 +1,6 @@
-import { useBodyScrollLock } from "@/hooks";
 import { type JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
+import { useBodyScrollLock } from "@/hooks";
 
 interface ModalProps {
 	isOpen: boolean;
@@ -41,12 +41,14 @@ export function Modal(props: ModalProps) {
 					}`}
 					onClick={handleBackdropClick}
 					onKeyDown={handleKeyDown}
+					role="dialog"
 					aria-modal="true"
 				>
 					<div
 						class={props.contentClass || ""}
 						onClick={(e) => e.stopPropagation()}
 						onKeyDown={(e) => e.stopPropagation()}
+						role="dialog"
 					>
 						{props.children}
 					</div>
