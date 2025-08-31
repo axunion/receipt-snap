@@ -34,51 +34,72 @@ export function useExpenseForm() {
 		return !error;
 	};
 
-	// Real-time validation effects
+	// Consolidated real-time validation
 	createEffect(() => {
-		validateField("name", expenseFormStore.name(), validateNameField);
-		if (expenseFormStore.name() !== "") markAsTouched("name");
-	});
+		const currentDateDefault = formatDateForInput(new Date());
+		const validators: Array<{
+			field: keyof FieldErrors;
+			validate: () => void;
+			shouldTouch: () => boolean;
+		}> = [
+			{
+				field: "name",
+				validate: () =>
+					validateField("name", expenseFormStore.name(), validateNameField),
+				shouldTouch: () => expenseFormStore.name() !== "",
+			},
+			{
+				field: "amount",
+				validate: () => {
+					const numericAmount = Number.parseFloat(expenseFormStore.amount());
+					validateField("amount", numericAmount, validateAmountField);
+				},
+				shouldTouch: () => expenseFormStore.amount() !== "",
+			},
+			{
+				field: "date",
+				validate: () =>
+					validateField("date", expenseFormStore.date(), validateDateField),
+				shouldTouch: () => expenseFormStore.date() !== currentDateDefault,
+			},
+			{
+				field: "details",
+				validate: () =>
+					validateField(
+						"details",
+						expenseFormStore.details(),
+						validateDetailsField,
+					),
+				shouldTouch: () => expenseFormStore.details() !== "",
+			},
+			{
+				field: "destination",
+				validate: () =>
+					validateField(
+						"destination",
+						expenseFormStore.destination(),
+						validateDestinationField,
+					),
+				shouldTouch: () => expenseFormStore.destination() !== "",
+			},
+			{
+				field: "receipt",
+				validate: () =>
+					validateField(
+						"receipt",
+						expenseFormStore.receiptImage(),
+						(img, reason) => validateReceiptField(img, reason),
+						expenseFormStore.noImageReason(),
+					),
+				shouldTouch: () =>
+					expenseFormStore.receiptImage() !== "" ||
+					expenseFormStore.noImageReason() !== "",
+			},
+		];
 
-	createEffect(() => {
-		const numericAmount = Number.parseFloat(expenseFormStore.amount());
-		validateField("amount", numericAmount, validateAmountField);
-		if (expenseFormStore.amount() !== "") markAsTouched("amount");
-	});
-
-	createEffect(() => {
-		validateField("date", expenseFormStore.date(), validateDateField);
-		if (expenseFormStore.date() !== formatDateForInput(new Date())) {
-			markAsTouched("date");
-		}
-	});
-
-	createEffect(() => {
-		validateField("details", expenseFormStore.details(), validateDetailsField);
-		if (expenseFormStore.details() !== "") markAsTouched("details");
-	});
-
-	createEffect(() => {
-		validateField(
-			"destination",
-			expenseFormStore.destination(),
-			validateDestinationField,
-		);
-		if (expenseFormStore.destination() !== "") markAsTouched("destination");
-	});
-
-	createEffect(() => {
-		validateField(
-			"receipt",
-			expenseFormStore.receiptImage(),
-			(img, reason) => validateReceiptField(img, reason),
-			expenseFormStore.noImageReason(),
-		);
-		if (
-			expenseFormStore.receiptImage() !== "" ||
-			expenseFormStore.noImageReason() !== ""
-		) {
-			markAsTouched("receipt");
+		for (const v of validators) {
+			v.validate();
+			if (v.shouldTouch()) markAsTouched(v.field);
 		}
 	});
 

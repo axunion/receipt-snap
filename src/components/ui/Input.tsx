@@ -26,6 +26,16 @@ interface InputProps {
 	maxLength?: number;
 	minLength?: number;
 	pattern?: string;
+	inputmode?:
+		| "text"
+		| "email"
+		| "numeric"
+		| "search"
+		| "tel"
+		| "url"
+		| "decimal"
+		| "none"; // pass-through for mobile keyboards
+	"aria-label"?: string;
 	"aria-invalid"?: boolean;
 	"aria-describedby"?: string;
 }
@@ -65,6 +75,8 @@ export function Input(props: InputProps) {
 			maxLength={props.maxLength}
 			minLength={props.minLength}
 			pattern={props.pattern}
+			inputmode={props.inputmode}
+			aria-label={props["aria-label"]}
 			aria-invalid={props["aria-invalid"]}
 			aria-describedby={props["aria-describedby"]}
 			class={`${baseClasses} ${props.class ?? ""}`}

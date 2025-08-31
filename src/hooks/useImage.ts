@@ -24,6 +24,7 @@ export function useImage(onImageCapture?: (base64: string) => void) {
 	const [error, setError] = createSignal("");
 	const [warning, setWarning] = createSignal("");
 	const [activeTab, setActiveTab] = createSignal<TabType>("camera");
+	const [info, setInfo] = createSignal("");
 
 	const handleTabChange = (tab: TabType) => {
 		setActiveTab(tab);
@@ -39,6 +40,7 @@ export function useImage(onImageCapture?: (base64: string) => void) {
 			setImagePreview("");
 			setError("");
 			setWarning("");
+			setInfo("");
 			setCompressionInfo(null);
 		}
 	});
@@ -46,6 +48,7 @@ export function useImage(onImageCapture?: (base64: string) => void) {
 	const handleFileSelect = async (file: File) => {
 		setError("");
 		setWarning("");
+		setInfo("");
 		setCompressionInfo(null);
 
 		const validation = validateImageFile(file);
@@ -54,9 +57,8 @@ export function useImage(onImageCapture?: (base64: string) => void) {
 			return;
 		}
 
-		if (validation.warning) {
-			setWarning(validation.warning);
-		}
+		if (validation.warning) setWarning(validation.warning);
+		if (validation.info) setInfo(validation.info);
 
 		setIsCompressing(true);
 
@@ -106,6 +108,7 @@ export function useImage(onImageCapture?: (base64: string) => void) {
 		setImagePreview("");
 		setError("");
 		setWarning("");
+		setInfo("");
 		setCompressionInfo(null);
 	};
 
@@ -113,6 +116,7 @@ export function useImage(onImageCapture?: (base64: string) => void) {
 		imagePreview,
 		error,
 		warning,
+		info,
 		activeTab,
 		isCompressing,
 		compressionInfo,

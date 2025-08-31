@@ -1,3 +1,4 @@
+import type { JSX } from "solid-js";
 import { Show } from "solid-js";
 import { ReceiptCamera } from "@/components/features/receipt-camera/ReceiptCamera";
 import { Input, Label, Select, Textarea } from "@/components/ui";
@@ -9,12 +10,46 @@ interface FormFieldProps {
 	touchedFields: () => TouchedFields;
 }
 
-export function NameField(props: FormFieldProps) {
+interface FieldWrapperProps {
+	field: keyof FieldErrors;
+	label: string;
+	icon?: string;
+	required?: boolean;
+	fieldErrors: () => FieldErrors;
+	touchedFields: () => TouchedFields;
+	children: JSX.Element;
+}
+
+function FieldWrapper(props: FieldWrapperProps) {
+	const error = () => props.fieldErrors()[props.field];
+	const touched = () => props.touchedFields()[props.field];
+	const errorId = `${props.field}-error`;
+
 	return (
 		<div>
-			<Label required icon="material-symbols:person-outline">
-				名前
+			<Label required={props.required} icon={props.icon}>
+				{props.label}
 			</Label>
+			{props.children}
+			<Show when={error() && touched()}>
+				<p id={errorId} class="text-sm text-red-600 mt-1">
+					{error()}
+				</p>
+			</Show>
+		</div>
+	);
+}
+
+export function NameField(props: FormFieldProps) {
+	return (
+		<FieldWrapper
+			field="name"
+			label="名前"
+			icon="material-symbols:person-outline"
+			required
+			fieldErrors={props.fieldErrors}
+			touchedFields={props.touchedFields}
+		>
 			<Input
 				type="text"
 				placeholder="名前を入力"
@@ -31,28 +66,30 @@ export function NameField(props: FormFieldProps) {
 						: undefined
 				}
 			/>
-			<Show when={props.fieldErrors().name && props.touchedFields().name}>
-				<p id="name-error" class="text-sm text-red-600 mt-1">
-					{props.fieldErrors().name}
-				</p>
-			</Show>
-		</div>
+		</FieldWrapper>
 	);
 }
 
 export function AmountField(props: FormFieldProps) {
 	return (
-		<div>
-			<Label required icon="material-symbols:payments-outline">
-				金額
-			</Label>
+		<FieldWrapper
+			field="amount"
+			label="金額"
+			icon="material-symbols:payments-outline"
+			required
+			fieldErrors={props.fieldErrors}
+			touchedFields={props.touchedFields}
+		>
 			<Input
-				type="amount"
+				type="text"
 				placeholder="0"
 				value={expenseFormStore.amount()}
 				onInput={expenseFormStore.setAmount}
 				required
 				maxLength={8}
+				inputmode="numeric"
+				pattern="^[0-9]{1,8}$"
+				aria-label="金額 (数字のみ)"
 				aria-invalid={
 					!!(props.fieldErrors().amount && props.touchedFields().amount)
 				}
@@ -62,21 +99,20 @@ export function AmountField(props: FormFieldProps) {
 						: undefined
 				}
 			/>
-			<Show when={props.fieldErrors().amount && props.touchedFields().amount}>
-				<p id="amount-error" class="text-sm text-red-600 mt-1">
-					{props.fieldErrors().amount}
-				</p>
-			</Show>
-		</div>
+		</FieldWrapper>
 	);
 }
 
 export function DateField(props: FormFieldProps) {
 	return (
-		<div>
-			<Label required icon="material-symbols:calendar-today-outline">
-				支払日
-			</Label>
+		<FieldWrapper
+			field="date"
+			label="支払日"
+			icon="material-symbols:calendar-today-outline"
+			required
+			fieldErrors={props.fieldErrors}
+			touchedFields={props.touchedFields}
+		>
 			<Input
 				type="date"
 				value={expenseFormStore.date()}
@@ -91,12 +127,7 @@ export function DateField(props: FormFieldProps) {
 						: undefined
 				}
 			/>
-			<Show when={props.fieldErrors().date && props.touchedFields().date}>
-				<p id="date-error" class="text-sm text-red-600 mt-1">
-					{props.fieldErrors().date}
-				</p>
-			</Show>
-		</div>
+		</FieldWrapper>
 	);
 }
 
@@ -117,10 +148,14 @@ export function NotesField() {
 
 export function DetailsField(props: FormFieldProps) {
 	return (
-		<div>
-			<Label required icon="material-symbols:format-list-bulleted">
-				内訳
-			</Label>
+		<FieldWrapper
+			field="details"
+			label="内訳"
+			icon="material-symbols:format-list-bulleted"
+			required
+			fieldErrors={props.fieldErrors}
+			touchedFields={props.touchedFields}
+		>
 			<Input
 				type="text"
 				placeholder="内訳を入力"
@@ -137,21 +172,20 @@ export function DetailsField(props: FormFieldProps) {
 						: undefined
 				}
 			/>
-			<Show when={props.fieldErrors().details && props.touchedFields().details}>
-				<p id="details-error" class="text-sm text-red-600 mt-1">
-					{props.fieldErrors().details}
-				</p>
-			</Show>
-		</div>
+		</FieldWrapper>
 	);
 }
 
 export function DestinationField(props: FormFieldProps) {
 	return (
-		<div>
-			<Label required icon="material-symbols:event-note-outline">
-				対象
-			</Label>
+		<FieldWrapper
+			field="destination"
+			label="対象"
+			icon="material-symbols:event-note-outline"
+			required
+			fieldErrors={props.fieldErrors}
+			touchedFields={props.touchedFields}
+		>
 			<Select
 				options={destinationStore.destinations() || []}
 				value={expenseFormStore.destination()}
@@ -170,31 +204,21 @@ export function DestinationField(props: FormFieldProps) {
 				}
 				disabled={destinationStore.destinations.loading}
 			/>
-			<Show
-				when={
-					props.fieldErrors().destination && props.touchedFields().destination
-				}
-			>
-				<p id="destination-error" class="text-sm text-red-600 mt-1">
-					{props.fieldErrors().destination}
-				</p>
-			</Show>
-		</div>
+		</FieldWrapper>
 	);
 }
 
 export function ReceiptField(props: FormFieldProps) {
 	return (
-		<div>
-			<Label required icon="material-symbols:receipt-outline">
-				レシート
-			</Label>
+		<FieldWrapper
+			field="receipt"
+			label="レシート"
+			icon="material-symbols:receipt-outline"
+			required
+			fieldErrors={props.fieldErrors}
+			touchedFields={props.touchedFields}
+		>
 			<ReceiptCamera onImageCapture={expenseFormStore.setReceiptImage} />
-			<Show when={props.fieldErrors().receipt && props.touchedFields().receipt}>
-				<p id="receipt-error" class="text-sm text-red-600 mt-1">
-					{props.fieldErrors().receipt}
-				</p>
-			</Show>
-		</div>
+		</FieldWrapper>
 	);
 }

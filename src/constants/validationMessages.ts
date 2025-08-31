@@ -1,10 +1,10 @@
 export const VALIDATION_MESSAGES = {
 	IMAGE: {
-		INVALID_TYPE: "JPEG、PNG、WebP、HEIC/HEIF形式の画像のみ対応しています。",
-		FILE_TOO_LARGE: "ファイルサイズは100MB以下にしてください。",
+		INVALID_TYPE: "JPEG / PNG / HEIC形式の画像のみ使用できます。",
+		FILE_TOO_LARGE: "画像サイズは12MB以下にしてください。",
 		LARGE_FILE_WARNING:
-			"ファイルサイズが大きいため、処理に時間がかかる場合があります。",
-		HEIC_WARNING: "HEIC/HEIF形式は一部環境で表示できない場合があります。",
+			"画像サイズが大きいため処理に時間がかかる可能性があります。",
+		HEIC_INFO: "HEIC画像をJPEGに変換しました。互換性を向上しています。",
 	},
 	FORM: {
 		NAME_REQUIRED: "名前は必須項目です。",

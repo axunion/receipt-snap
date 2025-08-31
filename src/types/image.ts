@@ -9,6 +9,7 @@ export interface ImageValidationResult {
 	isValid: boolean;
 	error?: string;
 	warning?: string;
+	info?: string;
 }
 
 export interface CompressionResult {

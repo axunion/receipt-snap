@@ -143,8 +143,8 @@ function generateFileName(originalName: string, format: string): string {
 
 export function getReceiptCompressionOptions(): CompressionOptions {
 	return {
-		maxWidth: RESOLUTION_PRESETS.VERY_HIGH.width,
-		maxHeight: RESOLUTION_PRESETS.VERY_HIGH.height,
+		maxWidth: RESOLUTION_PRESETS.RECEIPT.width,
+		maxHeight: RESOLUTION_PRESETS.RECEIPT.height,
 		quality: QUALITY_PRESETS.STANDARD,
 		format: SUPPORTED_FORMATS.OUTPUT_FORMAT,
 	};

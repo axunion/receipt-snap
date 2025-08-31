@@ -2,43 +2,32 @@ import { VALIDATION_MESSAGES } from "@/constants/validationMessages";
 import type { FieldErrors, ImageValidationResult } from "@/types";
 
 export function validateImageFile(file: File): ImageValidationResult {
-	const maxSize = 100 * 1024 * 1024; // 100MB
+	// Mobile-first policy: allow JPEG/PNG/HEIC, size <=12MB, warn >6MB, info for HEIC conversion
+	const MAX_SIZE_BYTES = 12 * 1024 * 1024;
+	const WARNING_THRESHOLD_BYTES = 6 * 1024 * 1024;
 	const allowedTypes = [
 		"image/jpeg",
 		"image/jpg",
 		"image/png",
-		"image/webp",
 		"image/heic",
 		"image/heif",
 	];
 
 	if (!allowedTypes.includes(file.type)) {
-		return {
-			isValid: false,
-			error: VALIDATION_MESSAGES.IMAGE.INVALID_TYPE,
-		};
+		return { isValid: false, error: VALIDATION_MESSAGES.IMAGE.INVALID_TYPE };
 	}
 
-	if (file.size > maxSize) {
-		return {
-			isValid: false,
-			error: VALIDATION_MESSAGES.IMAGE.FILE_TOO_LARGE,
-		};
+	if (file.size > MAX_SIZE_BYTES) {
+		return { isValid: false, error: VALIDATION_MESSAGES.IMAGE.FILE_TOO_LARGE };
 	}
 
-	// Generate warning for large files or HEIC format
-	const fileSizeMB = file.size / (1024 * 1024);
-	let warning: string | undefined;
-
-	if (fileSizeMB > 50) {
-		warning = VALIDATION_MESSAGES.IMAGE.LARGE_FILE_WARNING;
-	} else if (file.type === "image/heic" || file.type === "image/heif") {
-		warning = VALIDATION_MESSAGES.IMAGE.HEIC_WARNING;
-	}
+	const isLarge = file.size > WARNING_THRESHOLD_BYTES;
+	const isHeic = file.type === "image/heic" || file.type === "image/heif";
 
 	return {
 		isValid: true,
-		warning,
+		warning: isLarge ? VALIDATION_MESSAGES.IMAGE.LARGE_FILE_WARNING : undefined,
+		info: isHeic ? VALIDATION_MESSAGES.IMAGE.HEIC_INFO : undefined,
 	};
 }
 

@@ -15,6 +15,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 		imagePreview,
 		error,
 		warning,
+		info,
 		activeTab,
 		isCompressing,
 		compressionInfo,
@@ -106,7 +107,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 						<div>
 							<p class="text-sm font-medium text-red-800">{error()}</p>
 							<p class="text-xs text-red-600 mt-1">
-								JPEGまたはPNG形式、10MB以下の画像をお選びください
+								JPEG / PNG / HEIC (12MB以下) の画像を選択してください
 							</p>
 						</div>
 					</div>
@@ -123,6 +124,20 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 							class="text-yellow-600 mt-0.5"
 						/>
 						<p class="text-sm text-yellow-800">{warning()}</p>
+					</div>
+				</div>
+			)}
+
+			{info() && (
+				<div class="p-3 bg-sky-50 border border-sky-200 rounded-lg">
+					<div class="flex items-start gap-2">
+						<Icon
+							icon="material-symbols:info-outline"
+							width="16"
+							height="16"
+							class="text-sky-600 mt-0.5"
+						/>
+						<p class="text-xs text-sky-700 leading-relaxed">{info()}</p>
 					</div>
 				</div>
 			)}
