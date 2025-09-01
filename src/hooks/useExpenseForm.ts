@@ -1,7 +1,12 @@
 import { createEffect, createSignal } from "solid-js";
 import { submitExpense } from "@/services/apiService";
 import { expenseFormStore } from "@/stores";
-import type { FieldErrors, SubmitResponse, TouchedFields } from "@/types";
+import type {
+	ExpenseSubmitPayload,
+	FieldErrors,
+	SubmitResponse,
+	TouchedFields,
+} from "@/types";
 import {
 	formatDateForInput,
 	parseAmount,
@@ -13,6 +18,7 @@ import {
 	validateNameField,
 	validateReceiptField,
 } from "@/utils";
+import { fileToBase64 } from "@/utils/imageUtils";
 
 export function useExpenseForm() {
 	const [fieldErrors, setFieldErrors] = createSignal<FieldErrors>({});
@@ -87,12 +93,12 @@ export function useExpenseForm() {
 				validate: () =>
 					validateField(
 						"receipt",
-						expenseFormStore.receiptImage(),
-						(img, reason) => validateReceiptField(img, reason),
+						expenseFormStore.receiptFile(),
+						(file, reason) => validateReceiptField(file, reason),
 						expenseFormStore.noImageReason(),
 					),
 				shouldTouch: () =>
-					expenseFormStore.receiptImage() !== "" ||
+					expenseFormStore.receiptFile() !== null ||
 					expenseFormStore.noImageReason() !== "",
 			},
 		];
@@ -111,7 +117,7 @@ export function useExpenseForm() {
 			date: expenseFormStore.date(),
 			details: expenseFormStore.details(),
 			destination: expenseFormStore.destination(),
-			receiptImage: expenseFormStore.receiptImage(),
+			receiptFile: expenseFormStore.receiptFile(),
 			noImageReason: expenseFormStore.noImageReason(),
 		});
 
@@ -143,7 +149,22 @@ export function useExpenseForm() {
 
 		try {
 			const formData = expenseFormStore.getFormData();
-			const result = await submitExpense(formData);
+			// Convert file to base64 lazily only when submitting
+			let base64 = "";
+			if (formData.receiptFile) {
+				base64 = await fileToBase64(formData.receiptFile);
+			}
+			const payload: ExpenseSubmitPayload = {
+				name: formData.name,
+				amount: formData.amount,
+				date: formData.date,
+				details: formData.details,
+				destination: formData.destination,
+				notes: formData.notes,
+				receiptImage: base64,
+				noImageReason: formData.noImageReason,
+			};
+			const result = await submitExpense(payload);
 			expenseFormStore.setSubmitState({ isLoading: false, result });
 			return result;
 		} catch (error) {

@@ -112,10 +112,10 @@ export function validateDestinationField(
 }
 
 export function validateReceiptField(
-	receiptImage?: string,
+	receiptFile?: File | null,
 	noImageReason?: string,
 ): string | undefined {
-	return !receiptImage && !noImageReason?.trim()
+	return !receiptFile && !noImageReason?.trim()
 		? VALIDATION_MESSAGES.FORM.RECEIPT_REQUIRED
 		: undefined;
 }
@@ -126,7 +126,7 @@ export function validateExpenseForm(formData: {
 	date: string;
 	details: string;
 	destination: string;
-	receiptImage: string;
+	receiptFile: File | null;
 	noImageReason: string;
 }) {
 	const errors: string[] = [];
@@ -148,7 +148,7 @@ export function validateExpenseForm(formData: {
 		{
 			field: "receipt",
 			validator: () =>
-				validateReceiptField(formData.receiptImage, formData.noImageReason),
+				validateReceiptField(formData.receiptFile, formData.noImageReason),
 		},
 	] as const;
 

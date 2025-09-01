@@ -7,7 +7,7 @@ import { ImagePreview } from "./ImagePreview";
 import { UploadTabs } from "./UploadTabs";
 
 interface ReceiptCameraProps {
-	onImageCapture: (base64: string) => void;
+	onImageCapture: (file: File) => void;
 }
 
 export function ReceiptCamera(props: ReceiptCameraProps) {
@@ -28,7 +28,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 	let fileInputRef: HTMLInputElement | undefined;
 
 	createEffect(() => {
-		if (expenseFormStore.receiptImage() === null) {
+		if (expenseFormStore.receiptFile() === null) {
 			if (cameraInputRef) {
 				cameraInputRef.value = "";
 			}

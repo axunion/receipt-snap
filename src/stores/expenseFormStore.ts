@@ -8,7 +8,7 @@ const initialState: ExpenseFormData = {
 	details: "",
 	destination: "",
 	notes: "",
-	receiptImage: "",
+	receiptFile: null,
 	noImageReason: "",
 };
 
@@ -22,8 +22,8 @@ function createExpenseFormStore() {
 	const [noImageReason, setNoImageReason] = createSignal(
 		initialState.noImageReason,
 	);
-	const [receiptImage, setReceiptImage] = createSignal<string>(
-		initialState.receiptImage,
+	const [receiptFile, setReceiptFile] = createSignal<File | null>(
+		initialState.receiptFile,
 	);
 	const [submitState, setSubmitState] = createSignal<{
 		isLoading: boolean;
@@ -38,7 +38,7 @@ function createExpenseFormStore() {
 		setDestination(initialState.destination);
 		setNotes(initialState.notes);
 		setNoImageReason(initialState.noImageReason);
-		setReceiptImage(initialState.receiptImage);
+		setReceiptFile(initialState.receiptFile);
 		setSubmitState({ isLoading: false, result: null });
 	};
 
@@ -49,7 +49,7 @@ function createExpenseFormStore() {
 		details: details(),
 		destination: destination(),
 		notes: notes(),
-		receiptImage: receiptImage(),
+		receiptFile: receiptFile(),
 		noImageReason: noImageReason(),
 	});
 
@@ -68,8 +68,8 @@ function createExpenseFormStore() {
 		setNotes,
 		noImageReason,
 		setNoImageReason,
-		receiptImage,
-		setReceiptImage,
+		receiptFile,
+		setReceiptFile,
 		submitState,
 		setSubmitState,
 		resetForm,

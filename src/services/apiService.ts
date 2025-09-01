@@ -1,5 +1,10 @@
 import { CONFIG } from "@/constants/config";
-import type { ExpenseFormData, SelectOption, SubmitResponse } from "@/types";
+import type {
+	ExpenseFormData,
+	ExpenseSubmitPayload,
+	SelectOption,
+	SubmitResponse,
+} from "@/types";
 import { handleApiResponse, handleFetchError } from "@/utils";
 
 export async function fetchDestinations(): Promise<SelectOption[]> {
@@ -28,7 +33,7 @@ export async function fetchDestinations(): Promise<SelectOption[]> {
 }
 
 export async function submitExpense(
-	expenseData: ExpenseFormData,
+	expenseData: ExpenseFormData | ExpenseSubmitPayload,
 ): Promise<SubmitResponse> {
 	if (import.meta.env.DEV) {
 		await new Promise((resolve) => setTimeout(resolve, 1500));

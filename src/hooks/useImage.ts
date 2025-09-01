@@ -8,18 +8,7 @@ import {
 	getReceiptCompressionOptions,
 	validateImageFile,
 } from "@/utils";
-import { fileToBase64 } from "@/utils/imageUtils";
-
-function createPreviewUrl(file: File): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader();
-		reader.onload = (e) => resolve(e.target?.result as string);
-		reader.onerror = reject;
-		reader.readAsDataURL(file);
-	});
-}
-
-export function useImage(onImageCapture?: (base64: string) => void) {
+export function useImage(onImageCapture?: (file: File) => void) {
 	const [imagePreview, setImagePreview] = createSignal("");
 	const [error, setError] = createSignal("");
 	const [warning, setWarning] = createSignal("");
@@ -34,9 +23,12 @@ export function useImage(onImageCapture?: (base64: string) => void) {
 	const [compressionInfo, setCompressionInfo] =
 		createSignal<CompressionResult | null>(null);
 
-	// Automatically clear preview when receiptImage in store becomes null
+	// Automatically clear preview when receipt file in store becomes null
 	createEffect(() => {
-		if (expenseFormStore.receiptImage() === null) {
+		if (expenseFormStore.receiptFile() === null) {
+			if (imagePreview()) {
+				URL.revokeObjectURL(imagePreview());
+			}
 			setImagePreview("");
 			setError("");
 			setWarning("");
@@ -86,25 +78,33 @@ export function useImage(onImageCapture?: (base64: string) => void) {
 
 			setWarning("");
 
-			const base64 = await fileToBase64(compressedFile);
-			onImageCapture?.(base64);
+			onImageCapture?.(compressedFile);
 
-			const previewUrl = await createPreviewUrl(compressedFile);
-			setImagePreview(previewUrl);
+			// Create object URL for preview (memory efficient vs DataURL)
+			if (imagePreview()) {
+				URL.revokeObjectURL(imagePreview());
+			}
+			const objectUrl = URL.createObjectURL(compressedFile);
+			setImagePreview(objectUrl);
 		} catch (compressionError) {
 			console.error("Image compression error:", compressionError);
 			setError("Image compression failed. Using original image.");
 
-			onImageCapture?.("");
-
-			const previewUrl = await createPreviewUrl(file);
-			setImagePreview(previewUrl);
+			onImageCapture?.(file); // still hand back original so caller may decide
+			if (imagePreview()) {
+				URL.revokeObjectURL(imagePreview());
+			}
+			const fallbackUrl = URL.createObjectURL(file);
+			setImagePreview(fallbackUrl);
 		} finally {
 			setIsCompressing(false);
 		}
 	};
 
 	const clearImage = () => {
+		if (imagePreview()) {
+			URL.revokeObjectURL(imagePreview());
+		}
 		setImagePreview("");
 		setError("");
 		setWarning("");

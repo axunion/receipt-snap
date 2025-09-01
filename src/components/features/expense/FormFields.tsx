@@ -218,7 +218,7 @@ export function ReceiptField(props: FormFieldProps) {
 			fieldErrors={props.fieldErrors}
 			touchedFields={props.touchedFields}
 		>
-			<ReceiptCamera onImageCapture={expenseFormStore.setReceiptImage} />
+			<ReceiptCamera onImageCapture={expenseFormStore.setReceiptFile} />
 		</FieldWrapper>
 	);
 }
