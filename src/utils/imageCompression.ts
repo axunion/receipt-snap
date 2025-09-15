@@ -7,7 +7,19 @@ import {
 import type { CompressionOptions } from "@/types";
 
 /**
- * Compress image file with memory optimization
+ * Check if the file is HEIC/HEIF format
+ */
+function isHEICFormat(file: File): boolean {
+	return (
+		file.type === "image/heic" ||
+		file.type === "image/heif" ||
+		file.name.toLowerCase().endsWith(".heic") ||
+		file.name.toLowerCase().endsWith(".heif")
+	);
+}
+
+/**
+ * Compress image file with memory optimization and HEIC support
  */
 export async function compressImage(
 	file: File,
@@ -19,6 +31,23 @@ export async function compressImage(
 		quality = QUALITY_PRESETS.STANDARD,
 		format = SUPPORTED_FORMATS.OUTPUT_FORMAT,
 	} = options;
+
+	// Try createImageBitmap first for HEIC/HEIF files
+	if (isHEICFormat(file)) {
+		try {
+			return await compressWithImageBitmap(file, {
+				maxWidth,
+				maxHeight,
+				quality,
+				format,
+			});
+		} catch (error) {
+			if (import.meta.env.DEV) {
+				console.warn("ImageBitmap fallback failed for HEIC file:", error);
+			}
+			// If ImageBitmap fails, fall back to regular Image element method
+		}
+	}
 
 	return new Promise((resolve, reject) => {
 		const canvas = document.createElement("canvas");
@@ -97,10 +126,94 @@ export async function compressImage(
 
 		img.onerror = () => {
 			cleanup();
-			reject(new Error("Failed to load image"));
+			// Provide more specific error message for HEIC files
+			if (isHEICFormat(file)) {
+				reject(
+					new Error(
+						"HEIC file format not supported by this browser. Please try a JPEG or PNG file.",
+					),
+				);
+			} else {
+				reject(new Error("Failed to load image"));
+			}
 		};
 
 		img.src = URL.createObjectURL(file);
+	});
+}
+
+/**
+ * Compress image using createImageBitmap API (supports HEIC in some browsers)
+ */
+async function compressWithImageBitmap(
+	file: File,
+	options: {
+		maxWidth: number;
+		maxHeight: number;
+		quality: number;
+		format: string;
+	},
+): Promise<File> {
+	const { maxWidth, maxHeight, quality, format } = options;
+
+	// Create ImageBitmap from file
+	const imageBitmap = await createImageBitmap(file);
+
+	const { width, height } = imageBitmap;
+	const { newWidth, newHeight } = calculateNewSize(
+		width,
+		height,
+		maxWidth,
+		maxHeight,
+	);
+
+	// Create canvas and draw the ImageBitmap
+	const canvas = document.createElement("canvas");
+	canvas.width = newWidth;
+	canvas.height = newHeight;
+
+	const ctx = canvas.getContext("2d");
+	if (!ctx) {
+		imageBitmap.close();
+		throw new Error("Failed to get canvas context");
+	}
+
+	ctx.imageSmoothingEnabled = true;
+	ctx.imageSmoothingQuality = CANVAS_SETTINGS.SMOOTHING_QUALITY;
+	ctx.fillStyle = CANVAS_SETTINGS.BACKGROUND_COLOR;
+	ctx.fillRect(0, 0, newWidth, newHeight);
+	ctx.drawImage(imageBitmap, 0, 0, newWidth, newHeight);
+
+	// Clean up ImageBitmap
+	imageBitmap.close();
+
+	// Convert to blob and return as File
+	return new Promise((resolve, reject) => {
+		canvas.toBlob(
+			(blob) => {
+				try {
+					if (blob) {
+						const compressedFile = new File(
+							[blob],
+							generateFileName(file.name, format),
+							{
+								type: format,
+								lastModified: Date.now(),
+							},
+						);
+						canvas.width = 0;
+						canvas.height = 0;
+						resolve(compressedFile);
+					} else {
+						reject(new Error("Image compression failed"));
+					}
+				} catch (error) {
+					reject(error);
+				}
+			},
+			format,
+			quality,
+		);
 	});
 }
 

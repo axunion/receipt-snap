@@ -88,14 +88,25 @@ export function useImage(onImageCapture?: (file: File) => void) {
 			setImagePreview(objectUrl);
 		} catch (compressionError) {
 			console.error("Image compression error:", compressionError);
-			setError("Image compression failed. Using original image.");
 
-			onImageCapture?.(file); // still hand back original so caller may decide
-			if (imagePreview()) {
-				URL.revokeObjectURL(imagePreview());
+			// Handle HEIC-specific errors
+			if (compressionError instanceof Error) {
+				if (
+					compressionError.message.includes("HEIC file format not supported")
+				) {
+					setError(
+						"この環境ではHEIC形式をサポートしていません。JPEG・PNG形式の画像をご利用ください。",
+					);
+				} else if (compressionError.message.includes("Failed to load image")) {
+					setError(
+						"画像の読み込みに失敗しました。JPEG・PNG形式の画像をご利用ください。",
+					);
+				} else {
+					setError("画像の処理に失敗しました。別の画像をお試しください。");
+				}
+			} else {
+				setError("予期しないエラーが発生しました。");
 			}
-			const fallbackUrl = URL.createObjectURL(file);
-			setImagePreview(fallbackUrl);
 		} finally {
 			setIsCompressing(false);
 		}

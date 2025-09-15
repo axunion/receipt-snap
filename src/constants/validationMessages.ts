@@ -4,7 +4,8 @@ export const VALIDATION_MESSAGES = {
 		FILE_TOO_LARGE: "画像サイズは12MB以下にしてください。",
 		LARGE_FILE_WARNING:
 			"画像サイズが大きいため処理に時間がかかる可能性があります。",
-		HEIC_INFO: "HEIC画像をJPEGに変換しました。互換性を向上しています。",
+		HEIC_INFO:
+			"HEIC画像をJPEGに変換しました。ブラウザの対応状況により、一部環境では処理できない場合があります。",
 	},
 	FORM: {
 		NAME_REQUIRED: "名前は必須項目です。",
