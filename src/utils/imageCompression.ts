@@ -5,22 +5,46 @@ import {
 	SUPPORTED_FORMATS,
 } from "@/constants/compression";
 import type { CompressionOptions } from "@/types";
+import { generateCompressedFileName, isHEICFormat } from "./imageUtils";
 
-/**
- * Check if the file is HEIC/HEIF format
- */
-function isHEICFormat(file: File): boolean {
-	return (
-		file.type === "image/heic" ||
-		file.type === "image/heif" ||
-		file.name.toLowerCase().endsWith(".heic") ||
-		file.name.toLowerCase().endsWith(".heif")
-	);
+function setupCanvas(
+	width: number,
+	height: number,
+): {
+	canvas: HTMLCanvasElement;
+	ctx: CanvasRenderingContext2D;
+} {
+	const canvas = document.createElement("canvas");
+	canvas.width = width;
+	canvas.height = height;
+
+	const ctx = canvas.getContext("2d");
+	if (!ctx) {
+		throw new Error("Failed to get canvas context");
+	}
+
+	ctx.imageSmoothingEnabled = true;
+	ctx.imageSmoothingQuality = CANVAS_SETTINGS.SMOOTHING_QUALITY;
+	ctx.fillStyle = CANVAS_SETTINGS.BACKGROUND_COLOR;
+	ctx.fillRect(0, 0, width, height);
+
+	return { canvas, ctx };
 }
 
-/**
- * Compress image file with memory optimization and HEIC support
- */
+function cleanupResources(canvas: HTMLCanvasElement, imageUrl?: string): void {
+	try {
+		if (imageUrl?.startsWith("blob:")) {
+			URL.revokeObjectURL(imageUrl);
+		}
+		canvas.width = 0;
+		canvas.height = 0;
+	} catch (e) {
+		if (import.meta.env.DEV) {
+			console.warn("Cleanup error:", e);
+		}
+	}
+}
+
 export async function compressImage(
 	file: File,
 	options: CompressionOptions = {},
@@ -50,21 +74,13 @@ export async function compressImage(
 	}
 
 	return new Promise((resolve, reject) => {
-		const canvas = document.createElement("canvas");
-		const ctx = canvas.getContext("2d");
 		const img = new Image();
 
-		const cleanup = () => {
-			try {
-				if (img.src?.startsWith("blob:")) {
-					URL.revokeObjectURL(img.src);
-				}
-				canvas.width = 0;
-				canvas.height = 0;
-			} catch (e) {
-				if (import.meta.env.DEV) {
-					console.warn("Cleanup error:", e);
-				}
+		const cleanup = (canvas?: HTMLCanvasElement) => {
+			if (canvas) {
+				cleanupResources(canvas, img.src);
+			} else {
+				cleanupResources(document.createElement("canvas"), img.src);
 			}
 		};
 
@@ -78,46 +94,35 @@ export async function compressImage(
 					maxHeight,
 				);
 
-				canvas.width = newWidth;
-				canvas.height = newHeight;
+				const { canvas, ctx } = setupCanvas(newWidth, newHeight);
+				ctx.drawImage(img, 0, 0, newWidth, newHeight);
 
-				if (ctx) {
-					ctx.imageSmoothingEnabled = true;
-					ctx.imageSmoothingQuality = CANVAS_SETTINGS.SMOOTHING_QUALITY;
-					ctx.fillStyle = CANVAS_SETTINGS.BACKGROUND_COLOR;
-					ctx.fillRect(0, 0, newWidth, newHeight);
-					ctx.drawImage(img, 0, 0, newWidth, newHeight);
-
-					canvas.toBlob(
-						(blob) => {
-							try {
-								if (blob) {
-									const compressedFile = new File(
-										[blob],
-										generateFileName(file.name, format),
-										{
-											type: format,
-											lastModified: Date.now(),
-										},
-									);
-									cleanup();
-									resolve(compressedFile);
-								} else {
-									cleanup();
-									reject(new Error("Image compression failed"));
-								}
-							} catch (error) {
-								cleanup();
-								reject(error);
+				canvas.toBlob(
+					(blob) => {
+						try {
+							if (blob) {
+								const compressedFile = new File(
+									[blob],
+									generateCompressedFileName(file.name, format),
+									{
+										type: format,
+										lastModified: Date.now(),
+									},
+								);
+								cleanup(canvas);
+								resolve(compressedFile);
+							} else {
+								cleanup(canvas);
+								reject(new Error("Image compression failed"));
 							}
-						},
-						format,
-						quality,
-					);
-				} else {
-					cleanup();
-					reject(new Error("Failed to get canvas context"));
-				}
+						} catch (error) {
+							cleanup(canvas);
+							reject(error);
+						}
+					},
+					format,
+					quality,
+				);
 			} catch (error) {
 				cleanup();
 				reject(error);
@@ -126,25 +131,16 @@ export async function compressImage(
 
 		img.onerror = () => {
 			cleanup();
-			// Provide more specific error message for HEIC files
-			if (isHEICFormat(file)) {
-				reject(
-					new Error(
-						"HEIC file format not supported by this browser. Please try a JPEG or PNG file.",
-					),
-				);
-			} else {
-				reject(new Error("Failed to load image"));
-			}
+			const errorMsg = isHEICFormat(file)
+				? "HEIC file format not supported by this browser. Please try a JPEG or PNG file."
+				: "Failed to load image";
+			reject(new Error(errorMsg));
 		};
 
 		img.src = URL.createObjectURL(file);
 	});
 }
 
-/**
- * Compress image using createImageBitmap API (supports HEIC in some browsers)
- */
 async function compressWithImageBitmap(
 	file: File,
 	options: {
@@ -159,67 +155,54 @@ async function compressWithImageBitmap(
 	// Create ImageBitmap from file
 	const imageBitmap = await createImageBitmap(file);
 
-	const { width, height } = imageBitmap;
-	const { newWidth, newHeight } = calculateNewSize(
-		width,
-		height,
-		maxWidth,
-		maxHeight,
-	);
-
-	// Create canvas and draw the ImageBitmap
-	const canvas = document.createElement("canvas");
-	canvas.width = newWidth;
-	canvas.height = newHeight;
-
-	const ctx = canvas.getContext("2d");
-	if (!ctx) {
-		imageBitmap.close();
-		throw new Error("Failed to get canvas context");
-	}
-
-	ctx.imageSmoothingEnabled = true;
-	ctx.imageSmoothingQuality = CANVAS_SETTINGS.SMOOTHING_QUALITY;
-	ctx.fillStyle = CANVAS_SETTINGS.BACKGROUND_COLOR;
-	ctx.fillRect(0, 0, newWidth, newHeight);
-	ctx.drawImage(imageBitmap, 0, 0, newWidth, newHeight);
-
-	// Clean up ImageBitmap
-	imageBitmap.close();
-
-	// Convert to blob and return as File
-	return new Promise((resolve, reject) => {
-		canvas.toBlob(
-			(blob) => {
-				try {
-					if (blob) {
-						const compressedFile = new File(
-							[blob],
-							generateFileName(file.name, format),
-							{
-								type: format,
-								lastModified: Date.now(),
-							},
-						);
-						canvas.width = 0;
-						canvas.height = 0;
-						resolve(compressedFile);
-					} else {
-						reject(new Error("Image compression failed"));
-					}
-				} catch (error) {
-					reject(error);
-				}
-			},
-			format,
-			quality,
+	try {
+		const { width, height } = imageBitmap;
+		const { newWidth, newHeight } = calculateNewSize(
+			width,
+			height,
+			maxWidth,
+			maxHeight,
 		);
-	});
+
+		// Create canvas and draw the ImageBitmap
+		const { canvas, ctx } = setupCanvas(newWidth, newHeight);
+		ctx.drawImage(imageBitmap, 0, 0, newWidth, newHeight);
+
+		// Convert to blob and return as File
+		return new Promise((resolve, reject) => {
+			canvas.toBlob(
+				(blob) => {
+					try {
+						if (blob) {
+							const compressedFile = new File(
+								[blob],
+								generateCompressedFileName(file.name, format),
+								{
+									type: format,
+									lastModified: Date.now(),
+								},
+							);
+							cleanupResources(canvas);
+							resolve(compressedFile);
+						} else {
+							cleanupResources(canvas);
+							reject(new Error("Image compression failed"));
+						}
+					} catch (error) {
+						cleanupResources(canvas);
+						reject(error);
+					}
+				},
+				format,
+				quality,
+			);
+		});
+	} finally {
+		// Always clean up ImageBitmap
+		imageBitmap.close();
+	}
 }
 
-/**
- * Calculate new size while preserving aspect ratio
- */
 function calculateNewSize(
 	originalWidth: number,
 	originalHeight: number,
@@ -243,15 +226,6 @@ function calculateNewSize(
 		newWidth: Math.round(newWidth),
 		newHeight: Math.round(newHeight),
 	};
-}
-
-/**
- * Generate compressed filename with new extension
- */
-function generateFileName(originalName: string, format: string): string {
-	const nameWithoutExt = originalName.replace(/\.[^/.]+$/, "");
-	const extension = format.split("/")[1];
-	return `${nameWithoutExt}_compressed.${extension}`;
 }
 
 export function getReceiptCompressionOptions(): CompressionOptions {
