@@ -1,9 +1,11 @@
+export type DestinationData = {
+	value: string;
+	label: string;
+};
+
 export type DestinationSuccessResponse = {
 	result: "done";
-	data: {
-		value: string;
-		label: string;
-	}[];
+	data: DestinationData[];
 };
 
 export type DestinationErrorResponse = {

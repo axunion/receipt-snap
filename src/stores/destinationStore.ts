@@ -1,10 +1,10 @@
 import { createResource, createRoot } from "solid-js";
 import { fetchDestinations } from "@/services/apiService";
-import type { SelectOption } from "@/types";
+import type { DestinationData } from "@/types";
 
 function createDestinationStore() {
 	const [destinations, { refetch }] =
-		createResource<SelectOption[]>(fetchDestinations);
+		createResource<DestinationData[]>(fetchDestinations);
 
 	const getDestinationLabel = (value: string): string => {
 		const destination = destinations()?.find((d) => d.value === value);
