@@ -1,5 +1,5 @@
 import { createResource, createRoot } from "solid-js";
-import { fetchDestinations } from "@/services/apiService";
+import { fetchDestinations } from "@/services";
 import type { DestinationData } from "@/types";
 
 function createDestinationStore() {

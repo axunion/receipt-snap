@@ -11,6 +11,7 @@ export interface ExpenseFormData {
 
 // Payload actually sent to API (base64 string instead of File)
 export interface ExpenseSubmitPayload {
+	recaptchaToken: string;
 	name: string;
 	amount: string;
 	date: string;

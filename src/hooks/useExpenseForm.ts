@@ -1,5 +1,5 @@
 import { createEffect, createSignal } from "solid-js";
-import { submitExpense } from "@/services/apiService";
+import { getReCaptchaToken, submitExpense } from "@/services";
 import { expenseFormStore } from "@/stores";
 import type {
 	ExpenseSubmitPayload,
@@ -155,6 +155,7 @@ export function useExpenseForm() {
 				base64 = await fileToBase64(formData.receiptFile);
 			}
 			const payload: ExpenseSubmitPayload = {
+				recaptchaToken: await getReCaptchaToken(),
 				name: formData.name,
 				amount: formData.amount,
 				date: formData.date,

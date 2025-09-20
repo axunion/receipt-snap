@@ -66,6 +66,10 @@ dialog::backdrop {
 	display: none;
 }
 
+.grecaptcha-badge {
+	visibility: hidden;
+}
+
 @keyframes fadeIn {
 	from {
 		opacity: 0;
@@ -73,6 +77,14 @@ dialog::backdrop {
 	to {
 		opacity: 1;
 	}
+}
+
+.animate-in {
+	animation: fadeIn 0.2s ease-out;
+}
+
+.fade-in {
+	animation: fadeIn 0.2s ease-out;
 }
 
 @keyframes zoomIn {
@@ -84,14 +96,6 @@ dialog::backdrop {
 		opacity: 1;
 		transform: scale(1);
 	}
-}
-
-.animate-in {
-	animation: fadeIn 0.2s ease-out;
-}
-
-.fade-in {
-	animation: fadeIn 0.2s ease-out;
 }
 
 .zoom-in-95 {

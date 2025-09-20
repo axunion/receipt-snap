@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, onMount } from "solid-js";
 import {
 	AmountField,
 	DateField,
@@ -10,6 +10,7 @@ import {
 } from "@/components/features/expense/FormFields";
 import { SuccessModal } from "@/components/features/expense/SuccessModal";
 import { Button, LoadingOverlay } from "@/components/ui";
+import { CONFIG } from "@/constants/config";
 import { useExpenseForm } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
 import { destinationStore, expenseFormStore } from "@/stores";
@@ -95,6 +96,18 @@ export function ExpenseForm() {
 			handleSuccess();
 		}
 	};
+
+	onMount(() => {
+		if (
+			CONFIG.RECAPTCHA.SITE_KEY &&
+			!document.querySelector('script[src*="recaptcha"]')
+		) {
+			const script = document.createElement("script");
+			script.src = `https://www.google.com/recaptcha/api.js?render=${CONFIG.RECAPTCHA.SITE_KEY}`;
+			script.async = true;
+			document.head.appendChild(script);
+		}
+	});
 
 	return (
 		<MainLayout title="Receipt Snap">

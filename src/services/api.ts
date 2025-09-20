@@ -2,7 +2,6 @@ import { CONFIG } from "@/constants/config";
 import type {
 	DestinationData,
 	DestinationSuccessResponse,
-	ExpenseFormData,
 	ExpenseSubmitPayload,
 	SubmitResponse,
 } from "@/types";
@@ -36,7 +35,7 @@ export async function fetchDestinations(): Promise<DestinationData[]> {
 }
 
 export async function submitExpense(
-	expenseData: ExpenseFormData | ExpenseSubmitPayload,
+	expenseData: ExpenseSubmitPayload,
 ): Promise<SubmitResponse> {
 	// if (import.meta.env.DEV) {
 	// 	await new Promise((resolve) => setTimeout(resolve, 1500));
