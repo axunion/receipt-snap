@@ -5,7 +5,7 @@ import {
 	SUPPORTED_FORMATS,
 } from "@/constants/compression";
 import type { CompressionOptions } from "@/types";
-import { generateCompressedFileName, isHEICFormat } from "./imageUtils";
+import { generateCompressedFileName, isHEICFormat } from "./";
 
 function setupCanvas(
 	width: number,

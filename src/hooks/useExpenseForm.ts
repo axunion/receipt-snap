@@ -8,6 +8,7 @@ import type {
 	TouchedFields,
 } from "@/types";
 import {
+	fileToBase64,
 	formatDateForInput,
 	parseAmount,
 	validateAmountField,
@@ -18,7 +19,6 @@ import {
 	validateNameField,
 	validateReceiptField,
 } from "@/utils";
-import { fileToBase64 } from "@/utils/imageUtils";
 
 export function useExpenseForm() {
 	const [fieldErrors, setFieldErrors] = createSignal<FieldErrors>({});
