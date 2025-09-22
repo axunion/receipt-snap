@@ -1,6 +1,6 @@
 import type { JSX } from "solid-js";
 import { Show } from "solid-js";
-import { ReceiptCamera } from "@/components/features/receipt-camera/ReceiptCamera";
+import { ReceiptCamera } from "@/components/features/camera/ReceiptCamera";
 import { Input, Label, Select, Textarea } from "@/components/ui";
 import { destinationStore, expenseFormStore } from "@/stores";
 import type { FieldErrors, TouchedFields } from "@/types";

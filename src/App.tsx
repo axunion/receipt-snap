@@ -1,7 +1,7 @@
-import { ExpenseForm } from "@/components/features/expense/ExpenseForm";
+import { FormContainer } from "@/components/features/FormContainer";
 
 function App() {
-	return <ExpenseForm />;
+	return <FormContainer />;
 }
 
 export default App;
