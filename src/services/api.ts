@@ -1,66 +1,94 @@
 import { CONFIG } from "@/constants/config";
+import { ERROR_MESSAGES } from "@/constants/errorMessages";
 import type {
 	DestinationData,
 	DestinationSuccessResponse,
 	ExpenseSubmitPayload,
 	SubmitResponse,
 } from "@/types";
-import { handleApiResponse, handleFetchError } from "@/utils";
+
+async function apiRequest<T>(url: string, options?: RequestInit): Promise<T> {
+	try {
+		const response = await fetch(url, options);
+
+		if (!response.ok) {
+			throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+		}
+
+		const data = await response.json();
+
+		if (data?.result === "error") {
+			throw new Error(data.error);
+		}
+
+		return data;
+	} catch (error) {
+		if (error instanceof TypeError && error.message.includes("fetch")) {
+			throw new Error(ERROR_MESSAGES.NETWORK);
+		}
+		throw error instanceof Error ? error : new Error(ERROR_MESSAGES.UNEXPECTED);
+	}
+}
 
 export async function fetchDestinations(): Promise<DestinationData[]> {
 	// if (import.meta.env.DEV) {
-	// 	const data = [
-	// 		{ value: "value1", label: "イベント" },
-	// 		{ value: "value2", label: "交通費" },
-	// 	];
-	// 	const resultDone = { result: "done", data };
-	// 	console.log("Mock destinations data fetched:");
-	// 	console.log(resultDone);
+	// 	// Development mock configuration (only in dev builds)
+	// 	console.log("Using mock destination data");
+	// 	const shouldError = false;
+	// 	// Simulate API delay
+	// 	await new Promise((resolve) => setTimeout(resolve, 1500));
 
-	// 	if (Math.random() < 0.5) {
-	// 		throw new Error("Dummy error message.");
+	// 	if (shouldError) {
+	// 		throw new Error("Mock error: Failed to fetch destinations");
 	// 	}
 
-	// 	return resultDone.data;
+	// 	return [
+	// 		{ value: "project_a", label: "プロジェクトA" },
+	// 		{ value: "project_b", label: "プロジェクトB" },
+	// 	];
 	// }
 
-	try {
-		const response = await fetch(`${CONFIG.API.BASE_URL}`);
-		const successResponse =
-			await handleApiResponse<DestinationSuccessResponse>(response);
-		return successResponse.data;
-	} catch (error) {
-		throw handleFetchError(error);
-	}
+	const response = await apiRequest<DestinationSuccessResponse>(
+		`${CONFIG.API.BASE_URL}`,
+	);
+	return response.data;
 }
 
 export async function submitExpense(
 	expenseData: ExpenseSubmitPayload,
 ): Promise<SubmitResponse> {
 	// if (import.meta.env.DEV) {
-	// 	await new Promise((resolve) => setTimeout(resolve, 1500));
-	// 	const resultDone = { result: "done" };
-	// 	const resultError = { result: "error", error: "Dummy error message." };
-	// 	const result = Math.random() < 0.5 ? resultDone : resultError;
+	// 	// Development mock configuration (only in dev builds)
 	// 	console.log("Using mock expense submission:");
 	// 	console.log(JSON.stringify(expenseData, null, 2));
-	// 	console.log("Mock submission complete:", result);
-	// 	return result as SubmitResponse;
+	// 	const shouldError = true;
+	// 	// Simulate API delay
+	// 	await new Promise((resolve) => setTimeout(resolve, 1500));
+
+	// 	if (shouldError) {
+	// 		console.log("Mock submission error");
+	// 		return {
+	// 			result: "error",
+	// 			error: "Mock error: Submission failed",
+	// 		};
+	// 	}
+
+	// 	console.log("Mock submission success");
+	// 	return { result: "done" };
 	// }
 
 	try {
-		const response = await fetch(`${CONFIG.API.BASE_URL}`, {
+		return await apiRequest<SubmitResponse>(`${CONFIG.API.BASE_URL}`, {
 			method: "POST",
 			body: JSON.stringify(expenseData),
 		});
-
-		return await handleApiResponse<SubmitResponse>(response);
 	} catch (error) {
-		const handledError = handleFetchError(error);
-
 		return {
 			result: "error",
-			error: handledError.message,
+			error:
+				error instanceof Error
+					? error.message
+					: "予期しないエラーが発生しました。",
 		};
 	}
 }
