@@ -14,7 +14,6 @@ interface ModalProps {
 }
 
 export function Modal(props: ModalProps) {
-	// ボディスクロール制御 - アクセサー関数を使用してリアクティビティを保持
 	useBodyScrollLock(
 		() => props.isOpen,
 		() => props.disableBodyScroll !== false,

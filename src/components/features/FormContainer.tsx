@@ -9,7 +9,7 @@ import {
 	ReceiptField,
 } from "@/components/features/FormFields";
 import { SuccessModal } from "@/components/features/SuccessModal";
-import { Button, LoadingOverlay } from "@/components/ui";
+import { Button, Overlay, Spinner } from "@/components/ui";
 import { useExpenseForm, useRecaptcha, useSuccessModal } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
 import { expenseFormStore } from "@/stores";
@@ -68,7 +68,9 @@ export function FormContainer() {
 					{isSubmitting() ? "送信中..." : "送信する"}
 				</Button>
 
-				<LoadingOverlay isVisible={isSubmitting()} />
+				<Overlay isVisible={isSubmitting()}>
+					<Spinner size="lg" />
+				</Overlay>
 			</form>
 
 			<SuccessModal

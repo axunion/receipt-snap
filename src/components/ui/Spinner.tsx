@@ -1,10 +1,10 @@
-interface LoadingSpinnerProps {
+interface SpinnerProps {
 	size?: "sm" | "md" | "lg";
 	color?: string;
 	className?: string;
 }
 
-export function LoadingSpinner(props: LoadingSpinnerProps) {
+export function Spinner(props: SpinnerProps) {
 	const sizeClasses = {
 		sm: "h-4 w-4",
 		md: "h-6 w-6",
