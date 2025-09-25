@@ -190,7 +190,9 @@ export function DestinationField(props: FormFieldProps) {
 				options={destinationStore.destinations() || []}
 				value={expenseFormStore.destination()}
 				onSelect={expenseFormStore.setDestination}
-				placeholder="対象を選択"
+				placeholder={
+					destinationStore.destinations.loading ? "読み込み中..." : "対象を選択"
+				}
 				required
 				aria-invalid={
 					!!(
