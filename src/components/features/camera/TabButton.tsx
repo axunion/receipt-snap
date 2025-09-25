@@ -6,8 +6,7 @@ interface TabButtonProps {
 }
 
 export function TabButton(props: TabButtonProps) {
-	const baseClasses =
-		"flex-1 px-2 py-3 text-xs sm:text-sm font-medium cursor-pointer";
+	const baseClasses = "flex-1 px-2 py-3 text-sm font-medium cursor-pointer";
 	const positionClasses = {
 		left: "rounded-tl-lg",
 		center: "border-l border-slate-200",
