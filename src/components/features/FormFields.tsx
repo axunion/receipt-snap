@@ -8,6 +8,7 @@ import type { FieldErrors, TouchedFields } from "@/types";
 interface FormFieldProps {
 	fieldErrors: () => FieldErrors;
 	touchedFields: () => TouchedFields;
+	onNameClick?: () => void;
 }
 
 interface FieldWrapperProps {
@@ -52,11 +53,14 @@ export function NameField(props: FormFieldProps) {
 		>
 			<Input
 				type="text"
-				placeholder="名前を入力"
+				placeholder="名前を変更するにはクリック"
 				value={expenseFormStore.name()}
 				onInput={expenseFormStore.setName}
+				onClick={props.onNameClick}
 				required
 				maxLength={24}
+				readOnly
+				class="cursor-pointer"
 				aria-invalid={
 					!!(props.fieldErrors().name && props.touchedFields().name)
 				}
@@ -191,7 +195,7 @@ export function DestinationField(props: FormFieldProps) {
 				value={expenseFormStore.destination()}
 				onSelect={expenseFormStore.setDestination}
 				placeholder={
-					destinationStore.destinations.loading ? "読み込み中..." : "対象を選択"
+					destinationStore.destinations.loading ? "読み込み中..." : "選択"
 				}
 				required
 				aria-invalid={

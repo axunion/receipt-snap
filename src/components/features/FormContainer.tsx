@@ -18,9 +18,7 @@ import { expenseFormStore } from "@/stores";
 
 export function FormContainer() {
 	const isSubmitting = () => expenseFormStore.submitState().isLoading;
-	const [showOnboarding, setShowOnboarding] = createSignal(
-		!expenseFormStore.name().trim(),
-	);
+	const [showOnboarding, setShowOnboarding] = createSignal(true);
 
 	const { formErrors, fieldErrors, touchedFields, submitForm, resetForm } =
 		useExpenseForm();
@@ -50,15 +48,19 @@ export function FormContainer() {
 	return (
 		<MainLayout title="Receipt Snap">
 			<form onSubmit={handleSubmit} class="space-y-6 relative form-container">
-				<NameField fieldErrors={fieldErrors} touchedFields={touchedFields} />
+				<NameField
+					fieldErrors={fieldErrors}
+					touchedFields={touchedFields}
+					onNameClick={() => setShowOnboarding(true)}
+				/>
+				<ReceiptField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<DestinationField
 					fieldErrors={fieldErrors}
 					touchedFields={touchedFields}
 				/>
-				<ReceiptField fieldErrors={fieldErrors} touchedFields={touchedFields} />
+				<DateField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<AmountField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<DetailsField fieldErrors={fieldErrors} touchedFields={touchedFields} />
-				<DateField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<NotesField />
 
 				<FormErrorDisplay

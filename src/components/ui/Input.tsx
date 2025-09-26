@@ -16,8 +16,10 @@ interface InputProps {
 	value?: string | number;
 	onInput?: (value: string) => void;
 	onChange?: (event: Event) => void;
+	onClick?: (event: Event) => void;
 	required?: boolean;
 	disabled?: boolean;
+	readOnly?: boolean;
 	class?: string;
 	accept?: string;
 	min?: string | number;
@@ -42,7 +44,7 @@ interface InputProps {
 
 export function Input(props: InputProps) {
 	const baseClasses =
-		"w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-500 disabled:bg-slate-50 disabled:cursor-not-allowed transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300";
+		"w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-500 disabled:bg-slate-50 disabled:cursor-not-allowed read-only:bg-slate-50 read-only:cursor-pointer transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300";
 
 	const handleInput = (e: Event) => {
 		const target = e.currentTarget as HTMLInputElement;
@@ -66,8 +68,10 @@ export function Input(props: InputProps) {
 			value={props.value}
 			onInput={handleInput}
 			onChange={props.onChange}
+			onClick={props.onClick}
 			required={props.required}
 			disabled={props.disabled}
+			readOnly={props.readOnly}
 			accept={props.accept}
 			min={props.min}
 			max={props.max}
