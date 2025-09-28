@@ -1,16 +1,13 @@
 import { Icon } from "@iconify-icon/solid";
 import { Show } from "solid-js";
 import { Button, Modal } from "@/components/ui";
+import type { SubmittedExpenseData } from "@/hooks";
 
 interface SuccessModalProps {
 	isOpen: boolean;
 	onClose: () => void;
 	onNewExpense: () => void;
-	submittedExpense?: {
-		destinationLabel: string;
-		details: string;
-		amount: number;
-	};
+	submittedExpense?: SubmittedExpenseData;
 }
 
 export function SuccessModal(props: SuccessModalProps) {
@@ -18,7 +15,6 @@ export function SuccessModal(props: SuccessModalProps) {
 		<Modal
 			isOpen={props.isOpen}
 			onClose={props.onClose}
-			backdropClass="bg-black/50 backdrop-blur-sm p-4"
 			contentClass="bg-white rounded-lg px-6 py-8 max-w-sm w-full mx-4 fade-in"
 		>
 			<div class="text-center">
@@ -38,26 +34,24 @@ export function SuccessModal(props: SuccessModalProps) {
 				<h2 class="font-semibold mb-3">送信完了しました！</h2>
 
 				<Show when={props.submittedExpense}>
-					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-6">
-						<div class="space-y-3 text-center">
-							<div class="text-2xl font-bold text-green-800">
-								¥{props.submittedExpense?.amount.toLocaleString()}
+					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-4">
+						<div class="space-y-2 text-center">
+							<div class="text-lg font-bold text-green-800">
+								¥ {props.submittedExpense?.amount.toLocaleString()}
 							</div>
-							<div class="text-lg font-medium text-gray-800">
+							<div class="font-medium">
 								{props.submittedExpense?.destinationLabel}
 							</div>
-							<div class="text-sm text-gray-600 bg-white/70 rounded-lg px-3 py-2">
+							<div class="text-sm bg-white/80 rounded-lg px-3 py-4">
 								{props.submittedExpense?.details}
 							</div>
 						</div>
 					</div>
 				</Show>
 
-				<div class="space-y-3">
-					<Button onClick={props.onNewExpense} class="w-full" variant="primary">
-						新しいレシートを作成
-					</Button>
-				</div>
+				<Button onClick={props.onNewExpense} class="w-full" variant="primary">
+					新しいレシートを作成
+				</Button>
 			</div>
 		</Modal>
 	);

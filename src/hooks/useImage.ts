@@ -8,6 +8,7 @@ import {
 	getReceiptCompressionOptions,
 	validateImageFile,
 } from "@/utils";
+
 export function useImage(onImageCapture?: (file: File) => void) {
 	const [imagePreview, setImagePreview] = createSignal("");
 	const [error, setError] = createSignal("");

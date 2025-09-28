@@ -1,5 +1,5 @@
-import { createSignal } from "solid-js";
-import { FormErrorDisplay } from "@/components/features/FormErrorDisplay";
+import { createSignal, For } from "solid-js";
+import { ErrorModal } from "@/components/features/ErrorModal";
 import {
 	AmountField,
 	DateField,
@@ -12,7 +12,7 @@ import {
 import { NameOnboardingOverlay } from "@/components/features/NameOnboardingOverlay";
 import { SuccessModal } from "@/components/features/SuccessModal";
 import { Button, Overlay, Spinner } from "@/components/ui";
-import { useExpenseForm, useRecaptcha, useSuccessModal } from "@/hooks";
+import { useExpenseForm, useRecaptcha, useSubmitModal } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
 import { expenseFormStore } from "@/stores";
 
@@ -25,10 +25,12 @@ export function FormContainer() {
 	const {
 		showSuccessModal,
 		submittedData,
-		handleSuccess,
 		handleNewExpense,
-		handleCloseModal,
-	} = useSuccessModal(resetForm);
+		handleCloseSuccess,
+		showErrorModal,
+		errorMessage,
+		handleCloseError,
+	} = useSubmitModal(resetForm);
 
 	useRecaptcha();
 
@@ -38,11 +40,7 @@ export function FormContainer() {
 
 	const handleSubmit = async (event: Event) => {
 		event.preventDefault();
-		const result = await submitForm();
-
-		if (result?.result === "done") {
-			handleSuccess();
-		}
+		await submitForm();
 	};
 
 	return (
@@ -63,11 +61,28 @@ export function FormContainer() {
 				<DetailsField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<NotesField />
 
-				<FormErrorDisplay
-					formErrors={formErrors}
-					fieldErrors={fieldErrors}
-					touchedFields={touchedFields}
-				/>
+				{/* Validation Errors */}
+				{(() => {
+					const validationErrors = () => {
+						return formErrors().length > 0 &&
+							Object.values(touchedFields()).some(Boolean)
+							? formErrors().filter(
+									(fe: string) => !Object.values(fieldErrors()).includes(fe),
+								)
+							: [];
+					};
+
+					return validationErrors().length > 0 ? (
+						<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+							<p class="text-sm font-medium text-red-800 mb-2">入力エラー:</p>
+							<ul class="text-sm text-red-700 list-disc list-inside space-y-1">
+								<For each={validationErrors()}>
+									{(error) => <li>{error}</li>}
+								</For>
+							</ul>
+						</div>
+					) : null;
+				})()}
 
 				<Button
 					type="submit"
@@ -91,9 +106,15 @@ export function FormContainer() {
 
 			<SuccessModal
 				isOpen={showSuccessModal()}
-				onClose={handleCloseModal}
+				onClose={handleCloseSuccess}
 				onNewExpense={handleNewExpense}
 				submittedExpense={submittedData()}
+			/>
+
+			<ErrorModal
+				isOpen={showErrorModal()}
+				onClose={handleCloseError}
+				error={errorMessage()}
 			/>
 		</MainLayout>
 	);
