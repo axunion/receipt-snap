@@ -16,7 +16,7 @@ export const VALIDATION_MESSAGES = {
 		DATE_INVALID_NUMBERS: "日付には有効な数字を入力してください。",
 		MONTH_INVALID: "月は1〜12の範囲で入力してください。",
 		DAY_INVALID: "日は1〜31の範囲で入力してください。",
-		DATE_NOT_EXIST: "存在しない日付です（例：2月30日などは入力できません）。",
+		DATE_NOT_EXIST: "存在しない日付です。",
 		FUTURE_DATE: "未来の日付は入力できません。",
 		DETAILS_REQUIRED: "内訳は必須項目です。",
 		DESTINATION_REQUIRED: "対象は必須項目です。",

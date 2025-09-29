@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createMemo, createSignal, For, Show } from "solid-js";
 import { ErrorModal } from "@/components/features/ErrorModal";
 import {
 	AmountField,
@@ -32,6 +32,18 @@ export function FormContainer() {
 		handleCloseError,
 	} = useSubmitModal(resetForm);
 
+	// Validation errors (not field-specific)
+	const validationErrors = createMemo(() => {
+		const hasFormErrors = formErrors().length > 0;
+		const hasTouchedFields = Object.values(touchedFields()).some(Boolean);
+
+		if (!hasFormErrors || !hasTouchedFields) return [];
+
+		// Filter out field-specific errors to show only global ones
+		const fieldErrorMessages = Object.values(fieldErrors());
+		return formErrors().filter((error) => !fieldErrorMessages.includes(error));
+	});
+
 	useRecaptcha();
 
 	const handleOnboardingComplete = () => {
@@ -61,28 +73,14 @@ export function FormContainer() {
 				<DetailsField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<NotesField />
 
-				{/* Validation Errors */}
-				{(() => {
-					const validationErrors = () => {
-						return formErrors().length > 0 &&
-							Object.values(touchedFields()).some(Boolean)
-							? formErrors().filter(
-									(fe: string) => !Object.values(fieldErrors()).includes(fe),
-								)
-							: [];
-					};
-
-					return validationErrors().length > 0 ? (
-						<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
-							<p class="text-sm font-medium text-red-800 mb-2">入力エラー:</p>
-							<ul class="text-sm text-red-700 list-disc list-inside space-y-1">
-								<For each={validationErrors()}>
-									{(error) => <li>{error}</li>}
-								</For>
-							</ul>
-						</div>
-					) : null;
-				})()}
+				<Show when={validationErrors().length > 0}>
+					<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
+						<p class="text-sm font-medium text-red-800 mb-2">入力エラー:</p>
+						<ul class="text-sm text-red-700 list-disc list-inside space-y-1">
+							<For each={validationErrors()}>{(error) => <li>{error}</li>}</For>
+						</ul>
+					</div>
+				</Show>
 
 				<Button
 					type="submit"
