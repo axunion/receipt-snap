@@ -5,8 +5,8 @@ import type { SubmittedExpenseData } from "@/hooks";
 
 interface SuccessModalProps {
 	isOpen: boolean;
-	onClose: () => void;
-	onNewExpense: () => void;
+	onClose?: () => void;
+	onNewExpense?: () => void;
 	submittedExpense?: SubmittedExpenseData;
 }
 
@@ -14,7 +14,6 @@ export function SuccessModal(props: SuccessModalProps) {
 	return (
 		<Modal
 			isOpen={props.isOpen}
-			onClose={props.onClose}
 			contentClass="bg-white rounded-lg px-6 py-8 max-w-sm w-full mx-4 fade-in"
 		>
 			<div class="text-center">
@@ -34,13 +33,13 @@ export function SuccessModal(props: SuccessModalProps) {
 				<h2 class="font-semibold mb-3">送信完了しました！</h2>
 
 				<Show when={props.submittedExpense}>
-					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-4">
-						<div class="space-y-2 text-center">
+					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl px-4 py-6 mb-4">
+						<div class="space-y-3 text-center">
+							<div class="text-sm">
+								{props.submittedExpense?.destinationLabel}
+							</div>
 							<div class="text-lg font-bold text-green-800">
 								¥ {props.submittedExpense?.amount.toLocaleString()}
-							</div>
-							<div class="font-medium">
-								{props.submittedExpense?.destinationLabel}
 							</div>
 							<div class="text-sm bg-white/80 rounded-lg px-3 py-4">
 								{props.submittedExpense?.details}

@@ -26,7 +26,6 @@ export function FormContainer() {
 		showSuccessModal,
 		submittedData,
 		handleNewExpense,
-		handleCloseSuccess,
 		showErrorModal,
 		errorMessage,
 		handleCloseError,
@@ -104,7 +103,6 @@ export function FormContainer() {
 
 			<SuccessModal
 				isOpen={showSuccessModal()}
-				onClose={handleCloseSuccess}
 				onNewExpense={handleNewExpense}
 				submittedExpense={submittedData()}
 			/>
