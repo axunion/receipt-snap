@@ -43,7 +43,7 @@ export function formatFileSize(bytes: number): string {
 	return `${Number.parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
 }
 
-export function calculateCompressionRatio(
+export function calculateRatio(
 	originalSize: number,
 	compressedSize: number,
 ): number {

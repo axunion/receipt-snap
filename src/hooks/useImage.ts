@@ -2,10 +2,10 @@ import { createEffect, createSignal } from "solid-js";
 import { expenseFormStore } from "@/stores";
 import type { CompressionResult, TabType } from "@/types";
 import {
-	calculateCompressionRatio,
+	calculateRatio,
 	compressImage,
 	formatFileSize,
-	getReceiptCompressionOptions,
+	getCompressionOptions,
 	validateImageFile,
 } from "@/utils";
 
@@ -56,13 +56,10 @@ export function useImage(onImageCapture?: (file: File) => void) {
 		setIsCompressing(true);
 
 		try {
-			const baseOptions = getReceiptCompressionOptions();
+			const baseOptions = getCompressionOptions();
 			const compressedFile = await compressImage(file, baseOptions);
 
-			const compressionRatio = calculateCompressionRatio(
-				file.size,
-				compressedFile.size,
-			);
+			const compressionRatio = calculateRatio(file.size, compressedFile.size);
 
 			if (import.meta.env.DEV) {
 				console.log(

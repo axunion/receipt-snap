@@ -228,7 +228,7 @@ function calculateNewSize(
 	};
 }
 
-export function getReceiptCompressionOptions(): CompressionOptions {
+export function getCompressionOptions(): CompressionOptions {
 	return {
 		maxWidth: RESOLUTION_PRESETS.RECEIPT.width,
 		maxHeight: RESOLUTION_PRESETS.RECEIPT.height,

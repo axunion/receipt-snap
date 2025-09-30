@@ -3,7 +3,7 @@ import { destinationStore, expenseFormStore } from "@/stores";
 import type { SubmitErrorResponse } from "@/types";
 import { parseAmount } from "@/utils";
 
-export interface SubmittedExpenseData {
+export interface SubmittedData {
 	destinationLabel: string;
 	details: string;
 	amount: number;
@@ -12,8 +12,7 @@ export interface SubmittedExpenseData {
 export function useSubmitModal(resetForm: () => void) {
 	const [showSuccessModal, setShowSuccessModal] = createSignal(false);
 	const [showErrorModal, setShowErrorModal] = createSignal(false);
-	const [submittedData, setSubmittedData] =
-		createSignal<SubmittedExpenseData>();
+	const [submittedData, setSubmittedData] = createSignal<SubmittedData>();
 	const [errorMessage, setErrorMessage] = createSignal<string>("");
 
 	// Monitor submit state changes

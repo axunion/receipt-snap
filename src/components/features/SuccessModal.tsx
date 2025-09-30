@@ -1,13 +1,13 @@
 import { Icon } from "@iconify-icon/solid";
 import { Show } from "solid-js";
 import { Button, Modal } from "@/components/ui";
-import type { SubmittedExpenseData } from "@/hooks";
+import type { SubmittedData } from "@/hooks";
 
 interface SuccessModalProps {
 	isOpen: boolean;
 	onClose?: () => void;
 	onNewExpense?: () => void;
-	submittedExpense?: SubmittedExpenseData;
+	submittedExpense?: SubmittedData;
 }
 
 export function SuccessModal(props: SuccessModalProps) {
