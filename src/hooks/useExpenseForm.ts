@@ -35,8 +35,9 @@ export function useExpenseForm() {
 	};
 
 	// Consolidated real-time validation
+	const currentDateDefault = formatDateForInput(new Date());
+
 	createEffect(() => {
-		const currentDateDefault = formatDateForInput(new Date());
 		const validators: Array<{
 			field: keyof FieldErrors;
 			validate: () => void;
