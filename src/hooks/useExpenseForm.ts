@@ -11,13 +11,8 @@ import {
 	fileToBase64,
 	formatDateForInput,
 	parseAmount,
-	validateAmountField,
-	validateDateField,
-	validateDestinationField,
-	validateDetailsField,
-	validateExpenseForm,
-	validateNameField,
-	validateReceiptField,
+	validateField,
+	validateForm,
 } from "@/utils";
 
 export function useExpenseForm() {
@@ -29,13 +24,12 @@ export function useExpenseForm() {
 		setTouchedFields((prev) => ({ ...prev, [fieldName]: true }));
 	};
 
-	const validateField = <T, R = undefined>(
+	const validateSingleField = (
 		fieldName: keyof FieldErrors,
-		value: T,
-		validator: (val: T, relatedVal?: R) => string | undefined,
-		relatedValue?: R,
+		value: string | number | File | null,
+		extraValue?: string,
 	) => {
-		const error = validator(value, relatedValue);
+		const error = validateField(fieldName, value, extraValue);
 		setFieldErrors((prev) => ({ ...prev, [fieldName]: error }));
 		return !error;
 	};
@@ -50,51 +44,40 @@ export function useExpenseForm() {
 		}> = [
 			{
 				field: "name",
-				validate: () =>
-					validateField("name", expenseFormStore.name(), validateNameField),
+				validate: () => validateSingleField("name", expenseFormStore.name()),
 				shouldTouch: () => expenseFormStore.name() !== "",
 			},
 			{
 				field: "amount",
 				validate: () => {
 					const numericAmount = Number.parseFloat(expenseFormStore.amount());
-					validateField("amount", numericAmount, validateAmountField);
+					validateSingleField("amount", numericAmount);
 				},
 				shouldTouch: () => expenseFormStore.amount() !== "",
 			},
 			{
 				field: "date",
-				validate: () =>
-					validateField("date", expenseFormStore.date(), validateDateField),
+				validate: () => validateSingleField("date", expenseFormStore.date()),
 				shouldTouch: () => expenseFormStore.date() !== currentDateDefault,
 			},
 			{
 				field: "details",
 				validate: () =>
-					validateField(
-						"details",
-						expenseFormStore.details(),
-						validateDetailsField,
-					),
+					validateSingleField("details", expenseFormStore.details()),
 				shouldTouch: () => expenseFormStore.details() !== "",
 			},
 			{
 				field: "destination",
 				validate: () =>
-					validateField(
-						"destination",
-						expenseFormStore.destination(),
-						validateDestinationField,
-					),
+					validateSingleField("destination", expenseFormStore.destination()),
 				shouldTouch: () => expenseFormStore.destination() !== "",
 			},
 			{
 				field: "receipt",
 				validate: () =>
-					validateField(
+					validateSingleField(
 						"receipt",
 						expenseFormStore.receiptFile(),
-						(file, reason) => validateReceiptField(file, reason),
 						expenseFormStore.noImageReason(),
 					),
 				shouldTouch: () =>
@@ -111,7 +94,7 @@ export function useExpenseForm() {
 
 	const submitForm = async () => {
 		const currentAmount = parseAmount(expenseFormStore.amount());
-		const validation = validateExpenseForm({
+		const validation = validateForm({
 			name: expenseFormStore.name(),
 			amount: currentAmount,
 			date: expenseFormStore.date(),
