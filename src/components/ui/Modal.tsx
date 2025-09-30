@@ -42,12 +42,14 @@ export function Modal(props: ModalProps) {
 					onKeyDown={handleKeyDown}
 					role="dialog"
 					aria-modal="true"
+					aria-labelledby="modal-title"
+					aria-describedby="modal-description"
 				>
 					<div
 						class={props.contentClass || ""}
 						onClick={(e) => e.stopPropagation()}
 						onKeyDown={(e) => e.stopPropagation()}
-						role="dialog"
+						role="document"
 					>
 						{props.children}
 					</div>

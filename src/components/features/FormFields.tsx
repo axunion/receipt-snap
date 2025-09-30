@@ -11,7 +11,7 @@ interface FormFieldProps {
 	onNameClick?: () => void;
 }
 
-interface FieldWrapperProps {
+interface FormFieldWrapperProps {
 	field: keyof FieldErrors;
 	label: string;
 	icon?: string;
@@ -21,7 +21,7 @@ interface FieldWrapperProps {
 	children: JSX.Element;
 }
 
-function FieldWrapper(props: FieldWrapperProps) {
+function FormFieldWrapper(props: FormFieldWrapperProps) {
 	const error = () => props.fieldErrors()[props.field];
 	const touched = () => props.touchedFields()[props.field];
 	const errorId = `${props.field}-error`;
@@ -43,7 +43,7 @@ function FieldWrapper(props: FieldWrapperProps) {
 
 export function NameField(props: FormFieldProps) {
 	return (
-		<FieldWrapper
+		<FormFieldWrapper
 			field="name"
 			label="名前"
 			icon="material-symbols:person-outline"
@@ -70,13 +70,13 @@ export function NameField(props: FormFieldProps) {
 						: undefined
 				}
 			/>
-		</FieldWrapper>
+		</FormFieldWrapper>
 	);
 }
 
 export function AmountField(props: FormFieldProps) {
 	return (
-		<FieldWrapper
+		<FormFieldWrapper
 			field="amount"
 			label="金額"
 			icon="material-symbols:payments-outline"
@@ -103,13 +103,13 @@ export function AmountField(props: FormFieldProps) {
 						: undefined
 				}
 			/>
-		</FieldWrapper>
+		</FormFieldWrapper>
 	);
 }
 
 export function DateField(props: FormFieldProps) {
 	return (
-		<FieldWrapper
+		<FormFieldWrapper
 			field="date"
 			label="支払日"
 			icon="material-symbols:calendar-today-outline"
@@ -131,7 +131,7 @@ export function DateField(props: FormFieldProps) {
 						: undefined
 				}
 			/>
-		</FieldWrapper>
+		</FormFieldWrapper>
 	);
 }
 
@@ -152,7 +152,7 @@ export function NotesField() {
 
 export function DetailsField(props: FormFieldProps) {
 	return (
-		<FieldWrapper
+		<FormFieldWrapper
 			field="details"
 			label="内訳"
 			icon="material-symbols:format-list-bulleted"
@@ -176,13 +176,13 @@ export function DetailsField(props: FormFieldProps) {
 						: undefined
 				}
 			/>
-		</FieldWrapper>
+		</FormFieldWrapper>
 	);
 }
 
 export function DestinationField(props: FormFieldProps) {
 	return (
-		<FieldWrapper
+		<FormFieldWrapper
 			field="destination"
 			label="対象"
 			icon="material-symbols:event-note-outline"
@@ -210,13 +210,13 @@ export function DestinationField(props: FormFieldProps) {
 				}
 				disabled={destinationStore.destinations.loading}
 			/>
-		</FieldWrapper>
+		</FormFieldWrapper>
 	);
 }
 
 export function ReceiptField(props: FormFieldProps) {
 	return (
-		<FieldWrapper
+		<FormFieldWrapper
 			field="receipt"
 			label="レシート"
 			icon="material-symbols:receipt-outline"
@@ -225,6 +225,6 @@ export function ReceiptField(props: FormFieldProps) {
 			touchedFields={props.touchedFields}
 		>
 			<ReceiptCamera onImageCapture={expenseFormStore.setReceiptFile} />
-		</FieldWrapper>
+		</FormFieldWrapper>
 	);
 }
