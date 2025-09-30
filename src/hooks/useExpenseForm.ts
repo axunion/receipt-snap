@@ -123,7 +123,7 @@ export function useExpenseForm() {
 
 		if (!validation.isValid) {
 			if (import.meta.env.DEV) {
-				console.log("Validation failed:", validation.errors);
+				console.log("Form validation failed:", validation.errors);
 			}
 			return undefined;
 		}
@@ -152,7 +152,9 @@ export function useExpenseForm() {
 			expenseFormStore.setSubmitState({ isLoading: false, result });
 			return result;
 		} catch (error) {
-			console.error("Submit error:", error);
+			if (import.meta.env.DEV) {
+				console.error("Form submit error:", error);
+			}
 			const errorResult: SubmitResponse = {
 				result: "error",
 				error: "An error occurred during submission. Please try again",

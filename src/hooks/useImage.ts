@@ -1,4 +1,4 @@
-import { createEffect, createSignal } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 import { expenseFormStore } from "@/stores";
 import type { CompressionResult, TabType } from "@/types";
 import {
@@ -63,7 +63,7 @@ export function useImage(onImageCapture?: (file: File) => void) {
 
 			if (import.meta.env.DEV) {
 				console.log(
-					`Image compression complete: ${formatFileSize(file.size)} -> ${formatFileSize(compressedFile.size)} (${compressionRatio}% reduction)`,
+					`Image compression: ${formatFileSize(file.size)} -> ${formatFileSize(compressedFile.size)} (${compressionRatio}% reduction)`,
 				);
 			}
 
@@ -85,7 +85,9 @@ export function useImage(onImageCapture?: (file: File) => void) {
 			const objectUrl = URL.createObjectURL(compressedFile);
 			setImagePreview(objectUrl);
 		} catch (compressionError) {
-			console.error("Image compression error:", compressionError);
+			if (import.meta.env.DEV) {
+				console.error("Image compression error:", compressionError);
+			}
 
 			// Handle HEIC-specific errors
 			if (compressionError instanceof Error) {
@@ -120,6 +122,13 @@ export function useImage(onImageCapture?: (file: File) => void) {
 		setInfo("");
 		setCompressionInfo(null);
 	};
+
+	// Cleanup on component unmount to prevent memory leaks
+	onCleanup(() => {
+		if (imagePreview()) {
+			URL.revokeObjectURL(imagePreview());
+		}
+	});
 
 	return {
 		imagePreview,

@@ -31,16 +31,11 @@ export function FormContainer() {
 		handleCloseError,
 	} = useSubmitModal(resetForm);
 
-	// Validation errors (not field-specific)
-	const validationErrors = createMemo(() => {
-		const hasFormErrors = formErrors().length > 0;
-		const hasTouchedFields = Object.values(touchedFields()).some(Boolean);
-
-		if (!hasFormErrors || !hasTouchedFields) return [];
-
-		// Filter out field-specific errors to show only global ones
-		const fieldErrorMessages = Object.values(fieldErrors());
-		return formErrors().filter((error) => !fieldErrorMessages.includes(error));
+	// Show general validation errors (simplified logic)
+	const hasGeneralErrors = createMemo(() => {
+		const hasErrors = formErrors().length > 0;
+		const hasTouched = Object.values(touchedFields()).some(Boolean);
+		return hasErrors && hasTouched;
 	});
 
 	useRecaptcha();
@@ -72,11 +67,11 @@ export function FormContainer() {
 				<DetailsField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<NotesField />
 
-				<Show when={validationErrors().length > 0}>
+				<Show when={hasGeneralErrors()}>
 					<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
 						<p class="text-sm font-medium text-red-800 mb-2">入力エラー:</p>
 						<ul class="text-sm text-red-700 list-disc list-inside space-y-1">
-							<For each={validationErrors()}>{(error) => <li>{error}</li>}</For>
+							<For each={formErrors()}>{(error) => <li>{error}</li>}</For>
 						</ul>
 					</div>
 				</Show>
