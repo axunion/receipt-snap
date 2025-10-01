@@ -50,6 +50,8 @@ export function useSubmitModal(resetForm: () => void) {
 	const handleNewExpense = () => {
 		setShowSuccessModal(false);
 		setSubmittedData(undefined);
+		// Clear submit state first to prevent re-triggering
+		expenseFormStore.setSubmitState({ isLoading: false, result: null });
 		resetForm();
 	};
 
