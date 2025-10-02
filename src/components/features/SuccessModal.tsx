@@ -8,14 +8,13 @@ interface SuccessModalProps {
 	onClose?: () => void;
 	onNewExpense?: () => void;
 	submittedExpense?: SubmittedData;
+	title?: string;
+	buttonText?: string;
 }
 
 export function SuccessModal(props: SuccessModalProps) {
 	return (
-		<Modal
-			isOpen={props.isOpen}
-			contentClass="bg-white rounded-lg px-6 py-8 max-w-sm w-full mx-4 fade-in"
-		>
+		<Modal isOpen={props.isOpen}>
 			<div class="text-center">
 				<div
 					class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"
@@ -30,7 +29,9 @@ export function SuccessModal(props: SuccessModalProps) {
 					/>
 				</div>
 
-				<h2 class="font-semibold mb-3">送信完了しました！</h2>
+				<h2 class="font-semibold mb-3">
+					{props.title || "送信完了しました！"}
+				</h2>
 
 				<Show when={props.submittedExpense}>
 					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl px-4 py-6 mb-4">
@@ -49,7 +50,7 @@ export function SuccessModal(props: SuccessModalProps) {
 				</Show>
 
 				<Button onClick={props.onNewExpense} class="w-full" variant="primary">
-					新しいレシートを作成
+					{props.buttonText || "新しいレシートを作成"}
 				</Button>
 			</div>
 		</Modal>

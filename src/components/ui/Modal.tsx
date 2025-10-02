@@ -46,7 +46,10 @@ export function Modal(props: ModalProps) {
 					aria-describedby="modal-description"
 				>
 					<div
-						class={props.contentClass || ""}
+						class={
+							props.contentClass ||
+							"bg-white rounded-lg px-6 py-8 max-w-sm w-full mx-4 fade-in"
+						}
 						onClick={(e) => e.stopPropagation()}
 						onKeyDown={(e) => e.stopPropagation()}
 						role="document"
