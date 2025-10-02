@@ -191,12 +191,10 @@ export function DestinationField(props: FormFieldProps) {
 			touchedFields={props.touchedFields}
 		>
 			<Select
-				options={destinationStore.destinations() || []}
+				options={destinationStore.destinations()}
 				value={expenseFormStore.destination()}
 				onSelect={expenseFormStore.setDestination}
-				placeholder={
-					destinationStore.destinations.loading ? "読み込み中..." : "選択"
-				}
+				placeholder={destinationStore.loading() ? "読み込み中..." : "選択"}
 				required
 				aria-invalid={
 					!!(
@@ -208,7 +206,7 @@ export function DestinationField(props: FormFieldProps) {
 						? "destination-error"
 						: undefined
 				}
-				disabled={destinationStore.destinations.loading}
+				disabled={destinationStore.loading()}
 			/>
 		</FormFieldWrapper>
 	);

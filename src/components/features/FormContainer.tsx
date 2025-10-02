@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, Show } from "solid-js";
+import { createEffect, createMemo, createSignal, For, Show } from "solid-js";
 import { ErrorModal } from "@/components/features/ErrorModal";
 import {
 	AmountField,
@@ -14,11 +14,12 @@ import { SuccessModal } from "@/components/features/SuccessModal";
 import { Button, Overlay, Spinner } from "@/components/ui";
 import { useExpenseForm, useRecaptcha, useSubmitModal } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
-import { expenseFormStore } from "@/stores";
+import { destinationStore, expenseFormStore } from "@/stores";
 
 export function FormContainer() {
 	const isSubmitting = () => expenseFormStore.submitState().isLoading;
 	const [showOnboarding, setShowOnboarding] = createSignal(true);
+	const [showDestinationError, setShowDestinationError] = createSignal(false);
 
 	const { formErrors, fieldErrors, touchedFields, submitForm, resetForm } =
 		useExpenseForm();
@@ -30,6 +31,14 @@ export function FormContainer() {
 		errorMessage,
 		handleCloseError,
 	} = useSubmitModal(resetForm);
+
+	// Monitor destination store errors
+	createEffect(() => {
+		const error = destinationStore.error();
+		if (error) {
+			setShowDestinationError(true);
+		}
+	});
 
 	// Show general validation errors (simplified logic)
 	const hasGeneralErrors = createMemo(() => {
@@ -106,6 +115,17 @@ export function FormContainer() {
 				isOpen={showErrorModal()}
 				onClose={handleCloseError}
 				error={errorMessage()}
+			/>
+
+			<ErrorModal
+				isOpen={showDestinationError()}
+				onClose={() => {
+					setShowDestinationError(false);
+					window.location.reload();
+				}}
+				error={destinationStore.error() || ""}
+				title="送信先取得エラー"
+				buttonText="再読み込み"
 			/>
 		</MainLayout>
 	);

@@ -1,18 +1,32 @@
-import { createResource, createRoot } from "solid-js";
+import { createMemo, createResource, createRoot } from "solid-js";
 import { fetchDestinations } from "@/services";
-import type { DestinationData } from "@/types";
+import type { DestinationResponse } from "@/types";
 
 function createDestinationStore() {
-	const [destinations, { refetch }] =
-		createResource<DestinationData[]>(fetchDestinations);
+	const [destinationResponse, { refetch }] =
+		createResource<DestinationResponse>(fetchDestinations);
+
+	const destinations = createMemo(() => {
+		const response = destinationResponse();
+		return response?.result === "done" ? response.data : [];
+	});
+
+	const error = createMemo(() => {
+		const response = destinationResponse();
+		return response?.result === "error" ? response.error : null;
+	});
+
+	const loading = createMemo(() => destinationResponse.loading);
 
 	const getDestinationLabel = (value: string): string => {
-		const destination = destinations()?.find((d) => d.value === value);
+		const destination = destinations().find((d) => d.value === value);
 		return destination?.label || "";
 	};
 
 	return {
 		destinations,
+		error,
+		loading,
 		refetch,
 		getDestinationLabel,
 	};
