@@ -109,12 +109,16 @@ export function FormContainer() {
 				isOpen={showSuccessModal()}
 				onNewExpense={handleNewExpense}
 				submittedExpense={submittedData()}
+				title="送信完了しました"
+				buttonText="続けて追加する"
 			/>
 
 			<ErrorModal
 				isOpen={showErrorModal()}
 				onClose={handleCloseError}
 				error={errorMessage()}
+				title="送信エラー"
+				buttonText="やり直す"
 			/>
 
 			<ErrorModal

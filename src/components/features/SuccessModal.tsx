@@ -29,28 +29,26 @@ export function SuccessModal(props: SuccessModalProps) {
 					/>
 				</div>
 
-				<h2 class="font-semibold mb-3">
-					{props.title || "送信完了しました！"}
-				</h2>
+				<h2 class="font-semibold mb-3">{props.title || "完了しました"}</h2>
 
 				<Show when={props.submittedExpense}>
-					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl px-4 py-6 mb-4">
-						<div class="space-y-3 text-center">
-							<div class="text-sm">
-								{props.submittedExpense?.destinationLabel}
-							</div>
+					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 mb-4">
+						<div class="space-y-2 text-center">
 							<div class="text-lg font-bold text-green-800">
 								¥ {props.submittedExpense?.amount.toLocaleString()}
 							</div>
-							<div class="text-sm bg-white/80 rounded-lg px-3 py-4">
-								{props.submittedExpense?.details}
+							<div class="space-y-3 text-sm bg-white/80 rounded-md p-3">
+								<div class="font-bold">
+									{props.submittedExpense?.destinationLabel}
+								</div>
+								<div>{props.submittedExpense?.details}</div>
 							</div>
 						</div>
 					</div>
 				</Show>
 
 				<Button onClick={props.onNewExpense} class="w-full" variant="primary">
-					{props.buttonText || "新しいレシートを作成"}
+					{props.buttonText || "OK"}
 				</Button>
 			</div>
 		</Modal>

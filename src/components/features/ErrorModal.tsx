@@ -27,7 +27,7 @@ export function ErrorModal(props: ErrorModalProps) {
 				</div>
 
 				<h2 class="font-semibold mb-3 text-red-800">
-					{props.title || "送信エラー"}
+					{props.title || "エラーが発生しました"}
 				</h2>
 
 				<div class="bg-red-50 rounded-lg p-4 mb-4">
@@ -35,7 +35,7 @@ export function ErrorModal(props: ErrorModalProps) {
 				</div>
 
 				<Button onClick={props.onClose} class="w-full" variant="secondary">
-					{props.buttonText || "閉じる"}
+					{props.buttonText || "Close"}
 				</Button>
 			</div>
 		</Modal>
