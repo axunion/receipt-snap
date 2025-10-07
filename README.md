@@ -1,14 +1,15 @@
-# Receipt Snap - 経費申請アプリ
+# Receipt Snap
 
 レシートを撮影して経費申請を行うモバイルファーストのWebアプリケーション。
 
 ## 機能
 
-- 📸 **レシート撮影**: カメラ・ファイル選択によるレシート画像の取得
+- 📸 **レシート撮影**: カメラ・ファイルアップロード・画像なしの3つの入力方法
 - 📝 **経費申請フォーム**: 名前、金額、日付、詳細、目的、備考を入力
-- 📱 **モバイルファースト**: スマートフォンでの利用に最適化
+- 📱 **モバイルファースト**: スマートフォンでの利用に最適化されたUI
 - ✅ **リアルタイムバリデーション**: 入力中の即座なフォーム検証
-- 🗜️ **画像圧縮**: 自動的な画像圧縮とサイズ最適化
+- 🗜️ **画像圧縮**: HEIC/HEIF対応の自動画像圧縮とサイズ最適化
+- 🔄 **オンボーディング**: 初回利用時の名前設定とローカル保存
 
 ## 技術スタック
 
@@ -16,26 +17,33 @@
 - **ビルドツール**: Vite
 - **スタイリング**: Tailwind CSS v4
 - **言語**: TypeScript
-- **リンター**: Biome
+- **コード品質**: Biome
+- **アイコン**: Iconify Icon
 
 ## プロジェクト構成
 
 ```
 src/
-├── components/             # UIコンポーネント
-│   ├── ui/                # 汎用UIパーツ
-│   └── features/          # 機能別コンポーネント
-│       ├── expense/       # 経費申請関連
-│       └── receipt-camera/ # レシート撮影関連
-├── hooks/                 # ビジネスロジック
-├── stores/                # 状態管理
-├── services/              # API通信
-├── types/                 # 型定義
-├── utils/                 # ユーティリティ
-└── constants/             # 定数
+├── components/            # UIコンポーネント
+│   ├── ui/               # 汎用UIコンポーネント
+│   └── features/         # 機能別コンポーネント
+├── hooks/                # ビジネスロジック・バリデーション
+├── stores/               # グローバル状態管理
+├── services/             # API通信・外部サービス連携
+├── types/                # 型定義
+├── utils/                # ユーティリティ関数
+├── constants/            # 設定値・定数
+└── layouts/              # レイアウトコンポーネント
 ```
 
 ## 開発環境のセットアップ
+
+### 必要な環境
+
+- Node.js 22.20.0 (Volta使用推奨)
+- npm または pnpm
+
+### セットアップ手順
 
 ```bash
 # 依存関係のインストール
@@ -50,31 +58,46 @@ npm run dev
 ## スクリプト
 
 ```bash
-# 開発
+# 開発サーバー
 npm run dev
 
-# ビルド
+# プロダクションビルド
 npm run build
 
-# プレビュー
+# ビルド結果のプレビュー
 npm run preview
 
-# コード品質チェック
-npm run check
-npm run lint
-npm run format
+# コード品質
+npm run check        # 全チェック (フォーマット + リント)
+npm run lint         # リント実行
+npm run format       # フォーマット確認
+
+# 自動修正
+npm run check:write  # 全自動修正
+npm run lint:write   # リント自動修正
+npm run format:write # フォーマット自動修正
 ```
 
 ## アーキテクチャ
 
 ### 設計原則
 
-- **関心の分離**: UI、ビジネスロジック、状態管理を分離
+- **Mobile First**: スマートフォン利用を最優先に設計
+- **関心の分離**: UI、ビジネスロジック、状態管理を明確に分離
 - **単一責任**: 各コンポーネント・フックは一つの責務のみ
-- **型安全性**: TypeScriptによる厳格な型チェック
+- **型安全性**: TypeScript strict modeによる厳格な型チェック
 
 ### 主要パターン
 
-- **hooks/**: ビジネスロジックとバリデーション
-- **stores/**: グローバル状態管理（SolidJSシグナル）
-- **components/**: UIのみに集中したプレゼンテーション層
+- **components/ui/**: プレゼンテーションのみ。ビジネスロジック禁止
+- **components/features/**: ドメイン固有コンポーネント。hooks/storesと連携
+- **hooks/**: UIから分離されたビジネスロジック・バリデーション
+- **stores/**: `createRoot`によるグローバル状態管理
+- **services/**: API通信・外部サービス連携の抽象化
+
+### 状態管理戦略
+
+- **Local State**: `createSignal`で単一コンポーネント内の状態
+- **Global State**: stores/でアプリ全体の状態管理
+- **Form State**: `expenseFormStore`で統一管理、リアクティブバリデーション
+- **Server State**: `createResource`でAPI通信とキャッシュ
