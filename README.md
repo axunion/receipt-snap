@@ -1,6 +1,6 @@
 # Receipt Snap
 
-レシートを撮影して経費申請を行うモバイルファーストのWebアプリケーション。
+個人や小規模チーム向けの、シンプルなレシート管理・経費申請アプリです。スマートフォンでレシートを撮影し、Google Apps Script を経由してスプレッドシート等に記録できます。
 
 ## 機能
 
@@ -20,6 +20,23 @@
 - **コード品質**: Biome
 - **アイコン**: Iconify Icon
 
+## クイックスタート
+
+```bash
+# 1. 依存関係のインストール
+pnpm install
+
+# 2. 環境変数の設定
+# .env.localファイルをプロジェクトルートに作成し、以下を設定してください
+# VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+# VITE_API_BASE_URL=your_google_apps_script_url
+
+# 3. 開発サーバー起動
+pnpm run dev
+
+# 4. ブラウザで http://localhost:5173 を開く
+```
+
 ## プロジェクト構成
 
 ```
@@ -38,66 +55,27 @@ src/
 
 ## 開発環境のセットアップ
 
-### 必要な環境
+### 環境変数の設定
 
-- Node.js 22.20.0 (Volta使用推奨)
-- npm または pnpm
+`.env.local`ファイルをプロジェクトルートに作成してください：
+
+```env
+VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
+VITE_API_BASE_URL=your_google_apps_script_url
+```
+
+**必要な環境変数：**
+- `VITE_RECAPTCHA_SITE_KEY`: Google reCAPTCHA v3のサイトキー
+- `VITE_API_BASE_URL`: Google Apps ScriptのデプロイURL
 
 ### セットアップ手順
 
 ```bash
 # 依存関係のインストール
-npm install
+pnpm install
 
 # 開発サーバー起動
-npm run dev
+pnpm run dev
 
 # ブラウザで http://localhost:5173 にアクセス
 ```
-
-## スクリプト
-
-```bash
-# 開発サーバー
-npm run dev
-
-# プロダクションビルド
-npm run build
-
-# ビルド結果のプレビュー
-npm run preview
-
-# コード品質
-npm run check        # 全チェック (フォーマット + リント)
-npm run lint         # リント実行
-npm run format       # フォーマット確認
-
-# 自動修正
-npm run check:write  # 全自動修正
-npm run lint:write   # リント自動修正
-npm run format:write # フォーマット自動修正
-```
-
-## アーキテクチャ
-
-### 設計原則
-
-- **Mobile First**: スマートフォン利用を最優先に設計
-- **関心の分離**: UI、ビジネスロジック、状態管理を明確に分離
-- **単一責任**: 各コンポーネント・フックは一つの責務のみ
-- **型安全性**: TypeScript strict modeによる厳格な型チェック
-
-### 主要パターン
-
-- **components/ui/**: プレゼンテーションのみ。ビジネスロジック禁止
-- **components/features/**: ドメイン固有コンポーネント。hooks/storesと連携
-- **hooks/**: UIから分離されたビジネスロジック・バリデーション
-- **stores/**: `createRoot`によるグローバル状態管理
-- **services/**: API通信・外部サービス連携の抽象化
-
-### 状態管理戦略
-
-- **Local State**: `createSignal`で単一コンポーネント内の状態
-- **Global State**: stores/でアプリ全体の状態管理
-- **Form State**: `expenseFormStore`で統一管理、リアクティブバリデーション
-- **Server State**: `createResource`でAPI通信とキャッシュ
