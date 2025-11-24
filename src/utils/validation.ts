@@ -1,10 +1,14 @@
+import {
+	AMOUNT_LIMITS,
+	DATE_LIMITS,
+	FILE_SIZE_LIMITS,
+} from "@/constants/validation";
 import { VALIDATION_MESSAGES } from "@/constants/validationMessages";
 import type { FieldErrors, ImageValidationResult } from "@/types";
 
 export function validateImageFile(file: File): ImageValidationResult {
 	// Mobile-first policy: allow JPEG/PNG/HEIC, size <=12MB, warn >6MB, info for HEIC conversion
-	const MAX_SIZE_BYTES = 12 * 1024 * 1024;
-	const WARNING_THRESHOLD_BYTES = 6 * 1024 * 1024;
+	const { MAX_SIZE_BYTES, WARNING_THRESHOLD_BYTES } = FILE_SIZE_LIMITS;
 	const allowedTypes = [
 		"image/jpeg",
 		"image/jpg",
@@ -45,10 +49,10 @@ export function validateField(
 
 		case "amount": {
 			const amount = value as number;
-			if (Number.isNaN(amount) || amount <= 0) {
+			if (Number.isNaN(amount) || amount <= AMOUNT_LIMITS.MIN_AMOUNT) {
 				return VALIDATION_MESSAGES.FORM.AMOUNT_INVALID;
 			}
-			if (amount > 1000000) {
+			if (amount > AMOUNT_LIMITS.MAX_AMOUNT) {
 				return VALIDATION_MESSAGES.FORM.AMOUNT_TOO_LARGE;
 			}
 			return undefined;
@@ -78,10 +82,10 @@ export function validateField(
 				return VALIDATION_MESSAGES.FORM.DATE_INVALID_NUMBERS;
 			}
 
-			if (month < 1 || month > 12) {
+			if (month < DATE_LIMITS.MIN_MONTH || month > DATE_LIMITS.MAX_MONTH) {
 				return VALIDATION_MESSAGES.FORM.MONTH_INVALID;
 			}
-			if (day < 1 || day > 31) {
+			if (day < DATE_LIMITS.MIN_DAY || day > DATE_LIMITS.MAX_DAY) {
 				return VALIDATION_MESSAGES.FORM.DAY_INVALID;
 			}
 
