@@ -1,7 +1,9 @@
-import { onMount } from "solid-js";
+import { onCleanup, onMount } from "solid-js";
 import { CONFIG } from "@/constants/config";
 
 export function useRecaptcha() {
+	let scriptElement: HTMLScriptElement | undefined;
+
 	onMount(() => {
 		if (
 			CONFIG.RECAPTCHA.SITE_KEY &&
@@ -11,9 +13,15 @@ export function useRecaptcha() {
 			script.src = `https://www.google.com/recaptcha/api.js?render=${CONFIG.RECAPTCHA.SITE_KEY}`;
 			script.async = true;
 			document.head.appendChild(script);
+			scriptElement = script;
 		}
 	});
 
-	// Future enhancement: could return recaptcha token generation function
+	onCleanup(() => {
+		if (scriptElement) {
+			scriptElement.remove();
+		}
+	});
+
 	return {};
 }

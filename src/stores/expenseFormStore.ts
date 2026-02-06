@@ -1,10 +1,11 @@
 import { createRoot, createSignal } from "solid-js";
 import type { ExpenseFormData, SubmitResponse } from "@/types";
+import { formatDateForInput } from "@/utils";
 
 const initialState: ExpenseFormData = {
 	name: "",
 	amount: "",
-	date: new Date().toISOString().split("T")[0],
+	date: formatDateForInput(new Date()),
 	details: "",
 	destination: "",
 	notes: "",

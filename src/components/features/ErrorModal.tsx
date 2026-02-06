@@ -11,7 +11,10 @@ interface ErrorModalProps {
 
 export function ErrorModal(props: ErrorModalProps) {
 	return (
-		<Modal isOpen={props.isOpen}>
+		<Modal
+			isOpen={props.isOpen}
+			ariaLabel={props.title || "エラーが発生しました"}
+		>
 			<div class="text-center">
 				<div
 					class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"

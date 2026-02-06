@@ -11,6 +11,7 @@ interface ModalProps {
 	disableBodyScroll?: boolean;
 	backdropClass?: string;
 	contentClass?: string;
+	ariaLabel?: string;
 }
 
 export function Modal(props: ModalProps) {
@@ -42,8 +43,7 @@ export function Modal(props: ModalProps) {
 					onKeyDown={handleKeyDown}
 					role="dialog"
 					aria-modal="true"
-					aria-labelledby="modal-title"
-					aria-describedby="modal-description"
+					aria-label={props.ariaLabel}
 				>
 					<div
 						class={

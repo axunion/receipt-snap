@@ -11,6 +11,9 @@ export function formatDateForInput(date: Date): string {
 }
 
 export function formatDateForDisplay(dateString: string): string {
-	const date = new Date(dateString);
-	return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+	const parts = dateString.split("-");
+	const year = parts[0];
+	const month = Number.parseInt(parts[1], 10);
+	const day = Number.parseInt(parts[2], 10);
+	return `${year}年${month}月${day}日`;
 }

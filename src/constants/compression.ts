@@ -1,7 +1,7 @@
 // Image resolution settings
 export const RESOLUTION_PRESETS = {
 	RECEIPT: { width: 900, height: 1600 },
-	VERY_HIGH: { width: 800, height: 1200 },
+	DEFAULT: { width: 800, height: 1200 },
 } as const;
 
 // JPEG quality settings

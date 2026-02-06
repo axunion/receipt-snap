@@ -15,10 +15,11 @@ import { Button, Overlay, Spinner } from "@/components/ui";
 import { useExpenseForm, useRecaptcha, useSubmitModal } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
 import { destinationStore, expenseFormStore } from "@/stores";
+import { loadUserName } from "@/utils";
 
 export function FormContainer() {
 	const isSubmitting = () => expenseFormStore.submitState().isLoading;
-	const [showOnboarding, setShowOnboarding] = createSignal(true);
+	const [showOnboarding, setShowOnboarding] = createSignal(!loadUserName());
 	const [showDestinationError, setShowDestinationError] = createSignal(false);
 
 	const { formErrors, fieldErrors, touchedFields, submitForm, resetForm } =
