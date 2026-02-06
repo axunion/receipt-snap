@@ -2,7 +2,6 @@ import { CONFIG } from "@/constants/config";
 import { ERROR_MESSAGES } from "@/constants/errorMessages";
 import type {
 	DestinationResponse,
-	DestinationSuccessResponse,
 	ExpenseSubmitPayload,
 	SubmitResponse,
 } from "@/types";
@@ -15,13 +14,7 @@ async function apiRequest<T>(url: string, options?: RequestInit): Promise<T> {
 			throw new Error(`HTTP ${response.status}: ${response.statusText}`);
 		}
 
-		const data = await response.json();
-
-		if (data?.result === "error") {
-			throw new Error(data.error);
-		}
-
-		return data;
+		return await response.json();
 	} catch (error) {
 		if (error instanceof TypeError && error.message.includes("fetch")) {
 			throw new Error(ERROR_MESSAGES.NETWORK);
@@ -56,10 +49,7 @@ export async function fetchDestinations(): Promise<DestinationResponse> {
 	}
 
 	try {
-		const response = await apiRequest<DestinationSuccessResponse>(
-			`${CONFIG.API.BASE_URL}`,
-		);
-		return response;
+		return await apiRequest<DestinationResponse>(`${CONFIG.API.BASE_URL}`);
 	} catch (error) {
 		return {
 			result: "error",

@@ -1,5 +1,5 @@
 import { Icon } from "@iconify-icon/solid";
-import { createEffect } from "solid-js";
+import { createEffect, Show } from "solid-js";
 import { useImage } from "@/hooks";
 import { expenseFormStore } from "@/stores";
 import { formatFileSize } from "@/utils";
@@ -92,7 +92,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 				aria-label="レシートの画像ファイルを選択"
 			/>
 
-			{error() && (
+			<Show when={error()}>
 				<div
 					class="p-4 bg-red-50 border border-red-200 rounded-lg"
 					role="alert"
@@ -112,9 +112,9 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 						</div>
 					</div>
 				</div>
-			)}
+			</Show>
 
-			{warning() && (
+			<Show when={warning()}>
 				<div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
 					<div class="flex items-start gap-2">
 						<Icon
@@ -126,9 +126,9 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 						<p class="text-sm text-yellow-800">{warning()}</p>
 					</div>
 				</div>
-			)}
+			</Show>
 
-			{info() && (
+			<Show when={info()}>
 				<div class="p-3 bg-sky-50 border border-sky-200 rounded-lg">
 					<div class="flex items-start gap-2">
 						<Icon
@@ -140,34 +140,47 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 						<p class="text-xs text-sky-700 leading-relaxed">{info()}</p>
 					</div>
 				</div>
-			)}
+			</Show>
 
-			{compressionInfo() && (
-				<div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg transition-opacity duration-300">
-					<div class="flex items-start gap-2">
-						<Icon
-							icon="material-symbols:compress"
-							width="16"
-							height="16"
-							class="text-emerald-600 mt-0.5"
-						/>
-						<div class="flex-1">
-							<p class="text-sm text-emerald-700">
-								<span class="font-medium">画像を圧縮しました</span>
-							</p>
-							<div class="mt-1 text-xs text-emerald-600">
-								{compressionInfo()?.originalSize &&
-									`${formatFileSize(compressionInfo()?.originalSize ?? 0)} → ${formatFileSize(compressionInfo()?.compressedSize ?? 0)}`}
-								<span class="font-medium ml-1">
-									({Math.min(compressionInfo()?.ratio || 0, 99)}%削減)
-								</span>
+			<Show when={compressionInfo()}>
+				{(info) => (
+					<div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg transition-opacity duration-300">
+						<div class="flex items-start gap-2">
+							<Icon
+								icon="material-symbols:compress"
+								width="16"
+								height="16"
+								class="text-emerald-600 mt-0.5"
+							/>
+							<div class="flex-1">
+								<p class="text-sm text-emerald-700">
+									<span class="font-medium">画像を圧縮しました</span>
+								</p>
+								<div class="mt-1 text-xs text-emerald-600">
+									{info().originalSize &&
+										`${formatFileSize(info().originalSize ?? 0)} → ${formatFileSize(info().compressedSize ?? 0)}`}
+									<span class="font-medium ml-1">
+										({Math.min(info().ratio || 0, 99)}%削減)
+									</span>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			)}
+				)}
+			</Show>
 
-			{isCompressing() || imagePreview() ? (
+			<Show
+				when={isCompressing() || imagePreview()}
+				fallback={
+					<UploadTabs
+						activeTab={activeTab()}
+						onTabChange={setActiveTab}
+						onCameraClick={openCamera}
+						onFileClick={openFileDialog}
+						isCompressing={false}
+					/>
+				}
+			>
 				<ImagePreview
 					imagePreview={imagePreview()}
 					activeTab={activeTab()}
@@ -175,15 +188,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 					onClear={clearImageAndInputs}
 					isLoading={isCompressing()}
 				/>
-			) : (
-				<UploadTabs
-					activeTab={activeTab()}
-					onTabChange={setActiveTab}
-					onCameraClick={openCamera}
-					onFileClick={openFileDialog}
-					isCompressing={false}
-				/>
-			)}
+			</Show>
 		</div>
 	);
 }

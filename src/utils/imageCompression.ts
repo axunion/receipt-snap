@@ -50,8 +50,8 @@ export async function compressImage(
 	options: CompressionOptions = {},
 ): Promise<File> {
 	const {
-		maxWidth = RESOLUTION_PRESETS.VERY_HIGH.width,
-		maxHeight = RESOLUTION_PRESETS.VERY_HIGH.height,
+		maxWidth = RESOLUTION_PRESETS.DEFAULT.width,
+		maxHeight = RESOLUTION_PRESETS.DEFAULT.height,
 		quality = QUALITY_PRESETS.STANDARD,
 		format = SUPPORTED_FORMATS.OUTPUT_FORMAT,
 	} = options;

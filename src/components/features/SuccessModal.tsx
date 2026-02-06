@@ -14,7 +14,7 @@ interface SuccessModalProps {
 
 export function SuccessModal(props: SuccessModalProps) {
 	return (
-		<Modal isOpen={props.isOpen}>
+		<Modal isOpen={props.isOpen} ariaLabel={props.title || "完了しました"}>
 			<div class="text-center">
 				<div
 					class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"

@@ -34,66 +34,51 @@ export function useExpenseForm() {
 		return !error;
 	};
 
-	// Consolidated real-time validation
 	const currentDateDefault = formatDateForInput(new Date());
 
 	createEffect(() => {
-		const validators: Array<{
-			field: keyof FieldErrors;
-			validate: () => void;
-			shouldTouch: () => boolean;
-		}> = [
-			{
-				field: "name",
-				validate: () => validateSingleField("name", expenseFormStore.name()),
-				shouldTouch: () => expenseFormStore.name() !== "",
-			},
-			{
-				field: "amount",
-				validate: () => {
-					const numericAmount = Number.parseFloat(expenseFormStore.amount());
-					validateSingleField("amount", numericAmount);
-				},
-				shouldTouch: () => expenseFormStore.amount() !== "",
-			},
-			{
-				field: "date",
-				validate: () => validateSingleField("date", expenseFormStore.date()),
-				shouldTouch: () => expenseFormStore.date() !== currentDateDefault,
-			},
-			{
-				field: "details",
-				validate: () =>
-					validateSingleField("details", expenseFormStore.details()),
-				shouldTouch: () => expenseFormStore.details() !== "",
-			},
-			{
-				field: "destination",
-				validate: () =>
-					validateSingleField("destination", expenseFormStore.destination()),
-				shouldTouch: () => expenseFormStore.destination() !== "",
-			},
-			{
-				field: "receipt",
-				validate: () =>
-					validateSingleField(
-						"receipt",
-						expenseFormStore.receiptFile(),
-						expenseFormStore.noImageReason(),
-					),
-				shouldTouch: () =>
-					expenseFormStore.receiptFile() !== null ||
-					expenseFormStore.noImageReason() !== "",
-			},
-		];
+		const name = expenseFormStore.name();
+		validateSingleField("name", name);
+		if (name !== "") markAsTouched("name");
+	});
 
-		for (const v of validators) {
-			v.validate();
-			if (v.shouldTouch()) markAsTouched(v.field);
-		}
+	createEffect(() => {
+		const amount = expenseFormStore.amount();
+		const numericAmount = Number.parseFloat(amount);
+		validateSingleField("amount", numericAmount);
+		if (amount !== "") markAsTouched("amount");
+	});
+
+	createEffect(() => {
+		const date = expenseFormStore.date();
+		validateSingleField("date", date);
+		if (date !== currentDateDefault) markAsTouched("date");
+	});
+
+	createEffect(() => {
+		const details = expenseFormStore.details();
+		validateSingleField("details", details);
+		if (details !== "") markAsTouched("details");
+	});
+
+	createEffect(() => {
+		const destination = expenseFormStore.destination();
+		validateSingleField("destination", destination);
+		if (destination !== "") markAsTouched("destination");
+	});
+
+	createEffect(() => {
+		const receiptFile = expenseFormStore.receiptFile();
+		const noImageReason = expenseFormStore.noImageReason();
+		validateSingleField("receipt", receiptFile, noImageReason);
+		if (receiptFile !== null || noImageReason !== "") markAsTouched("receipt");
 	});
 
 	const submitForm = async () => {
+		if (expenseFormStore.submitState().isLoading) {
+			return undefined;
+		}
+
 		const currentAmount = parseAmount(expenseFormStore.amount());
 		const validation = validateForm({
 			name: expenseFormStore.name(),

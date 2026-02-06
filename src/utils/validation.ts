@@ -13,6 +13,7 @@ export function validateImageFile(file: File): ImageValidationResult {
 		"image/jpeg",
 		"image/jpg",
 		"image/png",
+		"image/webp",
 		"image/heic",
 		"image/heif",
 	];
@@ -35,101 +36,106 @@ export function validateImageFile(file: File): ImageValidationResult {
 	};
 }
 
-// Consolidated field validation function
+export function validateName(value: string): string | undefined {
+	return !value.trim() ? VALIDATION_MESSAGES.FORM.NAME_REQUIRED : undefined;
+}
+
+export function validateAmount(value: number): string | undefined {
+	if (Number.isNaN(value) || value <= AMOUNT_LIMITS.MIN_AMOUNT) {
+		return VALIDATION_MESSAGES.FORM.AMOUNT_INVALID;
+	}
+	if (value > AMOUNT_LIMITS.MAX_AMOUNT) {
+		return VALIDATION_MESSAGES.FORM.AMOUNT_TOO_LARGE;
+	}
+	return undefined;
+}
+
+export function validateDate(value: string): string | undefined {
+	if (!value) {
+		return VALIDATION_MESSAGES.FORM.DATE_REQUIRED;
+	}
+
+	const parts = value.split("-");
+	if (
+		parts.length !== 3 ||
+		parts[0].length !== 4 ||
+		parts[1].length !== 2 ||
+		parts[2].length !== 2
+	) {
+		return VALIDATION_MESSAGES.FORM.DATE_INVALID_FORMAT;
+	}
+
+	const year = Number.parseInt(parts[0], 10);
+	const month = Number.parseInt(parts[1], 10);
+	const day = Number.parseInt(parts[2], 10);
+
+	if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
+		return VALIDATION_MESSAGES.FORM.DATE_INVALID_NUMBERS;
+	}
+
+	if (month < DATE_LIMITS.MIN_MONTH || month > DATE_LIMITS.MAX_MONTH) {
+		return VALIDATION_MESSAGES.FORM.MONTH_INVALID;
+	}
+	if (day < DATE_LIMITS.MIN_DAY || day > DATE_LIMITS.MAX_DAY) {
+		return VALIDATION_MESSAGES.FORM.DAY_INVALID;
+	}
+
+	const inputDate = new Date(year, month - 1, day);
+
+	if (
+		inputDate.getFullYear() !== year ||
+		inputDate.getMonth() !== month - 1 ||
+		inputDate.getDate() !== day
+	) {
+		return VALIDATION_MESSAGES.FORM.DATE_NOT_EXIST;
+	}
+
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
+
+	if (inputDate.getTime() > today.getTime()) {
+		return VALIDATION_MESSAGES.FORM.FUTURE_DATE;
+	}
+
+	return undefined;
+}
+
+export function validateDetails(value: string): string | undefined {
+	return !value.trim() ? VALIDATION_MESSAGES.FORM.DETAILS_REQUIRED : undefined;
+}
+
+export function validateDestination(value: string): string | undefined {
+	return !value ? VALIDATION_MESSAGES.FORM.DESTINATION_REQUIRED : undefined;
+}
+
+export function validateReceipt(
+	file: File | null,
+	noImageReason: string,
+): string | undefined {
+	return !file && !noImageReason.trim()
+		? VALIDATION_MESSAGES.FORM.RECEIPT_REQUIRED
+		: undefined;
+}
+
+// Wrapper for backward compatibility with useExpenseForm and validateForm
 export function validateField(
 	field: keyof FieldErrors,
 	value: string | number | File | null,
 	extraValue?: string,
 ): string | undefined {
 	switch (field) {
-		case "name": {
-			const name = value as string;
-			return !name.trim() ? VALIDATION_MESSAGES.FORM.NAME_REQUIRED : undefined;
-		}
-
-		case "amount": {
-			const amount = value as number;
-			if (Number.isNaN(amount) || amount <= AMOUNT_LIMITS.MIN_AMOUNT) {
-				return VALIDATION_MESSAGES.FORM.AMOUNT_INVALID;
-			}
-			if (amount > AMOUNT_LIMITS.MAX_AMOUNT) {
-				return VALIDATION_MESSAGES.FORM.AMOUNT_TOO_LARGE;
-			}
-			return undefined;
-		}
-
-		case "date": {
-			const dateString = value as string;
-			if (!dateString) {
-				return VALIDATION_MESSAGES.FORM.DATE_REQUIRED;
-			}
-
-			const parts = dateString.split("-");
-			if (
-				parts.length !== 3 ||
-				parts[0].length !== 4 ||
-				parts[1].length !== 2 ||
-				parts[2].length !== 2
-			) {
-				return VALIDATION_MESSAGES.FORM.DATE_INVALID_FORMAT;
-			}
-
-			const year = Number.parseInt(parts[0], 10);
-			const month = Number.parseInt(parts[1], 10);
-			const day = Number.parseInt(parts[2], 10);
-
-			if (Number.isNaN(year) || Number.isNaN(month) || Number.isNaN(day)) {
-				return VALIDATION_MESSAGES.FORM.DATE_INVALID_NUMBERS;
-			}
-
-			if (month < DATE_LIMITS.MIN_MONTH || month > DATE_LIMITS.MAX_MONTH) {
-				return VALIDATION_MESSAGES.FORM.MONTH_INVALID;
-			}
-			if (day < DATE_LIMITS.MIN_DAY || day > DATE_LIMITS.MAX_DAY) {
-				return VALIDATION_MESSAGES.FORM.DAY_INVALID;
-			}
-
-			const inputDate = new Date(year, month - 1, day);
-
-			if (
-				inputDate.getFullYear() !== year ||
-				inputDate.getMonth() !== month - 1 ||
-				inputDate.getDate() !== day
-			) {
-				return VALIDATION_MESSAGES.FORM.DATE_NOT_EXIST;
-			}
-
-			const today = new Date();
-			today.setHours(0, 0, 0, 0);
-
-			if (inputDate.getTime() > today.getTime()) {
-				return VALIDATION_MESSAGES.FORM.FUTURE_DATE;
-			}
-
-			return undefined;
-		}
-
-		case "details": {
-			const details = value as string;
-			return !details.trim()
-				? VALIDATION_MESSAGES.FORM.DETAILS_REQUIRED
-				: undefined;
-		}
-
-		case "destination": {
-			const destination = value as string;
-			return !destination
-				? VALIDATION_MESSAGES.FORM.DESTINATION_REQUIRED
-				: undefined;
-		}
-
-		case "receipt": {
-			const receiptFile = value as File | null;
-			return !receiptFile && !extraValue?.trim()
-				? VALIDATION_MESSAGES.FORM.RECEIPT_REQUIRED
-				: undefined;
-		}
-
+		case "name":
+			return validateName(value as string);
+		case "amount":
+			return validateAmount(value as number);
+		case "date":
+			return validateDate(value as string);
+		case "details":
+			return validateDetails(value as string);
+		case "destination":
+			return validateDestination(value as string);
+		case "receipt":
+			return validateReceipt(value as File | null, extraValue ?? "");
 		default:
 			return undefined;
 	}

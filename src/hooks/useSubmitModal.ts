@@ -1,6 +1,5 @@
 import { createEffect, createSignal } from "solid-js";
 import { destinationStore, expenseFormStore } from "@/stores";
-import type { SubmitErrorResponse } from "@/types";
 import { parseAmount } from "@/utils";
 
 export interface SubmittedData {
@@ -24,7 +23,7 @@ export function useSubmitModal(resetForm: () => void) {
 			if (submitResult.result === "done") {
 				handleSuccess();
 			} else if (submitResult.result === "error") {
-				handleError((submitResult as SubmitErrorResponse).error);
+				handleError(submitResult.error);
 			}
 		}
 	});
