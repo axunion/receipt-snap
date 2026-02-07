@@ -83,6 +83,9 @@ export async function submitExpense(
 	}
 
 	try {
+		// Content-Type is intentionally omitted to avoid CORS preflight (OPTIONS).
+		// GAS does not handle preflight requests. The body is sent as text/plain
+		// and parsed via JSON.parse(e.postData.contents) on the server side.
 		return await apiRequest<SubmitResponse>(`${CONFIG.API.BASE_URL}`, {
 			method: "POST",
 			body: JSON.stringify(expenseData),

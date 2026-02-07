@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Receipt Snap is a mobile-first SolidJS expense/receipt management app. Users photograph receipts, fill out expense forms, and submit to a Google Apps Script backend.
+Receipt Snap is a mobile-first SolidJS expense/receipt management app. Users photograph receipts, fill out expense forms, and submit to a backend API. The frontend is backend-agnostic — any server that accepts JSON and returns `{ result: "done" | "error" }` responses works (Google Apps Script, Express, FastAPI, Cloudflare Workers, etc.).
 
 ## Commands
 
@@ -90,4 +90,5 @@ File input → `validateImageFile()` → `compressImage()` (HEIC→JPEG, canvas 
 
 Configured in `.env.local` (not committed):
 - `VITE_RECAPTCHA_SITE_KEY` — Google reCAPTCHA v3 site key
-- `VITE_API_BASE_URL` — Google Apps Script deployment URL
+- `VITE_API_BASE_URL` — Backend API URL (e.g. Google Apps Script, Express, etc.)
+  - Note: `Content-Type` header is intentionally omitted in `submitExpense` to avoid CORS preflight with GAS. Other backends may need it added.
