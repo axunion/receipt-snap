@@ -1,6 +1,6 @@
 # Receipt Snap
 
-個人や小規模チーム向けの、シンプルなレシート管理・経費申請アプリです。スマートフォンでレシートを撮影し、Google Apps Script を経由してスプレッドシート等に記録できます。
+個人や小規模チーム向けの、シンプルなレシート管理・経費申請アプリです。スマートフォンでレシートを撮影し、任意のバックエンドAPIに送信して記録できます。
 
 ## 機能
 
@@ -29,7 +29,7 @@ pnpm install
 # 2. 環境変数の設定
 # .env.localファイルをプロジェクトルートに作成し、以下を設定してください
 # VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
-# VITE_API_BASE_URL=your_google_apps_script_url
+# VITE_API_BASE_URL=your_backend_api_url
 
 # 3. 開発サーバー起動
 pnpm run dev
@@ -61,12 +61,12 @@ src/
 
 ```env
 VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
-VITE_API_BASE_URL=your_google_apps_script_url
+VITE_API_BASE_URL=your_backend_api_url
 ```
 
 **必要な環境変数：**
 - `VITE_RECAPTCHA_SITE_KEY`: Google reCAPTCHA v3のサイトキー
-- `VITE_API_BASE_URL`: Google Apps ScriptのデプロイURL
+- `VITE_API_BASE_URL`: バックエンドAPIのURL
 
 ### セットアップ手順
 
