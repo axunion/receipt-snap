@@ -5,6 +5,7 @@ import type {
 	ExpenseSubmitPayload,
 	SubmitResponse,
 } from "@/types";
+import { getDevForceError, getDevMockEnabled } from "@/utils/localStorage";
 
 async function apiRequest<T>(url: string, options?: RequestInit): Promise<T> {
 	try {
@@ -25,8 +26,8 @@ async function apiRequest<T>(url: string, options?: RequestInit): Promise<T> {
 
 export async function fetchDestinations(): Promise<DestinationResponse> {
 	// Development mock configuration (only in dev builds)
-	if (import.meta.env.DEV) {
-		const shouldError = false;
+	if (import.meta.env.DEV && getDevMockEnabled()) {
+		const shouldError = getDevForceError();
 		console.log("Using mock destination data");
 		// Simulate API delay
 		await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -63,8 +64,8 @@ export async function submitExpense(
 	expenseData: ExpenseSubmitPayload,
 ): Promise<SubmitResponse> {
 	// Development mock configuration (only in dev builds)
-	if (import.meta.env.DEV) {
-		const shouldError = false;
+	if (import.meta.env.DEV && getDevMockEnabled()) {
+		const shouldError = getDevForceError();
 		console.log("Using mock expense submission:");
 		console.log(JSON.stringify(expenseData, null, 2));
 		// Simulate API delay
