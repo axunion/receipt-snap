@@ -1,4 +1,5 @@
 import { formatAmount } from "@/utils";
+import styles from "./Input.module.css";
 
 type InputType =
 	| "text"
@@ -43,9 +44,6 @@ interface InputProps {
 }
 
 export function Input(props: InputProps) {
-	const baseClasses =
-		"w-full px-3 py-2.5 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-300 focus:border-sky-500 disabled:bg-slate-50 disabled:cursor-not-allowed read-only:bg-slate-50 read-only:cursor-pointer transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300";
-
 	const handleInput = (e: Event) => {
 		const target = e.currentTarget as HTMLInputElement;
 		let value = target.value;
@@ -83,7 +81,7 @@ export function Input(props: InputProps) {
 			aria-label={props["aria-label"]}
 			aria-invalid={props["aria-invalid"]}
 			aria-describedby={props["aria-describedby"]}
-			class={`${baseClasses} ${props.class ?? ""}`}
+			class={`${styles.input} ${props.class ?? ""}`}
 		/>
 	);
 }

@@ -1,6 +1,7 @@
 import { type JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useBodyScrollLock } from "@/hooks";
+import styles from "./Modal.module.css";
 
 interface ModalProps {
 	isOpen: boolean;
@@ -36,9 +37,7 @@ export function Modal(props: ModalProps) {
 		<Show when={props.isOpen}>
 			<Portal>
 				<div
-					class={`fixed inset-0 flex items-center justify-center z-50 ${
-						props.backdropClass || "bg-black/50 backdrop-blur-sm p-4"
-					}`}
+					class={props.backdropClass || styles.backdrop}
 					onClick={handleBackdropClick}
 					onKeyDown={handleKeyDown}
 					role="dialog"
@@ -46,10 +45,7 @@ export function Modal(props: ModalProps) {
 					aria-label={props.ariaLabel}
 				>
 					<div
-						class={
-							props.contentClass ||
-							"bg-white rounded-lg px-6 py-8 max-w-sm w-full mx-4 fade-in"
-						}
+						class={props.contentClass || styles.content}
 						onClick={(e) => e.stopPropagation()}
 						onKeyDown={(e) => e.stopPropagation()}
 						role="document"

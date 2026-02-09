@@ -4,6 +4,7 @@ import { useImage } from "@/hooks";
 import { expenseFormStore } from "@/stores";
 import { formatFileSize } from "@/utils";
 import { ImagePreview } from "./ImagePreview";
+import styles from "./ReceiptCamera.module.css";
 import { UploadTabs } from "./UploadTabs";
 
 interface ReceiptCameraProps {
@@ -72,7 +73,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 	};
 
 	return (
-		<div class="space-y-4">
+		<div class={styles.wrapper}>
 			<input
 				ref={cameraInputRef}
 				type="file"
@@ -93,20 +94,17 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 			/>
 
 			<Show when={error()}>
-				<div
-					class="p-4 bg-red-50 border border-red-200 rounded-lg"
-					role="alert"
-				>
-					<div class="flex items-start gap-2">
+				<div class={styles.alertError} role="alert">
+					<div class={styles.alertContent}>
 						<Icon
 							icon="material-symbols:error-outline"
 							width="16"
 							height="16"
-							class="text-red-600 mt-0.5 flex-shrink-0"
+							class={styles.alertIconError}
 						/>
 						<div>
-							<p class="text-sm font-medium text-red-800">{error()}</p>
-							<p class="text-xs text-red-600 mt-1">
+							<p class={styles.errorTitle}>{error()}</p>
+							<p class={styles.errorHint}>
 								JPEG / PNG / HEIC (12MB以下) の画像を選択してください
 							</p>
 						</div>
@@ -115,51 +113,53 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 			</Show>
 
 			<Show when={warning()}>
-				<div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-					<div class="flex items-start gap-2">
+				<div class={styles.alertWarning}>
+					<div class={styles.alertContent}>
 						<Icon
 							icon="material-symbols:warning-outline"
 							width="16"
 							height="16"
-							class="text-yellow-600 mt-0.5"
+							class={styles.alertIconWarning}
 						/>
-						<p class="text-sm text-yellow-800">{warning()}</p>
+						<p class={styles.warningText}>{warning()}</p>
 					</div>
 				</div>
 			</Show>
 
 			<Show when={info()}>
-				<div class="p-3 bg-sky-50 border border-sky-200 rounded-lg">
-					<div class="flex items-start gap-2">
+				<div class={styles.alertInfo}>
+					<div class={styles.alertContent}>
 						<Icon
 							icon="material-symbols:info-outline"
 							width="16"
 							height="16"
-							class="text-sky-600 mt-0.5"
+							class={styles.alertIconInfo}
 						/>
-						<p class="text-xs text-sky-700 leading-relaxed">{info()}</p>
+						<p class={styles.infoText}>{info()}</p>
 					</div>
 				</div>
 			</Show>
 
 			<Show when={compressionInfo()}>
 				{(info) => (
-					<div class="p-3 bg-emerald-50 border border-emerald-200 rounded-lg transition-opacity duration-300">
-						<div class="flex items-start gap-2">
+					<div class={styles.alertCompression}>
+						<div class={styles.alertContent}>
 							<Icon
 								icon="material-symbols:compress"
 								width="16"
 								height="16"
-								class="text-emerald-600 mt-0.5"
+								class={styles.alertIconCompression}
 							/>
-							<div class="flex-1">
-								<p class="text-sm text-emerald-700">
-									<span class="font-medium">画像を圧縮しました</span>
+							<div class={styles.compressionBody}>
+								<p class={styles.compressionTitle}>
+									<span class={styles.compressionTitleBold}>
+										画像を圧縮しました
+									</span>
 								</p>
-								<div class="mt-1 text-xs text-emerald-600">
+								<div class={styles.compressionDetails}>
 									{info().originalSize &&
 										`${formatFileSize(info().originalSize ?? 0)} → ${formatFileSize(info().compressedSize ?? 0)}`}
-									<span class="font-medium ml-1">
+									<span class={styles.compressionRatio}>
 										({Math.min(info().ratio || 0, 99)}%削減)
 									</span>
 								</div>

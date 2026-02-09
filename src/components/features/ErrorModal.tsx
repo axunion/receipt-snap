@@ -1,5 +1,6 @@
 import { Icon } from "@iconify-icon/solid";
 import { Button, Modal } from "@/components/ui";
+import styles from "./ErrorModal.module.css";
 
 interface ErrorModalProps {
 	isOpen: boolean;
@@ -15,26 +16,21 @@ export function ErrorModal(props: ErrorModalProps) {
 			isOpen={props.isOpen}
 			ariaLabel={props.title || "エラーが発生しました"}
 		>
-			<div class="text-center">
-				<div
-					class="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"
-					role="presentation"
-				>
+			<div class={styles.wrapper}>
+				<div class={styles.iconWrapper} role="presentation">
 					<Icon
 						icon="material-symbols:error"
 						width="32"
 						height="32"
-						class="text-red-600"
+						class={styles.icon}
 						role="presentation"
 					/>
 				</div>
 
-				<h2 class="font-semibold mb-3 text-red-800">
-					{props.title || "エラーが発生しました"}
-				</h2>
+				<h2 class={styles.title}>{props.title || "エラーが発生しました"}</h2>
 
-				<div class="bg-red-50 rounded-lg p-4 mb-4">
-					<p class="text-sm text-red-700">{props.error}</p>
+				<div class={styles.errorBox}>
+					<p class={styles.errorText}>{props.error}</p>
 				</div>
 
 				<Button onClick={props.onClose} class="w-full" variant="secondary">

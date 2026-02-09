@@ -4,6 +4,7 @@ import { ReceiptCamera } from "@/components/features/camera/ReceiptCamera";
 import { Input, Label, Select, Textarea } from "@/components/ui";
 import { destinationStore, expenseFormStore } from "@/stores";
 import type { FieldErrors, TouchedFields } from "@/types";
+import styles from "./FormFields.module.css";
 
 interface FormFieldProps {
 	fieldErrors: () => FieldErrors;
@@ -33,7 +34,7 @@ function FormFieldWrapper(props: FormFieldWrapperProps) {
 			</Label>
 			{props.children}
 			<Show when={error() && touched()}>
-				<p id={errorId} class="text-sm text-red-600 mt-1">
+				<p id={errorId} class={styles.error}>
 					{error()}
 				</p>
 			</Show>

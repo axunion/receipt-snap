@@ -1,0 +1,91 @@
+.wrapper {
+	border: 1px solid var(--color-slate-200);
+	border-radius: var(--radius-md);
+	overflow: hidden;
+}
+
+.tabBar {
+	display: flex;
+	background-color: var(--color-slate-50);
+}
+
+.tab {
+	flex: 1;
+	padding: 0.75rem 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+.tabLeft {
+	border-top-left-radius: var(--radius-lg);
+}
+
+.tabCenter {
+	border-left: 1px solid var(--color-slate-200);
+}
+
+.tabRight {
+	border-left: 1px solid var(--color-slate-200);
+	border-top-right-radius: var(--radius-lg);
+}
+
+.tabActive {
+	background-color: white;
+}
+
+.tabInactive {
+	background-color: var(--color-slate-50);
+	border-bottom: 1px solid var(--color-slate-200);
+	color: var(--color-slate-500);
+}
+
+.content {
+	padding: 1.5rem;
+	background-color: white;
+}
+
+.uploadArea {
+	border: 2px dashed var(--color-slate-300);
+	border-radius: var(--radius-lg);
+	height: 12rem;
+	text-align: center;
+	background-color: rgb(248 250 252 / 0.3);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+	.uploadArea {
+		padding: 2rem;
+	}
+}
+
+.uploadContent {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.uploadIcon {
+	margin: 0 auto;
+	height: 3rem;
+	width: 3rem;
+	color: var(--color-slate-400);
+}
+
+.uploadText {
+	font-size: 0.875rem;
+	color: var(--color-slate-600);
+	margin-bottom: 0.75rem;
+	font-weight: 500;
+}
+
+@media (min-width: 640px) {
+	.uploadText {
+		margin-bottom: 1rem;
+	}
+}

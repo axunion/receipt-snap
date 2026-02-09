@@ -2,6 +2,7 @@ import { Icon } from "@iconify-icon/solid";
 import { Button } from "@/components/ui";
 import type { TabType } from "@/types";
 import { NoImageTab } from "./NoImageTab";
+import styles from "./UploadTabs.module.css";
 
 interface UploadTabsProps {
 	activeTab: TabType;
@@ -11,36 +12,29 @@ interface UploadTabsProps {
 	isCompressing: boolean;
 }
 
-// Internal component for tab buttons
 function TabButton(props: {
 	active: boolean;
 	onClick: () => void;
 	position: "left" | "center" | "right";
 	children: string;
 }) {
-	const baseClasses = "flex-1 px-2 py-3 text-sm font-medium cursor-pointer";
-	const positionClasses = {
-		left: "rounded-tl-lg",
-		center: "border-l border-slate-200",
-		right: "border-l border-slate-200 rounded-tr-lg",
-	};
-	const stateClasses = {
-		active: "bg-white",
-		inactive: "bg-slate-50 border-b border-slate-200 text-slate-500",
+	const positionClass = {
+		left: styles.tabLeft,
+		center: styles.tabCenter,
+		right: styles.tabRight,
 	};
 
 	return (
 		<button
 			type="button"
 			onClick={props.onClick}
-			class={`${baseClasses} ${positionClasses[props.position]} ${stateClasses[props.active ? "active" : "inactive"]}`}
+			class={`${styles.tab} ${positionClass[props.position]} ${props.active ? styles.tabActive : styles.tabInactive}`}
 		>
 			{props.children}
 		</button>
 	);
 }
 
-// Internal component for upload buttons
 function UploadButton(props: {
 	type: "camera" | "file";
 	onClick: () => void;
@@ -60,18 +54,16 @@ function UploadButton(props: {
 	}[props.type];
 
 	return (
-		<div class="border-2 border-dashed border-slate-300 rounded-lg h-48 text-center bg-slate-50/30 flex flex-col justify-center items-center p-6 sm:p-8">
-			<div class="space-y-2">
-				<div class="mx-auto h-12 w-12 text-slate-400">
+		<div class={styles.uploadArea}>
+			<div class={styles.uploadContent}>
+				<div class={styles.uploadIcon}>
 					<Icon icon={config.icon} width="100%" height="100%" />
 				</div>
 				<div>
-					<p class="text-sm text-slate-600 mb-3 sm:mb-4 font-medium">
-						{config.text}
-					</p>
+					<p class={styles.uploadText}>{config.text}</p>
 					<Button
 						onClick={props.onClick}
-						class="w-40"
+						class="w-full"
 						disabled={props.isCompressing}
 					>
 						{props.isCompressing ? "処理中..." : config.buttonText}
@@ -84,8 +76,8 @@ function UploadButton(props: {
 
 export function UploadTabs(props: UploadTabsProps) {
 	return (
-		<div class="border border-slate-200 rounded-md overflow-hidden">
-			<div class="flex bg-slate-50">
+		<div class={styles.wrapper}>
+			<div class={styles.tabBar}>
 				<TabButton
 					active={props.activeTab === "camera"}
 					onClick={() => props.onTabChange("camera")}
@@ -109,7 +101,7 @@ export function UploadTabs(props: UploadTabsProps) {
 				</TabButton>
 			</div>
 
-			<div class="p-6 bg-white">
+			<div class={styles.content}>
 				{props.activeTab === "camera" && (
 					<UploadButton
 						type="camera"

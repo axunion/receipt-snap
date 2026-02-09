@@ -1,0 +1,30 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	position: relative;
+}
+
+.errorBox {
+	padding: 1rem;
+	background-color: var(--color-error-50);
+	border: 1px solid var(--color-error-200);
+	border-radius: var(--radius-lg);
+}
+
+.errorTitle {
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: var(--color-error-800);
+	margin-bottom: 0.5rem;
+}
+
+.errorList {
+	font-size: 0.875rem;
+	color: var(--color-error-700);
+	list-style-type: disc;
+	list-style-position: inside;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}

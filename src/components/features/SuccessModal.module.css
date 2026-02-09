@@ -1,0 +1,62 @@
+.wrapper {
+	text-align: center;
+}
+
+.iconWrapper {
+	width: 4rem;
+	height: 4rem;
+	background-color: var(--color-success-50);
+	border-radius: var(--radius-full);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 auto 1rem;
+	animation: bounce 1s infinite;
+}
+
+.icon {
+	color: var(--color-success-600);
+}
+
+.title {
+	font-weight: 600;
+	margin-bottom: 0.75rem;
+}
+
+.summaryCard {
+	background: linear-gradient(
+		to right,
+		var(--color-success-50),
+		var(--color-emerald-50)
+	);
+	border-radius: var(--radius-lg);
+	padding: 1rem;
+	margin-bottom: 1rem;
+}
+
+.summaryContent {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	text-align: center;
+}
+
+.amount {
+	font-size: 1.125rem;
+	font-weight: 700;
+	color: var(--color-success-800);
+}
+
+.details {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	font-size: 0.875rem;
+	background-color: rgb(255 255 255 / 0.8);
+	border-radius: var(--radius-md);
+	padding: 0.75rem;
+}
+
+.destination {
+	font-weight: 700;
+}

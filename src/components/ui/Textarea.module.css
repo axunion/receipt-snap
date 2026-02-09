@@ -1,0 +1,27 @@
+.textarea {
+	width: 100%;
+	padding: 0.625rem 0.75rem;
+	border: 1px solid var(--color-slate-200);
+	border-radius: var(--radius-lg);
+	outline: none;
+	resize: none;
+	transition: all var(--transition-normal);
+}
+
+.textarea:focus {
+	box-shadow: 0 0 0 2px var(--color-primary-300);
+	border-color: var(--color-primary-500);
+}
+
+.textarea:disabled {
+	background-color: var(--color-slate-50);
+	cursor: not-allowed;
+}
+
+.textarea::placeholder {
+	color: var(--color-slate-400);
+}
+
+.textarea:hover {
+	border-color: var(--color-slate-300);
+}

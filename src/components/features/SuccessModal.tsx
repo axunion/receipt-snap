@@ -2,6 +2,7 @@ import { Icon } from "@iconify-icon/solid";
 import { Show } from "solid-js";
 import { Button, Modal } from "@/components/ui";
 import type { SubmittedData } from "@/hooks";
+import styles from "./SuccessModal.module.css";
 
 interface SuccessModalProps {
 	isOpen: boolean;
@@ -15,30 +16,27 @@ interface SuccessModalProps {
 export function SuccessModal(props: SuccessModalProps) {
 	return (
 		<Modal isOpen={props.isOpen} ariaLabel={props.title || "完了しました"}>
-			<div class="text-center">
-				<div
-					class="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce"
-					role="presentation"
-				>
+			<div class={styles.wrapper}>
+				<div class={styles.iconWrapper} role="presentation">
 					<Icon
 						icon="material-symbols:check-circle"
 						width="32"
 						height="32"
-						class="text-green-600"
+						class={styles.icon}
 						role="presentation"
 					/>
 				</div>
 
-				<h2 class="font-semibold mb-3">{props.title || "完了しました"}</h2>
+				<h2 class={styles.title}>{props.title || "完了しました"}</h2>
 
 				<Show when={props.submittedExpense}>
-					<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 mb-4">
-						<div class="space-y-2 text-center">
-							<div class="text-lg font-bold text-green-800">
+					<div class={styles.summaryCard}>
+						<div class={styles.summaryContent}>
+							<div class={styles.amount}>
 								¥ {props.submittedExpense?.amount.toLocaleString()}
 							</div>
-							<div class="space-y-3 text-sm bg-white/80 rounded-md p-3">
-								<div class="font-bold">
+							<div class={styles.details}>
+								<div class={styles.destination}>
 									{props.submittedExpense?.destinationLabel}
 								</div>
 								<div>{props.submittedExpense?.details}</div>
