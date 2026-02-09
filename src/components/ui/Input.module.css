@@ -5,27 +5,27 @@
 	border-radius: var(--radius-lg);
 	outline: none;
 	transition: all var(--transition-normal);
-}
 
-.input:focus {
-	box-shadow: 0 0 0 2px var(--color-primary-300);
-	border-color: var(--color-primary-500);
-}
+	&:hover {
+		border-color: var(--color-slate-300);
+	}
 
-.input:disabled {
-	background-color: var(--color-slate-50);
-	cursor: not-allowed;
-}
+	&:focus {
+		box-shadow: 0 0 0 2px var(--color-primary-300);
+		border-color: var(--color-primary-500);
+	}
 
-.input:read-only {
-	background-color: var(--color-slate-50);
-	cursor: pointer;
-}
+	&:disabled {
+		background-color: var(--color-slate-50);
+		cursor: not-allowed;
+	}
 
-.input::placeholder {
-	color: var(--color-slate-400);
-}
+	&:read-only {
+		background-color: var(--color-slate-50);
+		cursor: pointer;
+	}
 
-.input:hover {
-	border-color: var(--color-slate-300);
+	&::placeholder {
+		color: var(--color-slate-400);
+	}
 }
