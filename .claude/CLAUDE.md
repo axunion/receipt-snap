@@ -23,7 +23,7 @@ No test framework is configured (`pnpm test` exits with error).
 - **SolidJS 1.9** — reactive framework (not React; no virtual DOM)
 - **Vite 7** — build tool
 - **TypeScript 5.9** — strict mode enabled
-- **Tailwind CSS v4** — utility-first styling
+- **CSS Modules + Lightning CSS** — scoped styles with native CSS nesting, auto vendor prefixes
 - **Biome 2.3** — linter and formatter (no ESLint/Prettier)
 - **pnpm** — package manager (Node 24 via Volta)
 
@@ -35,13 +35,15 @@ No test framework is configured (`pnpm test` exits with error).
 src/
 ├── components/
 │   ├── ui/           # Presentational only — no business logic
-│   └── features/     # Domain components (FormContainer, FormFields, camera/)
+│   ├── features/     # Domain components (FormContainer, FormFields, camera/)
+│   └── dev/          # Development tools (DevPanel)
 ├── hooks/            # Business logic separated from UI (useExpenseForm, useImage, etc.)
 ├── stores/           # Global state via createRoot + createSignal (expenseFormStore, destinationStore)
 ├── services/         # API communication (fetch wrapper, reCAPTCHA)
 ├── types/            # Shared TypeScript type definitions
 ├── utils/            # Pure utilities (validation, image compression, date formatting)
-└── constants/        # Validation limits, messages, compression settings
+├── constants/        # Validation limits, messages, compression settings
+└── layouts/          # Page layout components (MainLayout)
 ```
 
 ### Key Files
@@ -85,6 +87,7 @@ File input → `validateImageFile()` → `compressImage()` (HEIC→JPEG, canvas 
 - **Conditional rendering**: Use `<Show>`, `<For>`, `<Switch>` (not ternaries)
 - **Modals/overlays**: Use `<Portal>`
 - **Cleanup**: Always use `onCleanup()` for resource disposal
+- **CSS nesting**: Use `&` for pseudo-classes/elements and nest `@media` inside selectors
 
 ## Environment Variables
 
