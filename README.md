@@ -1,81 +1,62 @@
 # Receipt Snap
 
-個人や小規模チーム向けの、シンプルなレシート管理・経費申請アプリです。スマートフォンでレシートを撮影し、任意のバックエンドAPIに送信して記録できます。
+A simple, mobile-first receipt management and expense submission app. Snap a photo of your receipt, fill out the expense form, and submit it to any backend API.
 
-## 機能
+## Features
 
-- 📸 **レシート撮影**: カメラ・ファイルアップロード・画像なしの3つの入力方法
-- 📝 **経費申請フォーム**: 名前、金額、日付、詳細、目的、備考を入力
-- 📱 **モバイルファースト**: スマートフォンでの利用に最適化されたUI
-- ✅ **リアルタイムバリデーション**: 入力中の即座なフォーム検証
-- 🗜️ **画像圧縮**: HEIC/HEIF対応の自動画像圧縮とサイズ最適化
-- 🔄 **オンボーディング**: 初回利用時の名前設定とローカル保存
+- 📸 **Receipt Capture** — Camera, file upload, or no-image entry
+- 📝 **Expense Form** — Name, amount, date, description, purpose, and notes
+- 📱 **Mobile-First UI** — Optimized for smartphone use
+- ✅ **Real-Time Validation** — Instant form feedback as you type
+- 🗜️ **Image Compression** — Automatic HEIC/HEIF conversion and size optimization
+- 🔄 **Onboarding** — First-time name setup with local storage persistence
 
-## 技術スタック
+## Tech Stack
 
-- **フレームワーク**: SolidJS
-- **ビルドツール**: Vite
-- **スタイリング**: Tailwind CSS v4
-- **言語**: TypeScript
-- **コード品質**: Biome
-- **アイコン**: Iconify Icon
+- **SolidJS** — Reactive UI framework
+- **Vite** — Build tool
+- **CSS Modules + Lightning CSS** — Scoped styles with native nesting and auto vendor prefixes
+- **TypeScript** — Strict mode enabled
+- **Biome** — Linter and formatter
+- **Iconify Icon** — Icon library
 
-## クイックスタート
+## Getting Started
 
 ```bash
-# 1. 依存関係のインストール
+# Install dependencies
 pnpm install
 
-# 2. 環境変数の設定
-# .env.localファイルをプロジェクトルートに作成し、以下を設定してください
-# VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
-# VITE_API_BASE_URL=your_backend_api_url
+# Start the dev server
+pnpm dev
 
-# 3. 開発サーバー起動
-pnpm run dev
-
-# 4. ブラウザで http://localhost:5173 を開く
+# Open http://localhost:5173
 ```
 
-## プロジェクト構成
+## Project Structure
 
 ```
 src/
-├── components/            # UIコンポーネント
-│   ├── ui/               # 汎用UIコンポーネント
-│   └── features/         # 機能別コンポーネント
-├── hooks/                # ビジネスロジック・バリデーション
-├── stores/               # グローバル状態管理
-├── services/             # API通信・外部サービス連携
-├── types/                # 型定義
-├── utils/                # ユーティリティ関数
-├── constants/            # 設定値・定数
-└── layouts/              # レイアウトコンポーネント
+├── components/
+│   ├── ui/               # Presentational components
+│   ├── features/         # Domain-specific components
+│   └── dev/              # Development tools (DevPanel)
+├── hooks/                # Business logic and validation
+├── stores/               # Global state management
+├── services/             # API communication
+├── types/                # Shared type definitions
+├── utils/                # Utility functions
+├── constants/            # Configuration and constants
+└── layouts/              # Page layout components
 ```
 
-## 開発環境のセットアップ
+## Environment Variables
 
-### 環境変数の設定
-
-`.env.local`ファイルをプロジェクトルートに作成してください：
+Create a `.env.local` file in the project root:
 
 ```env
 VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
 VITE_API_BASE_URL=your_backend_api_url
 ```
 
-**必要な環境変数：**
-- `VITE_RECAPTCHA_SITE_KEY`: Google reCAPTCHA v3のサイトキー
-- `VITE_API_BASE_URL`: バックエンドAPIのURL
-
-### セットアップ手順
-
-```bash
-# 依存関係のインストール
-pnpm install
-
-# 開発サーバー起動
-pnpm run dev
-
-# ブラウザで http://localhost:5173 にアクセス
-```
+- `VITE_RECAPTCHA_SITE_KEY` — Google reCAPTCHA v3 site key
+- `VITE_API_BASE_URL` — Backend API URL (e.g. Google Apps Script, Express, etc.)
