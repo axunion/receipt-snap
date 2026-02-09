@@ -16,6 +16,7 @@ import { useExpenseForm, useRecaptcha, useSubmitModal } from "@/hooks";
 import { MainLayout } from "@/layouts/MainLayout";
 import { destinationStore, expenseFormStore } from "@/stores";
 import { loadUserName } from "@/utils";
+import styles from "./FormContainer.module.css";
 
 export function FormContainer() {
 	const isSubmitting = () => expenseFormStore.submitState().isLoading;
@@ -33,7 +34,6 @@ export function FormContainer() {
 		handleCloseError,
 	} = useSubmitModal(resetForm);
 
-	// Monitor destination store errors
 	createEffect(() => {
 		const error = destinationStore.error();
 		if (error) {
@@ -41,7 +41,6 @@ export function FormContainer() {
 		}
 	});
 
-	// Show general validation errors (simplified logic)
 	const hasGeneralErrors = createMemo(() => {
 		const hasErrors = formErrors().length > 0;
 		const hasTouched = Object.values(touchedFields()).some(Boolean);
@@ -61,7 +60,7 @@ export function FormContainer() {
 
 	return (
 		<MainLayout title="Receipt Snap">
-			<form onSubmit={handleSubmit} class="space-y-6 relative form-container">
+			<form onSubmit={handleSubmit} class={`${styles.form} form-container`}>
 				<NameField
 					fieldErrors={fieldErrors}
 					touchedFields={touchedFields}
@@ -78,9 +77,9 @@ export function FormContainer() {
 				<NotesField />
 
 				<Show when={hasGeneralErrors()}>
-					<div class="p-4 bg-red-50 border border-red-200 rounded-lg">
-						<p class="text-sm font-medium text-red-800 mb-2">入力エラー:</p>
-						<ul class="text-sm text-red-700 list-disc list-inside space-y-1">
+					<div class={styles.errorBox}>
+						<p class={styles.errorTitle}>入力エラー:</p>
+						<ul class={styles.errorList}>
 							<For each={formErrors()}>{(error) => <li>{error}</li>}</For>
 						</ul>
 					</div>

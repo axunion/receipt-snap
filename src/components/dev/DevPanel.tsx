@@ -5,6 +5,7 @@ import {
 	setDevForceError,
 	setDevMockEnabled,
 } from "@/utils/localStorage";
+import styles from "./DevPanel.module.css";
 
 function Toggle(props: {
 	label: string;
@@ -14,23 +15,19 @@ function Toggle(props: {
 }) {
 	return (
 		<label
-			class={`flex items-center justify-between gap-4 ${props.disabled ? "opacity-40" : ""}`}
+			class={`${styles.toggleRow} ${props.disabled ? styles.toggleRowDisabled : ""}`}
 		>
-			<span class="text-xs text-slate-300">{props.label}</span>
+			<span class={styles.toggleLabel}>{props.label}</span>
 			<button
 				type="button"
 				role="switch"
 				aria-checked={props.checked}
 				disabled={props.disabled}
-				class={`relative inline-flex !min-h-0 !min-w-0 h-6 w-12 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 ${
-					props.checked ? "bg-sky-500" : "bg-slate-600"
-				} ${props.disabled ? "cursor-not-allowed" : ""}`}
+				class={`${styles.toggleButton} ${props.checked ? styles.toggleActive : styles.toggleInactive}`}
 				onClick={() => props.onChange(!props.checked)}
 			>
 				<span
-					class={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-200 ${
-						props.checked ? "translate-x-6.5" : "translate-x-0.5"
-					}`}
+					class={`${styles.toggleKnob} ${props.checked ? styles.toggleKnobOn : styles.toggleKnobOff}`}
 				/>
 			</button>
 		</label>
@@ -53,27 +50,27 @@ export function DevPanel() {
 	};
 
 	return (
-		<div class="fixed bottom-4 right-4 z-50">
+		<div class={styles.container}>
 			<Show
 				when={open()}
 				fallback={
 					<button
 						type="button"
-						class="rounded-lg bg-slate-800 px-2.5 py-1.5 text-xs font-bold text-amber-400 shadow-lg ring-1 ring-slate-700 hover:bg-slate-700"
+						class={styles.openButton}
 						onClick={() => setOpen(true)}
 					>
 						DEV
 					</button>
 				}
 			>
-				<div class="relative w-52 rounded-xl bg-slate-800 px-4 pt-4 pb-4 shadow-xl ring-1 ring-slate-700">
+				<div class={styles.panel}>
 					<button
 						type="button"
-						class="absolute top-2 right-2 flex !min-h-0 !min-w-0 h-6 w-6 items-center justify-center rounded-full text-slate-500 hover:bg-slate-700 hover:text-slate-300"
+						class={styles.closeButton}
 						onClick={() => setOpen(false)}
 					>
 						<svg
-							class="h-3.5 w-3.5"
+							class={styles.closeIcon}
 							viewBox="0 0 20 20"
 							fill="currentColor"
 							aria-label="Close"
@@ -82,10 +79,10 @@ export function DevPanel() {
 							<path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
 						</svg>
 					</button>
-					<div class="mb-3">
-						<span class="text-xs font-bold text-amber-400">DEV</span>
+					<div class={styles.panelTitle}>
+						<span class={styles.titleText}>DEV</span>
 					</div>
-					<div class="space-y-2.5">
+					<div class={styles.toggleList}>
 						<Toggle
 							label="Mock API"
 							checked={mockEnabled()}

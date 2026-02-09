@@ -1,4 +1,5 @@
 import { type JSX, Show } from "solid-js";
+import styles from "./MainLayout.module.css";
 
 interface MainLayoutProps {
 	children: JSX.Element;
@@ -7,13 +8,11 @@ interface MainLayoutProps {
 
 export function MainLayout(props: MainLayoutProps) {
 	return (
-		<div class="min-h-screen bg-slate-50">
-			<div class="max-w-md mx-auto bg-white p-6 border-x border-slate-200 shadow-md">
+		<div class={styles.wrapper}>
+			<div class={styles.container}>
 				<Show when={props.title}>
-					<header class="mb-6">
-						<h1 class="font-['Bonheur_Royale',cursive] text-3xl text-center text-sky-500">
-							{props.title}
-						</h1>
+					<header class={styles.header}>
+						<h1 class={styles.title}>{props.title}</h1>
 					</header>
 				</Show>
 				{props.children}

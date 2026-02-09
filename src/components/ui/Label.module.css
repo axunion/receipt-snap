@@ -1,0 +1,22 @@
+.label {
+	display: block;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--color-slate-700);
+	margin-bottom: 0.5rem;
+}
+
+.content {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.text {
+	display: flex;
+}
+
+.required {
+	color: var(--color-error-400);
+	margin-left: 0.25rem;
+}

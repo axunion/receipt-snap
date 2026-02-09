@@ -1,0 +1,23 @@
+.select {
+	width: 100%;
+	padding: 0.625rem 0.75rem;
+	border: 1px solid var(--color-slate-200);
+	border-radius: var(--radius-lg);
+	outline: none;
+	background-color: white;
+	transition: all var(--transition-normal);
+}
+
+.select:focus {
+	box-shadow: 0 0 0 2px var(--color-primary-300);
+	border-color: var(--color-primary-500);
+}
+
+.select:disabled {
+	background-color: var(--color-slate-50);
+	cursor: not-allowed;
+}
+
+.select:hover {
+	border-color: var(--color-slate-300);
+}

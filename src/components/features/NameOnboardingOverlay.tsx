@@ -3,6 +3,7 @@ import { createEffect } from "solid-js";
 import { Button, Input, Overlay } from "@/components/ui";
 import { expenseFormStore } from "@/stores";
 import { loadUserName, saveUserName } from "@/utils";
+import styles from "./NameOnboardingOverlay.module.css";
 
 interface NameOnboardingOverlayProps {
 	isVisible: () => boolean;
@@ -10,7 +11,6 @@ interface NameOnboardingOverlayProps {
 }
 
 export function NameOnboardingOverlay(props: NameOnboardingOverlayProps) {
-	// Load saved name on component mount
 	createEffect(() => {
 		if (props.isVisible()) {
 			const savedName = loadUserName();
@@ -33,19 +33,19 @@ export function NameOnboardingOverlay(props: NameOnboardingOverlayProps) {
 
 	return (
 		<Overlay isVisible={props.isVisible()}>
-			<div class="w-full max-w-xs mx-4 px-4 py-8 bg-white rounded-lg shadow-xl">
-				<div class="w-20 h-20 mx-auto mb-6 bg-blue-100 rounded-full flex items-center justify-center">
+			<div class={styles.card}>
+				<div class={styles.iconWrapper}>
 					<Icon
 						icon="material-symbols:person-rounded"
 						width="40"
 						height="40"
-						class="text-blue-600"
+						class={styles.icon}
 						role="presentation"
 					/>
 				</div>
 
-				<form onSubmit={handleSubmit} class="space-y-4 text-center">
-					<p class="text-gray-600">まずは名前を入力してください</p>
+				<form onSubmit={handleSubmit} class={styles.form}>
+					<p class={styles.prompt}>まずは名前を入力してください</p>
 
 					<div>
 						<Input

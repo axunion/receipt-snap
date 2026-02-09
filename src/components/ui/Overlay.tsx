@@ -1,6 +1,7 @@
 import { type JSX, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useBodyScrollLock } from "@/hooks";
+import styles from "./Overlay.module.css";
 
 interface OverlayProps {
 	children: JSX.Element;
@@ -17,9 +18,7 @@ export function Overlay(props: OverlayProps) {
 	return (
 		<Show when={props.isVisible}>
 			<Portal>
-				<div class="fixed inset-0 bg-white/50 backdrop-blur-sm flex flex-col items-center justify-center z-50">
-					{props.children}
-				</div>
+				<div class={styles.overlay}>{props.children}</div>
 			</Portal>
 		</Show>
 	);
