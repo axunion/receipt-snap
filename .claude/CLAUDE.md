@@ -56,6 +56,7 @@ src/
 - **`src/utils/imageCompression.ts`** — HEIC support, canvas-based compression (900x1600, 70% JPEG)
 - **`src/services/api.ts`** — Generic `apiRequest<T>()` with mock mode for development
 - **`src/constants/validation.ts`** — Magic numbers extracted to named constants
+- **`src/hooks/useParentMessage.ts`** — iframe postMessage listener for receiving name from parent app
 
 ### Data Flow
 
@@ -74,6 +75,17 @@ src/
 ### Image Processing Pipeline
 
 File input → `validateImageFile()` → `compressImage()` (HEIC→JPEG, canvas resize) → blob URL for preview → `fileToBase64()` on submit. Memory cleaned via `URL.revokeObjectURL()`.
+
+### iframe postMessage Integration
+
+When embedded as an iframe in a same-origin parent app, the parent can provide the user's name via `postMessage`. The `useParentMessage` hook (called in `App.tsx`) handles this:
+
+1. On mount (iframe only) → sends `{ type: "receipt-snap:ready" }` to parent
+2. Parent responds with `{ type: "receipt-snap:set-name", name: "..." }`
+3. Hook sets the name in `expenseFormStore`, saves to localStorage, and sets `isExternalName` to `true`
+4. When `isExternalName` is `true` → onboarding is skipped, name field is non-clickable
+
+Security: same-origin only (`event.origin` check), `receipt-snap:` prefix to avoid message collisions. When not in an iframe, no listener is registered.
 
 ## Conventions
 

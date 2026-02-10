@@ -35,6 +35,12 @@ export function FormContainer() {
 	} = useSubmitModal(resetForm);
 
 	createEffect(() => {
+		if (expenseFormStore.isExternalName()) {
+			setShowOnboarding(false);
+		}
+	});
+
+	createEffect(() => {
 		const error = destinationStore.error();
 		if (error) {
 			setShowDestinationError(true);
@@ -64,7 +70,11 @@ export function FormContainer() {
 				<NameField
 					fieldErrors={fieldErrors}
 					touchedFields={touchedFields}
-					onNameClick={() => setShowOnboarding(true)}
+					onNameClick={
+						expenseFormStore.isExternalName()
+							? undefined
+							: () => setShowOnboarding(true)
+					}
 				/>
 				<ReceiptField fieldErrors={fieldErrors} touchedFields={touchedFields} />
 				<DestinationField

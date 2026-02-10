@@ -1,9 +1,9 @@
 import { createRoot, createSignal } from "solid-js";
 import type { ExpenseFormData, SubmitResponse } from "@/types";
-import { formatDateForInput } from "@/utils";
+import { formatDateForInput, loadUserName } from "@/utils";
 
 const initialState: ExpenseFormData = {
-	name: "",
+	name: loadUserName(),
 	amount: "",
 	date: formatDateForInput(new Date()),
 	details: "",
@@ -30,9 +30,9 @@ function createExpenseFormStore() {
 		isLoading: boolean;
 		result: SubmitResponse | null;
 	}>({ isLoading: false, result: null });
+	const [isExternalName, setIsExternalName] = createSignal(false);
 
 	const resetForm = () => {
-		setName(initialState.name);
 		setAmount(initialState.amount);
 		setDate(initialState.date);
 		setDetails(initialState.details);
@@ -73,6 +73,8 @@ function createExpenseFormStore() {
 		setReceiptFile,
 		submitState,
 		setSubmitState,
+		isExternalName,
+		setIsExternalName,
 		resetForm,
 		getFormData,
 	};
