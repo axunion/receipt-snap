@@ -1,4 +1,4 @@
-import { type JSX, Show } from "solid-js";
+import { createEffect, type JSX, onCleanup, Show } from "solid-js";
 import { Portal } from "solid-js/web";
 import { useBodyScrollLock } from "@/hooks";
 import styles from "./Modal.module.css";
@@ -21,14 +21,23 @@ export function Modal(props: ModalProps) {
 		() => props.disableBodyScroll !== false,
 	);
 
+	createEffect(() => {
+		if (!props.isOpen || props.closeOnEscape === false || !props.onClose) {
+			return;
+		}
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				props.onClose?.();
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+		onCleanup(() => window.removeEventListener("keydown", handleKeyDown));
+	});
+
 	const handleBackdropClick = () => {
 		if (props.closeOnBackdropClick !== false && props.onClose) {
-			props.onClose();
-		}
-	};
-
-	const handleKeyDown = (e: KeyboardEvent) => {
-		if (e.key === "Escape" && props.closeOnEscape !== false && props.onClose) {
 			props.onClose();
 		}
 	};
@@ -39,7 +48,7 @@ export function Modal(props: ModalProps) {
 				<div
 					class={props.backdropClass || styles.backdrop}
 					onClick={handleBackdropClick}
-					onKeyDown={handleKeyDown}
+					onKeyDown={handleBackdropClick}
 					role="dialog"
 					aria-modal="true"
 					aria-label={props.ariaLabel}

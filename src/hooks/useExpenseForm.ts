@@ -126,7 +126,7 @@ export function useExpenseForm() {
 			const payload: ExpenseSubmitPayload = {
 				recaptchaToken: await getReCaptchaToken(),
 				name: formData.name,
-				amount: formData.amount,
+				amount: String(currentAmount),
 				date: formData.date,
 				details: formData.details,
 				destination: formData.destination,

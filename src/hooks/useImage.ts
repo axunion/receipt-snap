@@ -16,10 +16,6 @@ export function useImage(onImageCapture?: (file: File) => void) {
 	const [activeTab, setActiveTab] = createSignal<TabType>("camera");
 	const [info, setInfo] = createSignal("");
 
-	const handleTabChange = (tab: TabType) => {
-		setActiveTab(tab);
-	};
-
 	const [isCompressing, setIsCompressing] = createSignal(false);
 	const [compressionInfo, setCompressionInfo] =
 		createSignal<CompressionResult | null>(null);
@@ -121,6 +117,14 @@ export function useImage(onImageCapture?: (file: File) => void) {
 		setWarning("");
 		setInfo("");
 		setCompressionInfo(null);
+	};
+
+	const handleTabChange = (tab: TabType) => {
+		setActiveTab(tab);
+		if (tab === "no-image") {
+			expenseFormStore.setReceiptFile(null);
+			clearImage();
+		}
 	};
 
 	// Cleanup on component unmount to prevent memory leaks
