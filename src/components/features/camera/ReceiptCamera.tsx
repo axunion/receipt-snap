@@ -62,6 +62,7 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 	};
 
 	const clearImageAndInputs = () => {
+		expenseFormStore.setReceiptFile(null);
 		clearImage();
 		expenseFormStore.setNoImageReason("");
 		if (cameraInputRef) {
