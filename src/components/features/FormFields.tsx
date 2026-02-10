@@ -54,14 +54,14 @@ export function NameField(props: FormFieldProps) {
 		>
 			<Input
 				type="text"
-				placeholder="名前を変更するにはクリック"
+				placeholder={props.onNameClick ? "名前を変更するにはクリック" : "名前"}
 				value={expenseFormStore.name()}
 				onInput={expenseFormStore.setName}
 				onClick={props.onNameClick}
 				required
 				maxLength={24}
 				readOnly
-				class="cursor-pointer"
+				class={props.onNameClick ? "cursor-pointer" : undefined}
 				aria-invalid={
 					!!(props.fieldErrors().name && props.touchedFields().name)
 				}

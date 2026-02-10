@@ -10,6 +10,7 @@ A simple, mobile-first receipt management and expense submission app. Snap a pho
 - ✅ **Real-Time Validation** — Instant form feedback as you type
 - 🗜️ **Image Compression** — Automatic HEIC/HEIF conversion and size optimization
 - 🔄 **Onboarding** — First-time name setup with local storage persistence
+- 🖼️ **iframe Embedding** — Parent app can set user name via `postMessage`
 
 ## Tech Stack
 
@@ -60,3 +61,11 @@ VITE_API_BASE_URL=your_backend_api_url
 
 - `VITE_RECAPTCHA_SITE_KEY` — Google reCAPTCHA v3 site key
 - `VITE_API_BASE_URL` — Backend API URL (e.g. Google Apps Script, Express, etc.)
+
+## iframe Embedding
+
+Receipt Snap can be embedded as an iframe within a same-origin parent app. The parent can provide the user's name via `postMessage`, which skips onboarding and locks the name field.
+
+- The iframe sends `receipt-snap:ready` on mount; the parent responds with `receipt-snap:set-name`
+- Same-origin only — cross-origin messages are ignored
+- When not in an iframe, the listener is not registered and standalone behavior is unchanged

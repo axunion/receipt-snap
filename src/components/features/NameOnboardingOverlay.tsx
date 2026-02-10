@@ -1,8 +1,7 @@
 import { Icon } from "@iconify-icon/solid";
-import { createEffect } from "solid-js";
 import { Button, Input, Overlay } from "@/components/ui";
 import { expenseFormStore } from "@/stores";
-import { loadUserName, saveUserName } from "@/utils";
+import { saveUserName } from "@/utils";
 import styles from "./NameOnboardingOverlay.module.css";
 
 interface NameOnboardingOverlayProps {
@@ -11,16 +10,6 @@ interface NameOnboardingOverlayProps {
 }
 
 export function NameOnboardingOverlay(props: NameOnboardingOverlayProps) {
-	createEffect(() => {
-		if (props.isVisible()) {
-			const savedName = loadUserName();
-
-			if (savedName && !expenseFormStore.name().trim()) {
-				expenseFormStore.setName(savedName);
-			}
-		}
-	});
-
 	const handleSubmit = (event: Event) => {
 		event.preventDefault();
 		const name = expenseFormStore.name().trim();
