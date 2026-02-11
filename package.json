@@ -9,7 +9,8 @@
 		"preview": "vite preview",
 		"check": "biome check ./src",
 		"check:write": "biome check --write ./src",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"dependencies": {
 		"solid-js": "^1.9.10"
@@ -17,12 +18,16 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.3.14",
 		"@iconify-icon/solid": "^3.0.1",
+		"@solidjs/testing-library": "^0.8.10",
+		"@testing-library/jest-dom": "^6.9.1",
 		"@types/node": "^24.6.0",
 		"browserslist": "^4.28.1",
+		"happy-dom": "^20.6.1",
 		"lightningcss": "^1.31.1",
 		"typescript": "~5.9.3",
 		"vite": "^7.3.1",
-		"vite-plugin-solid": "^2.11.8"
+		"vite-plugin-solid": "^2.11.8",
+		"vitest": "^4.0.18"
 	},
 	"browserslist": [
 		"defaults and fully supports es6-module"
