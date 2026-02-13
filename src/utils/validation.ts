@@ -105,7 +105,9 @@ export function validateDetails(value: string): string | undefined {
 }
 
 export function validateDestination(value: string): string | undefined {
-	return !value ? VALIDATION_MESSAGES.FORM.DESTINATION_REQUIRED : undefined;
+	return !value.trim()
+		? VALIDATION_MESSAGES.FORM.DESTINATION_REQUIRED
+		: undefined;
 }
 
 export function validateReceipt(

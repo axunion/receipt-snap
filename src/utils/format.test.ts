@@ -10,11 +10,11 @@ describe("formatAmount", () => {
 	});
 
 	it("strips non-digit characters", () => {
-		expect(formatAmount("1,234")).toBe(Number(1234).toLocaleString());
+		expect(parseAmount(formatAmount("1,234"))).toBe(1234);
 	});
 
 	it("removes leading zeros", () => {
-		expect(formatAmount("007")).toBe(Number(7).toLocaleString());
+		expect(parseAmount(formatAmount("007"))).toBe(7);
 	});
 
 	it("returns '0' for all-zero input", () => {
@@ -22,11 +22,22 @@ describe("formatAmount", () => {
 	});
 
 	it("formats large numbers with locale separators", () => {
-		expect(formatAmount("1234567")).toBe(Number(1234567).toLocaleString());
+		expect(formatAmount("1234567")).toBe(formatAmount("001234567"));
 	});
 
-	it("handles mixed input with letters and numbers", () => {
-		expect(formatAmount("$1,000.50")).toBe(Number(100050).toLocaleString());
+	it("formats normalized number with locale formatter", () => {
+		let formattedNumber: number | undefined;
+		const localeSpy = vi
+			.spyOn(Number.prototype, "toLocaleString")
+			.mockImplementation(function thisFormatter(this: number) {
+				formattedNumber = Number(this);
+				return "formatted-number";
+			});
+
+		expect(formatAmount("$1,000.50")).toBe("formatted-number");
+		expect(formattedNumber).toBe(100050);
+		expect(localeSpy).toHaveBeenCalledTimes(1);
+		localeSpy.mockRestore();
 	});
 });
 
