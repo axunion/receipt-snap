@@ -180,6 +180,12 @@ describe("validateDestination", () => {
 		);
 	});
 
+	it("returns error when whitespace only", () => {
+		expect(validateDestination("   ")).toBe(
+			VALIDATION_MESSAGES.FORM.DESTINATION_REQUIRED,
+		);
+	});
+
 	it("returns undefined for valid input", () => {
 		expect(validateDestination("Tokyo Office")).toBeUndefined();
 	});
@@ -219,11 +225,25 @@ describe("validateImageFile", () => {
 		expect(result.error).toBe(VALIDATION_MESSAGES.IMAGE.FILE_TOO_LARGE);
 	});
 
+	it("accepts file exactly at 12MB limit", () => {
+		const file = createFile("limit.jpg", 12 * 1024 * 1024, "image/jpeg");
+		const result = validateImageFile(file);
+		expect(result.isValid).toBe(true);
+		expect(result.error).toBeUndefined();
+	});
+
 	it("warns for file over 6MB", () => {
 		const file = createFile("big.jpg", 7 * 1024 * 1024, "image/jpeg");
 		const result = validateImageFile(file);
 		expect(result.isValid).toBe(true);
 		expect(result.warning).toBe(VALIDATION_MESSAGES.IMAGE.LARGE_FILE_WARNING);
+	});
+
+	it("does not warn for file exactly at 6MB threshold", () => {
+		const file = createFile("threshold.jpg", 6 * 1024 * 1024, "image/jpeg");
+		const result = validateImageFile(file);
+		expect(result.isValid).toBe(true);
+		expect(result.warning).toBeUndefined();
 	});
 
 	it("returns no warning for file under 6MB", () => {

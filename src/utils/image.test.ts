@@ -115,6 +115,12 @@ describe("calculateRatio", () => {
 // -- fileToBase64 --
 
 describe("fileToBase64", () => {
+	const originalFileReader = globalThis.FileReader;
+
+	afterEach(() => {
+		globalThis.FileReader = originalFileReader;
+	});
+
 	it("converts a text file to base64", async () => {
 		const file = new File(["hello"], "test.txt", { type: "text/plain" });
 		const result = await fileToBase64(file);
@@ -122,5 +128,44 @@ describe("fileToBase64", () => {
 		expect(result.length).toBeGreaterThan(0);
 		// "hello" -> base64 is "aGVsbG8="
 		expect(result).toBe("aGVsbG8=");
+	});
+
+	it("rejects when FileReader reports an error", async () => {
+		class ErrorFileReader {
+			onload: ((ev: ProgressEvent<FileReader>) => unknown) | null = null;
+			onerror: ((ev: ProgressEvent<FileReader>) => unknown) | null = null;
+			result: string | ArrayBuffer | null = null;
+			error = new Error("read failed");
+
+			readAsDataURL() {
+				this.onerror?.(new ProgressEvent("error") as ProgressEvent<FileReader>);
+			}
+		}
+
+		globalThis.FileReader = ErrorFileReader as unknown as typeof FileReader;
+		const file = new File(["hello"], "test.txt", { type: "text/plain" });
+
+		await expect(fileToBase64(file)).rejects.toThrow("read failed");
+	});
+
+	it("rejects when FileReader result is not a string", async () => {
+		class NonStringResultReader {
+			onload: ((ev: ProgressEvent<FileReader>) => unknown) | null = null;
+			onerror: ((ev: ProgressEvent<FileReader>) => unknown) | null = null;
+			result: string | ArrayBuffer | null = new ArrayBuffer(8);
+			error = null;
+
+			readAsDataURL() {
+				this.onload?.(new ProgressEvent("load") as ProgressEvent<FileReader>);
+			}
+		}
+
+		globalThis.FileReader =
+			NonStringResultReader as unknown as typeof FileReader;
+		const file = new File(["hello"], "test.txt", { type: "text/plain" });
+
+		await expect(fileToBase64(file)).rejects.toThrow(
+			"Failed to convert file to base64",
+		);
 	});
 });
