@@ -6,7 +6,6 @@ export default defineConfig({
 	plugins: [solid()],
 	css: {
 		transformer: "lightningcss",
-		lightningcss: {},
 	},
 	build: {
 		cssMinify: "lightningcss",
