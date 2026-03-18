@@ -1,6 +1,6 @@
 import { renderHook } from "@solidjs/testing-library";
 import { VALIDATION_MESSAGES } from "@/constants/validationMessages";
-import { expenseFormStore } from "@/stores";
+import { expenseFormStore } from "./expenseFormStore";
 import { useExpenseForm } from "./useExpenseForm";
 
 const { submitExpenseMock, getReCaptchaTokenMock, fileToBase64Mock } =

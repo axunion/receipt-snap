@@ -1,12 +1,11 @@
 import { Icon } from "@iconify-icon/solid";
 import { Show } from "solid-js";
 import { Button, Modal } from "@/components/ui";
-import type { SubmittedData } from "@/hooks";
+import type { SubmittedData } from "../model";
 import styles from "./SuccessModal.module.css";
 
 interface SuccessModalProps {
 	isOpen: boolean;
-	onClose?: () => void;
 	onNewExpense?: () => void;
 	submittedExpense?: SubmittedData;
 	title?: string;

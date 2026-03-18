@@ -1,14 +1,18 @@
 import { Icon } from "@iconify-icon/solid";
 import { createEffect, Show } from "solid-js";
-import { useImage } from "@/hooks";
-import { expenseFormStore } from "@/stores";
 import { formatFileSize } from "@/utils";
+import { useReceiptImage } from "../../model/useReceiptImage";
 import { ImagePreview } from "./ImagePreview";
 import styles from "./ReceiptCamera.module.css";
 import { UploadTabs } from "./UploadTabs";
 
 interface ReceiptCameraProps {
+	selectedFile: File | null;
+	noImageReason: string;
 	onImageCapture: (file: File) => void;
+	onNoImageReasonChange: (value: string) => void;
+	onRemoveReceipt: () => void;
+	onClearReceipt: () => void;
 }
 
 export function ReceiptCamera(props: ReceiptCameraProps) {
@@ -23,19 +27,27 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 		setActiveTab,
 		handleFileSelect,
 		clearImage,
-	} = useImage(props.onImageCapture);
+	} = useReceiptImage({
+		selectedFile: () => props.selectedFile,
+		onImageCapture: props.onImageCapture,
+		onReceiptRemoved: props.onRemoveReceipt,
+	});
 
 	let cameraInputRef: HTMLInputElement | undefined;
 	let fileInputRef: HTMLInputElement | undefined;
 
+	const resetInputs = () => {
+		if (cameraInputRef) {
+			cameraInputRef.value = "";
+		}
+		if (fileInputRef) {
+			fileInputRef.value = "";
+		}
+	};
+
 	createEffect(() => {
-		if (expenseFormStore.receiptFile() === null) {
-			if (cameraInputRef) {
-				cameraInputRef.value = "";
-			}
-			if (fileInputRef) {
-				fileInputRef.value = "";
-			}
+		if (props.selectedFile === null) {
+			resetInputs();
 		}
 	});
 
@@ -62,15 +74,9 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 	};
 
 	const clearImageAndInputs = () => {
-		expenseFormStore.setReceiptFile(null);
+		props.onClearReceipt();
 		clearImage();
-		expenseFormStore.setNoImageReason("");
-		if (cameraInputRef) {
-			cameraInputRef.value = "";
-		}
-		if (fileInputRef) {
-			fileInputRef.value = "";
-		}
+		resetInputs();
 	};
 
 	return (
@@ -178,6 +184,8 @@ export function ReceiptCamera(props: ReceiptCameraProps) {
 						onTabChange={setActiveTab}
 						onCameraClick={openCamera}
 						onFileClick={openFileDialog}
+						noImageReason={props.noImageReason}
+						onNoImageReasonChange={props.onNoImageReasonChange}
 						isCompressing={false}
 					/>
 				}

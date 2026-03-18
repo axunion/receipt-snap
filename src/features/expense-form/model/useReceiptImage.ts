@@ -1,5 +1,4 @@
 import { createEffect, createSignal, onCleanup } from "solid-js";
-import { expenseFormStore } from "@/stores";
 import type { CompressionResult, TabType } from "@/types";
 import {
 	calculateRatio,
@@ -9,7 +8,13 @@ import {
 	validateImageFile,
 } from "@/utils";
 
-export function useImage(onImageCapture?: (file: File) => void) {
+interface UseReceiptImageOptions {
+	selectedFile: () => File | null;
+	onImageCapture?: (file: File) => void;
+	onReceiptRemoved?: () => void;
+}
+
+export function useReceiptImage(options: UseReceiptImageOptions) {
 	const [imagePreview, setImagePreview] = createSignal("");
 	const [error, setError] = createSignal("");
 	const [warning, setWarning] = createSignal("");
@@ -20,9 +25,9 @@ export function useImage(onImageCapture?: (file: File) => void) {
 	const [compressionInfo, setCompressionInfo] =
 		createSignal<CompressionResult | null>(null);
 
-	// Automatically clear preview when receipt file in store becomes null
+	// Clear preview when the selected file is reset from outside the camera UI.
 	createEffect(() => {
-		if (expenseFormStore.receiptFile() === null) {
+		if (options.selectedFile() === null) {
 			if (imagePreview()) {
 				URL.revokeObjectURL(imagePreview());
 			}
@@ -72,7 +77,7 @@ export function useImage(onImageCapture?: (file: File) => void) {
 
 			setWarning("");
 
-			onImageCapture?.(compressedFile);
+			options.onImageCapture?.(compressedFile);
 
 			// Create object URL for preview (memory efficient vs DataURL)
 			if (imagePreview()) {
@@ -122,7 +127,7 @@ export function useImage(onImageCapture?: (file: File) => void) {
 	const handleTabChange = (tab: TabType) => {
 		setActiveTab(tab);
 		if (tab === "no-image") {
-			expenseFormStore.setReceiptFile(null);
+			options.onReceiptRemoved?.();
 			clearImage();
 		}
 	};

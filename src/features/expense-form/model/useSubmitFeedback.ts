@@ -1,6 +1,7 @@
 import { createEffect, createSignal } from "solid-js";
-import { destinationStore, expenseFormStore } from "@/stores";
 import { parseAmount } from "@/utils";
+import { destinationStore } from "./destinationStore";
+import { expenseFormStore } from "./expenseFormStore";
 
 export interface SubmittedData {
 	destinationLabel: string;
@@ -8,7 +9,7 @@ export interface SubmittedData {
 	amount: number;
 }
 
-export function useSubmitModal(resetForm: () => void) {
+export function useSubmitFeedback(resetForm: () => void) {
 	const [showSuccessModal, setShowSuccessModal] = createSignal(false);
 	const [showErrorModal, setShowErrorModal] = createSignal(false);
 	const [submittedData, setSubmittedData] = createSignal<SubmittedData>();
@@ -54,11 +55,6 @@ export function useSubmitModal(resetForm: () => void) {
 		resetForm();
 	};
 
-	const handleCloseSuccess = () => {
-		setShowSuccessModal(false);
-		setSubmittedData(undefined);
-	};
-
 	const handleCloseError = () => {
 		setShowErrorModal(false);
 		setErrorMessage("");
@@ -67,12 +63,9 @@ export function useSubmitModal(resetForm: () => void) {
 	};
 
 	return {
-		// Success modal
 		showSuccessModal,
 		submittedData,
 		handleNewExpense,
-		handleCloseSuccess,
-		// Error modal
 		showErrorModal,
 		errorMessage,
 		handleCloseError,

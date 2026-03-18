@@ -1,5 +1,5 @@
 import { Icon } from "@iconify-icon/solid";
-import { Button } from "@/components/ui";
+import { Button, Spinner } from "@/components/ui";
 import type { TabType } from "@/types";
 import styles from "./ImagePreview.module.css";
 
@@ -17,12 +17,7 @@ export function ImagePreview(props: ImagePreviewProps) {
 			<div class={styles.previewContainer}>
 				{props.isLoading ? (
 					<div class={styles.loadingBox}>
-						<Icon
-							icon="material-symbols:hourglass-top"
-							width="24"
-							height="24"
-							class={styles.loadingIcon}
-						/>
+						<Spinner size="md" class={styles.loadingSpinner} />
 						<p class={styles.loadingText}>画像を処理中...</p>
 					</div>
 				) : props.imagePreview ? (

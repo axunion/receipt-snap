@@ -32,6 +32,15 @@ function createExpenseFormStore() {
 	}>({ isLoading: false, result: null });
 	const [isExternalName, setIsExternalName] = createSignal(false);
 
+	const removeReceipt = () => {
+		setReceiptFile(null);
+	};
+
+	const clearReceipt = () => {
+		setReceiptFile(null);
+		setNoImageReason("");
+	};
+
 	const resetForm = () => {
 		setAmount(initialState.amount);
 		setDate(initialState.date);
@@ -75,6 +84,8 @@ function createExpenseFormStore() {
 		setSubmitState,
 		isExternalName,
 		setIsExternalName,
+		removeReceipt,
+		clearReceipt,
 		resetForm,
 		getFormData,
 	};
