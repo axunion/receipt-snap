@@ -1,13 +1,10 @@
 import { DevPanel } from "@/components/dev/DevPanel";
-import { FormContainer } from "@/components/features/FormContainer";
-import { useParentMessage } from "@/hooks";
+import { ExpenseFormFeature } from "@/features/expense-form";
 
 function App() {
-	useParentMessage();
-
 	return (
 		<>
-			<FormContainer />
+			<ExpenseFormFeature />
 			{import.meta.env.DEV && <DevPanel />}
 		</>
 	);

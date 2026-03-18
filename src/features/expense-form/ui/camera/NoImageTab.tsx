@@ -1,14 +1,18 @@
 import { Textarea } from "@/components/ui";
-import { expenseFormStore } from "@/stores";
 import styles from "./NoImageTab.module.css";
 
-export function NoImageTab() {
+interface NoImageTabProps {
+	value: string;
+	onInput: (value: string) => void;
+}
+
+export function NoImageTab(props: NoImageTabProps) {
 	return (
 		<div class={styles.container}>
 			<Textarea
 				placeholder="レシートがない理由を入力"
-				value={expenseFormStore.noImageReason()}
-				onInput={expenseFormStore.setNoImageReason}
+				value={props.value}
+				onInput={props.onInput}
 				rows={6}
 				class="h-full"
 			/>

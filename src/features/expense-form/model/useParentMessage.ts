@@ -1,6 +1,6 @@
 import { onCleanup } from "solid-js";
-import { expenseFormStore } from "@/stores";
 import { saveUserName } from "@/utils";
+import { expenseFormStore } from "./expenseFormStore";
 
 export function useParentMessage() {
 	// Skip if not running inside an iframe

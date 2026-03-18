@@ -9,6 +9,8 @@ interface UploadTabsProps {
 	onTabChange: (tab: TabType) => void;
 	onCameraClick: () => void;
 	onFileClick: () => void;
+	noImageReason: string;
+	onNoImageReasonChange: (value: string) => void;
 	isCompressing: boolean;
 }
 
@@ -118,7 +120,12 @@ export function UploadTabs(props: UploadTabsProps) {
 					/>
 				)}
 
-				{props.activeTab === "no-image" && <NoImageTab />}
+				{props.activeTab === "no-image" && (
+					<NoImageTab
+						value={props.noImageReason}
+						onInput={props.onNoImageReasonChange}
+					/>
+				)}
 			</div>
 		</div>
 	);

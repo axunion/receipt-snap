@@ -4,6 +4,16 @@
 	fill: none;
 }
 
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 .sm {
 	height: 1rem;
 	width: 1rem;

@@ -1,27 +1,26 @@
 import { Icon } from "@iconify-icon/solid";
 import { Button, Input, Overlay } from "@/components/ui";
-import { expenseFormStore } from "@/stores";
-import { saveUserName } from "@/utils";
 import styles from "./NameOnboardingOverlay.module.css";
 
 interface NameOnboardingOverlayProps {
-	isVisible: () => boolean;
+	isVisible: boolean;
+	name: string;
+	onInput: (value: string) => void;
 	onComplete: () => void;
 }
 
 export function NameOnboardingOverlay(props: NameOnboardingOverlayProps) {
 	const handleSubmit = (event: Event) => {
 		event.preventDefault();
-		const name = expenseFormStore.name().trim();
+		const name = props.name.trim();
 
 		if (name) {
-			saveUserName(name);
 			props.onComplete();
 		}
 	};
 
 	return (
-		<Overlay isVisible={props.isVisible()}>
+		<Overlay isVisible={props.isVisible}>
 			<div class={styles.card}>
 				<div class={styles.iconWrapper}>
 					<Icon
@@ -39,8 +38,8 @@ export function NameOnboardingOverlay(props: NameOnboardingOverlayProps) {
 					<div>
 						<Input
 							type="text"
-							value={expenseFormStore.name()}
-							onInput={expenseFormStore.setName}
+							value={props.name}
+							onInput={props.onInput}
 							required
 							maxLength={24}
 							class="text-center"
@@ -49,7 +48,7 @@ export function NameOnboardingOverlay(props: NameOnboardingOverlayProps) {
 
 					<Button
 						type="submit"
-						disabled={!expenseFormStore.name().trim()}
+						disabled={!props.name.trim()}
 						class="w-full"
 						size="lg"
 					>

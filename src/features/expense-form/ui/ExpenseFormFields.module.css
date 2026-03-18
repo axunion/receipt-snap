@@ -1,0 +1,19 @@
+.error {
+	font-size: 0.875rem;
+	color: var(--color-error-600);
+	margin-top: 0.25rem;
+}
+
+.destinationField {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.loadingHint {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.75rem;
+	color: var(--color-slate-500);
+}

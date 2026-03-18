@@ -1,15 +1,13 @@
 import type { JSX } from "solid-js";
 import { Show } from "solid-js";
-import { ReceiptCamera } from "@/components/features/camera/ReceiptCamera";
-import { Input, Label, Select, Textarea } from "@/components/ui";
-import { destinationStore, expenseFormStore } from "@/stores";
-import type { FieldErrors, TouchedFields } from "@/types";
-import styles from "./FormFields.module.css";
+import { Input, Label, Select, Spinner, Textarea } from "@/components/ui";
+import type { FieldErrors, SelectOption, TouchedFields } from "@/types";
+import { ReceiptCamera } from "./camera/ReceiptCamera";
+import styles from "./ExpenseFormFields.module.css";
 
 interface FormFieldProps {
 	fieldErrors: () => FieldErrors;
 	touchedFields: () => TouchedFields;
-	onNameClick?: () => void;
 }
 
 interface FormFieldWrapperProps {
@@ -42,7 +40,13 @@ function FormFieldWrapper(props: FormFieldWrapperProps) {
 	);
 }
 
-export function NameField(props: FormFieldProps) {
+interface NameFieldProps extends FormFieldProps {
+	value: string;
+	onInput: (value: string) => void;
+	onNameClick?: () => void;
+}
+
+export function NameField(props: NameFieldProps) {
 	return (
 		<FormFieldWrapper
 			field="name"
@@ -55,8 +59,8 @@ export function NameField(props: FormFieldProps) {
 			<Input
 				type="text"
 				placeholder={props.onNameClick ? "名前を変更するにはクリック" : "名前"}
-				value={expenseFormStore.name()}
-				onInput={expenseFormStore.setName}
+				value={props.value}
+				onInput={props.onInput}
 				onClick={props.onNameClick}
 				required
 				maxLength={24}
@@ -75,7 +79,12 @@ export function NameField(props: FormFieldProps) {
 	);
 }
 
-export function AmountField(props: FormFieldProps) {
+interface AmountFieldProps extends FormFieldProps {
+	value: string;
+	onInput: (value: string) => void;
+}
+
+export function AmountField(props: AmountFieldProps) {
 	return (
 		<FormFieldWrapper
 			field="amount"
@@ -88,8 +97,8 @@ export function AmountField(props: FormFieldProps) {
 			<Input
 				type="text"
 				placeholder="0"
-				value={expenseFormStore.amount()}
-				onInput={expenseFormStore.setAmount}
+				value={props.value}
+				onInput={props.onInput}
 				required
 				maxLength={8}
 				inputmode="numeric"
@@ -108,7 +117,12 @@ export function AmountField(props: FormFieldProps) {
 	);
 }
 
-export function DateField(props: FormFieldProps) {
+interface DateFieldProps extends FormFieldProps {
+	value: string;
+	onInput: (value: string) => void;
+}
+
+export function DateField(props: DateFieldProps) {
 	return (
 		<FormFieldWrapper
 			field="date"
@@ -120,8 +134,8 @@ export function DateField(props: FormFieldProps) {
 		>
 			<Input
 				type="date"
-				value={expenseFormStore.date()}
-				onInput={expenseFormStore.setDate}
+				value={props.value}
+				onInput={props.onInput}
 				required
 				aria-invalid={
 					!!(props.fieldErrors().date && props.touchedFields().date)
@@ -136,14 +150,19 @@ export function DateField(props: FormFieldProps) {
 	);
 }
 
-export function NotesField() {
+interface NotesFieldProps {
+	value: string;
+	onInput: (value: string) => void;
+}
+
+export function NotesField(props: NotesFieldProps) {
 	return (
 		<div>
 			<Label icon="material-symbols:note-outline">備考</Label>
 			<Textarea
 				placeholder="備考があれば入力してください"
-				value={expenseFormStore.notes()}
-				onInput={expenseFormStore.setNotes}
+				value={props.value}
+				onInput={props.onInput}
 				rows={4}
 				maxLength={1024}
 			/>
@@ -151,7 +170,12 @@ export function NotesField() {
 	);
 }
 
-export function DetailsField(props: FormFieldProps) {
+interface DetailsFieldProps extends FormFieldProps {
+	value: string;
+	onInput: (value: string) => void;
+}
+
+export function DetailsField(props: DetailsFieldProps) {
 	return (
 		<FormFieldWrapper
 			field="details"
@@ -164,8 +188,8 @@ export function DetailsField(props: FormFieldProps) {
 			<Input
 				type="text"
 				placeholder="内訳を入力"
-				value={expenseFormStore.details()}
-				onInput={expenseFormStore.setDetails}
+				value={props.value}
+				onInput={props.onInput}
 				required
 				maxLength={64}
 				aria-invalid={
@@ -181,7 +205,14 @@ export function DetailsField(props: FormFieldProps) {
 	);
 }
 
-export function DestinationField(props: FormFieldProps) {
+interface DestinationFieldProps extends FormFieldProps {
+	value: string;
+	options: SelectOption[];
+	isLoading: boolean;
+	onSelect: (value: string) => void;
+}
+
+export function DestinationField(props: DestinationFieldProps) {
 	return (
 		<FormFieldWrapper
 			field="destination"
@@ -191,29 +222,47 @@ export function DestinationField(props: FormFieldProps) {
 			fieldErrors={props.fieldErrors}
 			touchedFields={props.touchedFields}
 		>
-			<Select
-				options={destinationStore.destinations()}
-				value={expenseFormStore.destination()}
-				onSelect={expenseFormStore.setDestination}
-				placeholder={destinationStore.loading() ? "読み込み中..." : "選択"}
-				required
-				aria-invalid={
-					!!(
+			<div class={styles.destinationField}>
+				<Select
+					options={props.options}
+					value={props.value}
+					onSelect={props.onSelect}
+					placeholder={props.isLoading ? "読み込み中..." : "選択"}
+					required
+					aria-invalid={
+						!!(
+							props.fieldErrors().destination &&
+							props.touchedFields().destination
+						)
+					}
+					aria-describedby={
 						props.fieldErrors().destination && props.touchedFields().destination
-					)
-				}
-				aria-describedby={
-					props.fieldErrors().destination && props.touchedFields().destination
-						? "destination-error"
-						: undefined
-				}
-				disabled={destinationStore.loading()}
-			/>
+							? "destination-error"
+							: undefined
+					}
+					disabled={props.isLoading}
+				/>
+				<Show when={props.isLoading}>
+					<div class={styles.loadingHint} aria-live="polite">
+						<Spinner size="sm" />
+						<span>送信先を読み込み中...</span>
+					</div>
+				</Show>
+			</div>
 		</FormFieldWrapper>
 	);
 }
 
-export function ReceiptField(props: FormFieldProps) {
+interface ReceiptFieldProps extends FormFieldProps {
+	receiptFile: File | null;
+	noImageReason: string;
+	onReceiptFileChange: (file: File) => void;
+	onNoImageReasonChange: (value: string) => void;
+	onRemoveReceipt: () => void;
+	onClearReceipt: () => void;
+}
+
+export function ReceiptField(props: ReceiptFieldProps) {
 	return (
 		<FormFieldWrapper
 			field="receipt"
@@ -223,7 +272,14 @@ export function ReceiptField(props: FormFieldProps) {
 			fieldErrors={props.fieldErrors}
 			touchedFields={props.touchedFields}
 		>
-			<ReceiptCamera onImageCapture={expenseFormStore.setReceiptFile} />
+			<ReceiptCamera
+				selectedFile={props.receiptFile}
+				noImageReason={props.noImageReason}
+				onImageCapture={props.onReceiptFileChange}
+				onNoImageReasonChange={props.onNoImageReasonChange}
+				onRemoveReceipt={props.onRemoveReceipt}
+				onClearReceipt={props.onClearReceipt}
+			/>
 		</FormFieldWrapper>
 	);
 }

@@ -21,9 +21,8 @@
 	justify-content: center;
 }
 
-.loadingIcon {
+.loadingSpinner {
 	color: var(--color-gray-400);
-	animation: spin 1s linear infinite;
 	margin-bottom: 0.5rem;
 }
 
