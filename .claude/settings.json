@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(pnpm check)",
+      "Bash(pnpm check:write)",
+      "Bash(pnpm test)",
+      "Bash(pnpm test:watch)",
+      "Bash(pnpm test:run)",
+      "Bash(pnpm build)"
+    ]
+  }
+}

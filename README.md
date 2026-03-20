@@ -14,11 +14,12 @@ A simple, mobile-first receipt management and expense submission app. Snap a pho
 
 ## Tech Stack
 
-- **SolidJS** — Reactive UI framework
-- **Vite** — Build tool
+- **SolidJS 1.9** — Reactive UI framework (fine-grained reactivity, no virtual DOM)
+- **Vite 7** — Build tool
+- **TypeScript 5.9** — Strict mode enabled
 - **CSS Modules + Lightning CSS** — Scoped styles with native nesting and auto vendor prefixes
-- **TypeScript** — Strict mode enabled
-- **Biome** — Linter and formatter
+- **Biome 2** — Linter and formatter
+- **Vitest 4** — Unit tests
 - **Iconify Icon** — Icon library
 
 ## Getting Started
@@ -33,20 +34,35 @@ pnpm dev
 # Open http://localhost:5173
 ```
 
+## Commands
+
+```bash
+pnpm dev          # Start Vite dev server
+pnpm build        # Type-check then Vite build
+pnpm preview      # Preview production build
+pnpm check        # Biome lint + format check
+pnpm check:write  # Auto-fix lint + format issues
+pnpm test         # Run Vitest
+pnpm test:watch   # Vitest in watch mode
+```
+
 ## Project Structure
 
 ```
 src/
+├── features/
+│   └── expense-form/     # Feature module
+│       ├── model/        # Business logic: stores, hooks, state
+│       └── ui/           # UI components for this feature
+│           └── camera/   # Receipt camera/upload components
 ├── components/
-│   ├── ui/               # Presentational components
-│   ├── features/         # Domain-specific components
+│   ├── ui/               # Shared presentational components (no business logic)
 │   └── dev/              # Development tools (DevPanel)
-├── hooks/                # Business logic and validation
-├── stores/               # Global state management
+├── hooks/                # Shared cross-feature hooks
 ├── services/             # API communication
 ├── types/                # Shared type definitions
-├── utils/                # Utility functions
-├── constants/            # Configuration and constants
+├── utils/                # Pure utility functions
+├── constants/            # Named constants
 └── layouts/              # Page layout components
 ```
 
