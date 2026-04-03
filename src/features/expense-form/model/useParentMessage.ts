@@ -1,4 +1,6 @@
 import { onCleanup } from "solid-js";
+import { CONFIG } from "@/constants/config";
+import { NAME_LIMITS } from "@/constants/validation";
 import { saveUserName } from "@/utils";
 import { expenseFormStore } from "./expenseFormStore";
 
@@ -7,12 +9,12 @@ export function useParentMessage() {
 	if (window === window.parent) return;
 
 	const handler = (event: MessageEvent) => {
-		// Only accept messages from the same origin
-		if (event.origin !== window.location.origin) return;
+		if (!CONFIG.POSTMESSAGE.ALLOWED_ORIGINS.has(event.origin)) return;
 
 		if (
 			event.data?.type === "receipt-snap:set-name" &&
-			typeof event.data.name === "string"
+			typeof event.data.name === "string" &&
+			event.data.name.length <= NAME_LIMITS.MAX_LENGTH
 		) {
 			const name = event.data.name;
 			expenseFormStore.setName(name);
@@ -22,10 +24,8 @@ export function useParentMessage() {
 	};
 
 	window.addEventListener("message", handler);
-	window.parent.postMessage(
-		{ type: "receipt-snap:ready" },
-		window.location.origin,
-	);
+	// Use "*" because the parent may be cross-origin; ready contains no sensitive data
+	window.parent.postMessage({ type: "receipt-snap:ready" }, "*");
 
 	onCleanup(() => {
 		window.removeEventListener("message", handler);

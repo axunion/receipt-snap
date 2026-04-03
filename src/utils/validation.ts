@@ -2,6 +2,7 @@ import {
 	AMOUNT_LIMITS,
 	DATE_LIMITS,
 	FILE_SIZE_LIMITS,
+	NAME_LIMITS,
 } from "@/constants/validation";
 import { VALIDATION_MESSAGES } from "@/constants/validationMessages";
 import type { FieldErrors, ImageValidationResult } from "@/types";
@@ -37,7 +38,10 @@ export function validateImageFile(file: File): ImageValidationResult {
 }
 
 export function validateName(value: string): string | undefined {
-	return !value.trim() ? VALIDATION_MESSAGES.FORM.NAME_REQUIRED : undefined;
+	if (!value.trim()) return VALIDATION_MESSAGES.FORM.NAME_REQUIRED;
+	if (value.length > NAME_LIMITS.MAX_LENGTH)
+		return VALIDATION_MESSAGES.FORM.NAME_TOO_LONG;
+	return undefined;
 }
 
 export function validateAmount(value: number): string | undefined {

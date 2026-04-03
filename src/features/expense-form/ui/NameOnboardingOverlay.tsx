@@ -1,5 +1,6 @@
 import { Icon } from "@iconify-icon/solid";
 import { Button, Input, Overlay } from "@/components/ui";
+import { NAME_LIMITS } from "@/constants/validation";
 import styles from "./NameOnboardingOverlay.module.css";
 
 interface NameOnboardingOverlayProps {
@@ -41,7 +42,7 @@ export function NameOnboardingOverlay(props: NameOnboardingOverlayProps) {
 							value={props.name}
 							onInput={props.onInput}
 							required
-							maxLength={24}
+							maxLength={NAME_LIMITS.MAX_LENGTH}
 							class="text-center"
 						/>
 					</div>

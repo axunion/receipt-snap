@@ -1,3 +1,7 @@
+export const NAME_LIMITS = {
+	MAX_LENGTH: 100,
+} as const;
+
 // File size validation settings
 export const FILE_SIZE_LIMITS = {
 	MAX_SIZE_BYTES: 12 * 1024 * 1024, // 12MB

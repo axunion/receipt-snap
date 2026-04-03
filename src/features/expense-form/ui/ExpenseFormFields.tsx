@@ -1,6 +1,7 @@
 import type { JSX } from "solid-js";
 import { Show } from "solid-js";
 import { Input, Label, Select, Spinner, Textarea } from "@/components/ui";
+import { NAME_LIMITS } from "@/constants/validation";
 import type { FieldErrors, SelectOption, TouchedFields } from "@/types";
 import { ReceiptCamera } from "./camera/ReceiptCamera";
 import styles from "./ExpenseFormFields.module.css";
@@ -63,7 +64,7 @@ export function NameField(props: NameFieldProps) {
 				onInput={props.onInput}
 				onClick={props.onNameClick}
 				required
-				maxLength={24}
+				maxLength={NAME_LIMITS.MAX_LENGTH}
 				readOnly
 				class={props.onNameClick ? "cursor-pointer" : undefined}
 				aria-invalid={

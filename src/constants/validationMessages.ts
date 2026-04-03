@@ -9,6 +9,7 @@ export const VALIDATION_MESSAGES = {
 	},
 	FORM: {
 		NAME_REQUIRED: "名前は必須項目です。",
+		NAME_TOO_LONG: "名前は100文字以内で入力してください。",
 		AMOUNT_INVALID: "金額は0より大きい値を入力してください。",
 		AMOUNT_TOO_LARGE: "金額は1,000,000以下で入力してください。",
 		DATE_REQUIRED: "支払日を入力してください。",

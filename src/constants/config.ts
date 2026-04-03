@@ -6,6 +6,16 @@ const validateEnvVar = (name: string, value: string | undefined): string => {
 	return value || "";
 };
 
+// Parse comma-separated allowed origins, always include self
+const parseAllowedOrigins = (): Set<string> => {
+	const raw = import.meta.env.VITE_ALLOWED_ORIGINS ?? "";
+	const entries = raw
+		.split(",")
+		.map((s) => s.trim())
+		.filter(Boolean);
+	return new Set([window.location.origin, ...entries]);
+};
+
 export const CONFIG = {
 	RECAPTCHA: {
 		SITE_KEY: validateEnvVar(
@@ -18,5 +28,8 @@ export const CONFIG = {
 			"VITE_API_BASE_URL",
 			import.meta.env.VITE_API_BASE_URL,
 		),
+	},
+	POSTMESSAGE: {
+		ALLOWED_ORIGINS: parseAllowedOrigins(),
 	},
 } as const;
