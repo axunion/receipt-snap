@@ -11,7 +11,7 @@ const parseAllowedOrigins = (): Set<string> => {
 	const raw = import.meta.env.VITE_ALLOWED_ORIGINS ?? "";
 	const entries = raw
 		.split(",")
-		.map((s) => s.trim())
+		.map((s: string) => s.trim())
 		.filter(Boolean);
 	return new Set([window.location.origin, ...entries]);
 };
