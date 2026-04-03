@@ -65,37 +65,11 @@ src/
 - **`src/utils/imageCompression.ts`** — HEIC→JPEG, canvas-based compression (900×1600, 70% JPEG)
 - **`src/constants/validation.ts`** — Validation limits as named constants
 
-### Data Flow
-
-1. User input → updates signals in `expenseFormStore`
-2. `createEffect` in `useExpenseForm` runs real-time validation (only after field is touched)
-3. On submit → compresses image to base64, gets reCAPTCHA token, POSTs to API
-4. API response uses discriminated union: `{ result: "done" } | { result: "error", error: string }`
-
 ### State Management
 
 - **Local**: `createSignal()` for component-scoped state
 - **Global**: Stores use `createRoot()` to persist across component lifecycle
 - **Server**: `createResource()` for async/API data
-- **Form**: Centralized in `expenseFormStore`, validated reactively in `useExpenseForm`
-
-### Image Processing Pipeline
-
-File input → `validateImageFile()` → `compressImage()` (HEIC→JPEG, canvas resize) → blob URL for preview → `fileToBase64()` on submit. Memory cleaned via `URL.revokeObjectURL()`.
-
-### iframe postMessage Integration
-
-When embedded as an iframe, the parent can provide the user's name via `postMessage`:
-1. On mount → sends `{ type: "receipt-snap:ready" }` to parent (target `"*"` to reach cross-origin parents)
-2. Parent responds with `{ type: "receipt-snap:set-name", name: "..." }`
-3. Sets `isExternalName = true` in `expenseFormStore` → onboarding skipped, name field non-clickable
-4. `isExternalName` is intentionally **not** reset by `resetForm`
-
-Security:
-- Allowed origins are controlled via `VITE_ALLOWED_ORIGINS` (see Environment Variables)
-- `window.location.origin` is always implicitly allowed
-- `name` is validated: must be a non-empty string, max 100 characters (`NAME_LIMITS.MAX_LENGTH`)
-- `receipt-snap:` namespace prefix on all message types
 
 ### Testing Patterns
 

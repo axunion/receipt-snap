@@ -10,9 +10,10 @@ Review changed files against project conventions and SolidJS best practices.
 Steps:
 1. Run `git diff --name-only HEAD` to identify changed files
 2. Also check `git diff --name-only --cached` for staged changes
-3. Read each changed `.ts` / `.tsx` / `.css` file
-4. Review against the checklist below
-5. Report findings grouped by file, with line references where possible
+3. Run `git status --short` and include any untracked `.ts` / `.tsx` / `.css` files (lines starting with `??`)
+4. Read each changed or untracked `.ts` / `.tsx` / `.css` file
+5. Review against the checklist below
+6. Report findings grouped by file, with line references where possible
 
 ## Review Checklist
 

@@ -12,7 +12,7 @@ Components in this directory are **purely presentational**. They have no knowled
 ### No Business Logic
 - No imports from `src/features/`
 - No imports from `src/services/`
-- No imports from `src/stores/` or feature stores
+- No imports from feature stores (e.g. `src/features/expense-form/model/*Store.ts`)
 - Behavior is controlled entirely through **props and callback functions**
 
 ### Props Design

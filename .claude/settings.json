@@ -1,13 +1,18 @@
 {
+  "sandbox": {
+    "enabled": true
+  },
+  "autoAllowBashIfSandboxed": true,
   "permissions": {
-    "allow": [
-      "Bash(grep:*)",
-      "Bash(pnpm check)",
-      "Bash(pnpm check:write)",
-      "Bash(pnpm test)",
-      "Bash(pnpm test:watch)",
-      "Bash(pnpm test:run)",
-      "Bash(pnpm build)"
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(rm -r*)",
+      "Bash(git push*)",
+      "Bash(git reset --hard*)",
+      "Bash(git clean -f*)",
+      "Bash(sudo *)",
+      "Bash(chmod *)",
+      "Bash(chown *)"
     ]
   }
 }
