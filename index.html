@@ -3,6 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <!--
+      Content-Security-Policy (defense-in-depth layer).
+      Note: <meta> does not support `frame-ancestors` — set that directive
+      via the hosting layer's HTTP response header to restrict which origins
+      may embed this app in an iframe.
+
+      style-src includes 'unsafe-inline' because vite-plugin-solid injects
+      CSS Modules as JS-created <style> elements at runtime (both in dev and
+      as a fallback path). Without it the app renders unstyled.
+
+      connect-src lists known origins (reCAPTCHA + GAS). If you deploy to a
+      different backend host, add it here AND in the HTTP response header CSP
+      (the meta tag cannot substitute env-var values at deploy time).
+    -->
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' https://www.google.com https://www.gstatic.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      img-src 'self' data: blob:;
+      connect-src 'self' https://www.google.com https://script.google.com;
+      frame-src https://www.google.com;
+      base-uri 'self';
+      form-action 'self';
+    " />
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />

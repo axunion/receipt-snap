@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup } from "solid-js";
+import { createEffect, createSignal, onCleanup, untrack } from "solid-js";
 import type { CompressionResult, TabType } from "@/types";
 import {
 	calculateRatio,
@@ -26,10 +26,14 @@ export function useReceiptImage(options: UseReceiptImageOptions) {
 		createSignal<CompressionResult | null>(null);
 
 	// Clear preview when the selected file is reset from outside the camera UI.
+	// imagePreview is read with untrack so it is not a reactive dependency —
+	// this effect must only re-run when selectedFile changes, not on every
+	// preview update (which would cause a redundant second execution).
 	createEffect(() => {
 		if (options.selectedFile() === null) {
-			if (imagePreview()) {
-				URL.revokeObjectURL(imagePreview());
+			const preview = untrack(imagePreview);
+			if (preview) {
+				URL.revokeObjectURL(preview);
 			}
 			setImagePreview("");
 			setError("");
