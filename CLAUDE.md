@@ -12,8 +12,8 @@ Receipt Snap is a mobile-first SolidJS expense/receipt management app. Users pho
 pnpm dev              # Start Vite dev server
 pnpm build            # Type-check (tsc -b) then Vite build
 pnpm preview          # Preview production build
-pnpm check            # Biome lint + format check
-pnpm check:write      # Auto-fix lint + format issues
+pnpm check            # Biome lint + format check + type-check
+pnpm fix              # Auto-fix lint + format issues
 pnpm test             # Run Vitest (unit tests)
 pnpm test:watch       # Vitest in watch mode
 ```
@@ -26,7 +26,7 @@ pnpm test:watch       # Vitest in watch mode
 - **CSS Modules + Lightning CSS** — scoped styles, native CSS nesting, auto vendor prefixes
 - **Biome 2** — linter and formatter (no ESLint/Prettier)
 - **Vitest 4** — unit tests; `@solidjs/testing-library` + `happy-dom`
-- **pnpm** — package manager (Node 24 via Volta)
+- **pnpm** — package manager (Node 24, versions pinned via `devEngines`)
 
 ## Architecture
 
