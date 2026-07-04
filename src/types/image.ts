@@ -16,5 +16,4 @@ export interface CompressionResult {
   originalSize: number;
   compressedSize: number;
   ratio: number;
-  duration: number;
 }

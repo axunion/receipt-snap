@@ -11,7 +11,7 @@ export const FILE_SIZE_LIMITS = {
 // Amount validation settings
 export const AMOUNT_LIMITS = {
   MIN_AMOUNT: 0,
-  MAX_AMOUNT: 1_000_000, // 1,000,000円
+  MAX_AMOUNT: 1_000_000, // 1,000,000 yen
 } as const;
 
 // Date validation settings

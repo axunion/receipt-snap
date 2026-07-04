@@ -1,4 +1,5 @@
 import { Icon } from "@iconify-icon/solid";
+import { Match, Switch } from "solid-js";
 import { Button } from "@/components/ui";
 import type { TabType } from "@/types";
 import { NoImageTab } from "./NoImageTab";
@@ -104,28 +105,28 @@ export function UploadTabs(props: UploadTabsProps) {
       </div>
 
       <div class={styles.content}>
-        {props.activeTab === "camera" && (
-          <UploadButton
-            type="camera"
-            onClick={props.onCameraClick}
-            isCompressing={props.isCompressing}
-          />
-        )}
-
-        {props.activeTab === "file" && (
-          <UploadButton
-            type="file"
-            onClick={props.onFileClick}
-            isCompressing={props.isCompressing}
-          />
-        )}
-
-        {props.activeTab === "no-image" && (
-          <NoImageTab
-            value={props.noImageReason}
-            onInput={props.onNoImageReasonChange}
-          />
-        )}
+        <Switch>
+          <Match when={props.activeTab === "camera"}>
+            <UploadButton
+              type="camera"
+              onClick={props.onCameraClick}
+              isCompressing={props.isCompressing}
+            />
+          </Match>
+          <Match when={props.activeTab === "file"}>
+            <UploadButton
+              type="file"
+              onClick={props.onFileClick}
+              isCompressing={props.isCompressing}
+            />
+          </Match>
+          <Match when={props.activeTab === "no-image"}>
+            <NoImageTab
+              value={props.noImageReason}
+              onInput={props.onNoImageReasonChange}
+            />
+          </Match>
+        </Switch>
       </div>
     </div>
   );

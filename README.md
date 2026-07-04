@@ -43,8 +43,8 @@ In development mode the app runs with **mock data** by default — no backend ne
 pnpm dev          # Start Vite dev server
 pnpm build        # Type-check (tsc -b) then Vite build
 pnpm preview      # Preview production build
-pnpm check        # Biome lint + format check
-pnpm check:write  # Auto-fix lint + format issues
+pnpm check        # Biome lint + format check + type-check
+pnpm fix          # Auto-fix lint + format issues
 pnpm test         # Run Vitest (unit tests)
 pnpm test:watch   # Vitest in watch mode
 ```
@@ -233,7 +233,7 @@ src/
 ## Tech Stack
 
 - **SolidJS 1.9** — Fine-grained reactivity, no virtual DOM
-- **Vite 7** — Build tool
+- **Vite 8** — Build tool
 - **TypeScript 5.9** — Strict mode
 - **CSS Modules + Lightning CSS** — Scoped styles, native nesting, auto vendor prefixes
 - **Biome 2** — Linter and formatter

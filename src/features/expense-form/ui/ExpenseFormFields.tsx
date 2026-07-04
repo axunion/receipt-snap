@@ -16,6 +16,7 @@ interface FormFieldWrapperProps {
   label: string;
   icon?: string;
   required?: boolean;
+  inputId?: string;
   fieldErrors: () => FieldErrors;
   touchedFields: () => TouchedFields;
   children: JSX.Element;
@@ -28,7 +29,7 @@ function FormFieldWrapper(props: FormFieldWrapperProps) {
 
   return (
     <div>
-      <Label required={props.required} icon={props.icon}>
+      <Label for={props.inputId} required={props.required} icon={props.icon}>
         {props.label}
       </Label>
       {props.children}
@@ -54,10 +55,12 @@ export function NameField(props: NameFieldProps) {
       label="名前"
       icon="material-symbols:person-outline"
       required
+      inputId="name"
       fieldErrors={props.fieldErrors}
       touchedFields={props.touchedFields}
     >
       <Input
+        id="name"
         type="text"
         placeholder={props.onNameClick ? "名前を変更するにはクリック" : "名前"}
         value={props.value}
@@ -92,10 +95,12 @@ export function AmountField(props: AmountFieldProps) {
       label="金額"
       icon="material-symbols:payments-outline"
       required
+      inputId="amount"
       fieldErrors={props.fieldErrors}
       touchedFields={props.touchedFields}
     >
       <Input
+        id="amount"
         type="text"
         placeholder="0"
         value={props.value}
@@ -130,10 +135,12 @@ export function DateField(props: DateFieldProps) {
       label="支払日"
       icon="material-symbols:calendar-today-outline"
       required
+      inputId="date"
       fieldErrors={props.fieldErrors}
       touchedFields={props.touchedFields}
     >
       <Input
+        id="date"
         type="date"
         value={props.value}
         onInput={props.onInput}
@@ -159,8 +166,11 @@ interface NotesFieldProps {
 export function NotesField(props: NotesFieldProps) {
   return (
     <div>
-      <Label icon="material-symbols:note-outline">備考</Label>
+      <Label for="notes" icon="material-symbols:note-outline">
+        備考
+      </Label>
       <Textarea
+        id="notes"
         placeholder="備考があれば入力してください"
         value={props.value}
         onInput={props.onInput}
@@ -183,10 +193,12 @@ export function DetailsField(props: DetailsFieldProps) {
       label="内訳"
       icon="material-symbols:format-list-bulleted"
       required
+      inputId="details"
       fieldErrors={props.fieldErrors}
       touchedFields={props.touchedFields}
     >
       <Input
+        id="details"
         type="text"
         placeholder="内訳を入力"
         value={props.value}
@@ -220,11 +232,13 @@ export function DestinationField(props: DestinationFieldProps) {
       label="対象"
       icon="material-symbols:event-note-outline"
       required
+      inputId="destination"
       fieldErrors={props.fieldErrors}
       touchedFields={props.touchedFields}
     >
       <div class={styles.destinationField}>
         <Select
+          id="destination"
           options={props.options}
           value={props.value}
           onSelect={props.onSelect}

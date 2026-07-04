@@ -16,10 +16,20 @@ interface ModalProps {
 }
 
 export function Modal(props: ModalProps) {
+  let contentRef: HTMLDivElement | undefined;
+
   useBodyScrollLock(
     () => props.isOpen,
     () => props.disableBodyScroll !== false,
   );
+
+  createEffect(() => {
+    if (!props.isOpen) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    contentRef?.focus();
+    onCleanup(() => previouslyFocused?.focus());
+  });
 
   createEffect(() => {
     if (!props.isOpen || props.closeOnEscape === false || !props.onClose) {
@@ -36,8 +46,12 @@ export function Modal(props: ModalProps) {
     onCleanup(() => window.removeEventListener("keydown", handleKeyDown));
   });
 
-  const handleBackdropClick = () => {
-    if (props.closeOnBackdropClick !== false && props.onClose) {
+  const handleBackdropClick = (e: MouseEvent) => {
+    if (
+      e.target === e.currentTarget &&
+      props.closeOnBackdropClick !== false &&
+      props.onClose
+    ) {
       props.onClose();
     }
   };
@@ -45,19 +59,19 @@ export function Modal(props: ModalProps) {
   return (
     <Show when={props.isOpen}>
       <Portal>
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: backdrop click-to-close is a pointer-only affordance; keyboard users close via Escape (window listener above) */}
         <div
           class={props.backdropClass || styles.backdrop}
           onClick={handleBackdropClick}
-          onKeyDown={handleBackdropClick}
-          role="dialog"
-          aria-modal="true"
-          aria-label={props.ariaLabel}
+          role="presentation"
         >
           <div
+            ref={contentRef}
             class={props.contentClass || styles.content}
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-            role="document"
+            role="dialog"
+            aria-modal="true"
+            aria-label={props.ariaLabel}
+            tabindex="-1"
           >
             {props.children}
           </div>

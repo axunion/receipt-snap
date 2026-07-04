@@ -76,7 +76,6 @@ export function useReceiptImage(options: UseReceiptImageOptions) {
         originalSize: file.size,
         compressedSize: compressedFile.size,
         ratio: compressionRatio,
-        duration: 0,
       });
 
       setWarning("");

@@ -22,6 +22,4 @@ export function useRecaptcha() {
       scriptElement.remove();
     }
   });
-
-  return {};
 }

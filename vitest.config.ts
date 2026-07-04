@@ -13,12 +13,20 @@ export default defineConfig({
     environment: "happy-dom",
     globals: true,
     include: ["src/**/*.test.{ts,tsx}"],
+    setupFiles: ["./src/test-setup.ts"],
+    server: {
+      deps: {
+        // Ships raw .jsx that must go through vite-plugin-solid
+        inline: ["@iconify-icon/solid"],
+      },
+    },
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],
       include: ["src/**/*.{ts,tsx}"],
       exclude: [
         "src/**/*.test.{ts,tsx}",
+        "src/test-setup.ts",
         "src/types/**",
         "src/vite-env.d.ts",
         "src/index.tsx",

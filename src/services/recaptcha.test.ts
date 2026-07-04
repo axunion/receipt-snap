@@ -32,6 +32,24 @@ describe("getReCaptchaToken", () => {
     });
   });
 
+  it("rejects when the token request times out", async () => {
+    vi.useFakeTimers();
+    const executeMock = vi.fn();
+    (window as Window & { grecaptcha?: Window["grecaptcha"] }).grecaptcha = {
+      ready: () => {}, // callback never invoked — simulates a hung grecaptcha
+      execute: executeMock,
+    };
+
+    const tokenPromise = getReCaptchaToken();
+    const assertion = expect(tokenPromise).rejects.toThrow(
+      "reCAPTCHA token request timed out",
+    );
+    await vi.advanceTimersByTimeAsync(10_000);
+    await assertion;
+    expect(executeMock).not.toHaveBeenCalled();
+    vi.useRealTimers();
+  });
+
   it("rejects when execute fails", async () => {
     const executeError = new Error("execute failed");
     const executeMock = vi.fn().mockRejectedValue(executeError);

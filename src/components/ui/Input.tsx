@@ -1,14 +1,6 @@
-import { formatAmount } from "@/utils";
 import styles from "./Input.module.css";
 
-type InputType =
-  | "text"
-  | "email"
-  | "password"
-  | "number"
-  | "date"
-  | "file"
-  | "amount";
+type InputType = "text" | "email" | "password" | "number" | "date" | "file";
 
 interface InputProps {
   id?: string;
@@ -46,22 +38,13 @@ interface InputProps {
 export function Input(props: InputProps) {
   const handleInput = (e: Event) => {
     const target = e.currentTarget as HTMLInputElement;
-    let value = target.value;
-
-    if (props.type === "amount") {
-      value = formatAmount(value);
-      target.value = value;
-    }
-
-    props.onInput?.(value);
+    props.onInput?.(target.value);
   };
-
-  const inputType = props.type === "amount" ? "text" : (props.type ?? "text");
 
   return (
     <input
       id={props.id}
-      type={inputType}
+      type={props.type ?? "text"}
       placeholder={props.placeholder}
       value={props.value}
       onInput={handleInput}

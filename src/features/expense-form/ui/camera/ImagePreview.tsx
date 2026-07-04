@@ -1,4 +1,5 @@
 import { Icon } from "@iconify-icon/solid";
+import { Match, Show, Switch } from "solid-js";
 import { Button, Spinner } from "@/components/ui";
 import type { TabType } from "@/types";
 import styles from "./ImagePreview.module.css";
@@ -15,30 +16,35 @@ export function ImagePreview(props: ImagePreviewProps) {
   return (
     <div class={styles.wrapper}>
       <div class={styles.previewContainer}>
-        {props.isLoading ? (
-          <div class={styles.loadingBox}>
-            <Spinner size="md" class={styles.loadingSpinner} />
-            <p class={styles.loadingText}>画像を処理中...</p>
-          </div>
-        ) : props.imagePreview ? (
-          <img
-            src={props.imagePreview}
-            alt="レシートプレビュー"
-            class={styles.previewImage}
-          />
-        ) : (
-          <div class={styles.emptyBox}>
-            <Icon
-              icon="material-symbols:image-outline"
-              width="48"
-              height="48"
-              class={styles.emptyIcon}
+        <Switch
+          fallback={
+            <div class={styles.emptyBox}>
+              <Icon
+                icon="material-symbols:image-outline"
+                width="48"
+                height="48"
+                class={styles.emptyIcon}
+              />
+            </div>
+          }
+        >
+          <Match when={props.isLoading}>
+            <div class={styles.loadingBox}>
+              <Spinner size="md" class={styles.loadingSpinner} />
+              <p class={styles.loadingText}>画像を処理中...</p>
+            </div>
+          </Match>
+          <Match when={props.imagePreview}>
+            <img
+              src={props.imagePreview}
+              alt="レシートプレビュー"
+              class={styles.previewImage}
             />
-          </div>
-        )}
+          </Match>
+        </Switch>
       </div>
 
-      {!props.isLoading && (
+      <Show when={!props.isLoading}>
         <div class={styles.actions}>
           <Button onClick={props.onRetake} size="sm">
             {props.activeTab === "camera" ? "撮り直し" : "別の画像を選択"}
@@ -47,7 +53,7 @@ export function ImagePreview(props: ImagePreviewProps) {
             削除
           </Button>
         </div>
-      )}
+      </Show>
     </div>
   );
 }
