@@ -1,31 +1,31 @@
 .backdrop {
-	position: fixed;
-	inset: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 50;
-	background-color: rgb(0 0 0 / 0.5);
-	backdrop-filter: blur(4px);
-	padding: 1rem;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  background-color: rgb(0 0 0 / 0.5);
+  backdrop-filter: blur(4px);
+  padding: 1rem;
 }
 
 .content {
-	background-color: white;
-	border-radius: var(--radius-lg);
-	padding: 2rem 1.5rem;
-	max-width: 24rem;
-	width: 100%;
-	margin: 0 1rem;
-	animation: fadeIn 0.2s ease-out;
+  background-color: white;
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.5rem;
+  max-width: 24rem;
+  width: 100%;
+  margin: 0 1rem;
+  animation: fadeIn 0.2s ease-out;
 }
 
 @keyframes fadeIn {
-	from {
-		opacity: 0;
-	}
+  from {
+    opacity: 0;
+  }
 
-	to {
-		opacity: 1;
-	}
+  to {
+    opacity: 1;
+  }
 }

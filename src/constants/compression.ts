@@ -1,37 +1,37 @@
 // Image resolution settings
 export const RESOLUTION_PRESETS = {
-	RECEIPT: { width: 900, height: 1600 },
-	DEFAULT: { width: 800, height: 1200 },
+  RECEIPT: { width: 900, height: 1600 },
+  DEFAULT: { width: 800, height: 1200 },
 } as const;
 
 // JPEG quality settings
 export const QUALITY_PRESETS = {
-	STANDARD: 0.7,
+  STANDARD: 0.7,
 } as const;
 
 // File format support
 export const SUPPORTED_FORMATS = {
-	OUTPUT_FORMAT: "image/jpeg" as const,
-	SUPPORTED_INPUTS: [
-		"image/jpeg",
-		"image/jpg",
-		"image/png",
-		"image/webp",
-		"image/heic",
-		"image/heif",
-	] as const,
-	FILE_EXTENSIONS: [
-		".jpg",
-		".jpeg",
-		".png",
-		".webp",
-		".heic",
-		".heif",
-	] as const,
+  OUTPUT_FORMAT: "image/jpeg" as const,
+  SUPPORTED_INPUTS: [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/webp",
+    "image/heic",
+    "image/heif",
+  ] as const,
+  FILE_EXTENSIONS: [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".webp",
+    ".heic",
+    ".heif",
+  ] as const,
 } as const;
 
 // Canvas settings
 export const CANVAS_SETTINGS = {
-	BACKGROUND_COLOR: "#ffffff",
-	SMOOTHING_QUALITY: "high" as ImageSmoothingQuality,
+  BACKGROUND_COLOR: "#ffffff",
+  SMOOTHING_QUALITY: "high" as ImageSmoothingQuality,
 } as const;

@@ -1,20 +1,20 @@
 export interface CompressionOptions {
-	maxWidth?: number;
-	maxHeight?: number;
-	quality?: number;
-	format?: "image/jpeg" | "image/webp" | "image/png";
+  maxWidth?: number;
+  maxHeight?: number;
+  quality?: number;
+  format?: "image/jpeg" | "image/webp" | "image/png";
 }
 
 export interface ImageValidationResult {
-	isValid: boolean;
-	error?: string;
-	warning?: string;
-	info?: string;
+  isValid: boolean;
+  error?: string;
+  warning?: string;
+  info?: string;
 }
 
 export interface CompressionResult {
-	originalSize: number;
-	compressedSize: number;
-	ratio: number;
-	duration: number;
+  originalSize: number;
+  compressedSize: number;
+  ratio: number;
+  duration: number;
 }

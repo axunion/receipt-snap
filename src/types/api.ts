@@ -1,29 +1,29 @@
 export type DestinationData = {
-	value: string;
-	label: string;
+  value: string;
+  label: string;
 };
 
 export type DestinationSuccessResponse = {
-	result: "done";
-	data: DestinationData[];
+  result: "done";
+  data: DestinationData[];
 };
 
 export type DestinationErrorResponse = {
-	result: "error";
-	error: string;
+  result: "error";
+  error: string;
 };
 
 export type DestinationResponse =
-	| DestinationSuccessResponse
-	| DestinationErrorResponse;
+  | DestinationSuccessResponse
+  | DestinationErrorResponse;
 
 export type SubmitSuccessResponse = {
-	result: "done";
+  result: "done";
 };
 
 export type SubmitErrorResponse = {
-	result: "error";
-	error: string;
+  result: "error";
+  error: string;
 };
 
 export type SubmitResponse = SubmitSuccessResponse | SubmitErrorResponse;

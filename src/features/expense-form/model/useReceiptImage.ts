@@ -1,158 +1,158 @@
 import { createEffect, createSignal, onCleanup, untrack } from "solid-js";
 import type { CompressionResult, TabType } from "@/types";
 import {
-	calculateRatio,
-	compressImage,
-	formatFileSize,
-	getCompressionOptions,
-	validateImageFile,
+  calculateRatio,
+  compressImage,
+  formatFileSize,
+  getCompressionOptions,
+  validateImageFile,
 } from "@/utils";
 
 interface UseReceiptImageOptions {
-	selectedFile: () => File | null;
-	onImageCapture?: (file: File) => void;
-	onReceiptRemoved?: () => void;
+  selectedFile: () => File | null;
+  onImageCapture?: (file: File) => void;
+  onReceiptRemoved?: () => void;
 }
 
 export function useReceiptImage(options: UseReceiptImageOptions) {
-	const [imagePreview, setImagePreview] = createSignal("");
-	const [error, setError] = createSignal("");
-	const [warning, setWarning] = createSignal("");
-	const [activeTab, setActiveTab] = createSignal<TabType>("camera");
-	const [info, setInfo] = createSignal("");
+  const [imagePreview, setImagePreview] = createSignal("");
+  const [error, setError] = createSignal("");
+  const [warning, setWarning] = createSignal("");
+  const [activeTab, setActiveTab] = createSignal<TabType>("camera");
+  const [info, setInfo] = createSignal("");
 
-	const [isCompressing, setIsCompressing] = createSignal(false);
-	const [compressionInfo, setCompressionInfo] =
-		createSignal<CompressionResult | null>(null);
+  const [isCompressing, setIsCompressing] = createSignal(false);
+  const [compressionInfo, setCompressionInfo] =
+    createSignal<CompressionResult | null>(null);
 
-	// Clear preview when the selected file is reset from outside the camera UI.
-	// imagePreview is read with untrack so it is not a reactive dependency —
-	// this effect must only re-run when selectedFile changes, not on every
-	// preview update (which would cause a redundant second execution).
-	createEffect(() => {
-		if (options.selectedFile() === null) {
-			const preview = untrack(imagePreview);
-			if (preview) {
-				URL.revokeObjectURL(preview);
-			}
-			setImagePreview("");
-			setError("");
-			setWarning("");
-			setInfo("");
-			setCompressionInfo(null);
-		}
-	});
+  // Clear preview when the selected file is reset from outside the camera UI.
+  // imagePreview is read with untrack so it is not a reactive dependency —
+  // this effect must only re-run when selectedFile changes, not on every
+  // preview update (which would cause a redundant second execution).
+  createEffect(() => {
+    if (options.selectedFile() === null) {
+      const preview = untrack(imagePreview);
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+      setImagePreview("");
+      setError("");
+      setWarning("");
+      setInfo("");
+      setCompressionInfo(null);
+    }
+  });
 
-	const handleFileSelect = async (file: File) => {
-		setError("");
-		setWarning("");
-		setInfo("");
-		setCompressionInfo(null);
+  const handleFileSelect = async (file: File) => {
+    setError("");
+    setWarning("");
+    setInfo("");
+    setCompressionInfo(null);
 
-		const validation = validateImageFile(file);
-		if (!validation.isValid) {
-			setError(validation.error || "Invalid file");
-			return;
-		}
+    const validation = validateImageFile(file);
+    if (!validation.isValid) {
+      setError(validation.error || "Invalid file");
+      return;
+    }
 
-		if (validation.warning) setWarning(validation.warning);
-		if (validation.info) setInfo(validation.info);
+    if (validation.warning) setWarning(validation.warning);
+    if (validation.info) setInfo(validation.info);
 
-		setIsCompressing(true);
+    setIsCompressing(true);
 
-		try {
-			const baseOptions = getCompressionOptions();
-			const compressedFile = await compressImage(file, baseOptions);
+    try {
+      const baseOptions = getCompressionOptions();
+      const compressedFile = await compressImage(file, baseOptions);
 
-			const compressionRatio = calculateRatio(file.size, compressedFile.size);
+      const compressionRatio = calculateRatio(file.size, compressedFile.size);
 
-			if (import.meta.env.DEV) {
-				console.log(
-					`Image compression: ${formatFileSize(file.size)} -> ${formatFileSize(compressedFile.size)} (${compressionRatio}% reduction)`,
-				);
-			}
+      if (import.meta.env.DEV) {
+        console.log(
+          `Image compression: ${formatFileSize(file.size)} -> ${formatFileSize(compressedFile.size)} (${compressionRatio}% reduction)`,
+        );
+      }
 
-			setCompressionInfo({
-				originalSize: file.size,
-				compressedSize: compressedFile.size,
-				ratio: compressionRatio,
-				duration: 0,
-			});
+      setCompressionInfo({
+        originalSize: file.size,
+        compressedSize: compressedFile.size,
+        ratio: compressionRatio,
+        duration: 0,
+      });
 
-			setWarning("");
+      setWarning("");
 
-			options.onImageCapture?.(compressedFile);
+      options.onImageCapture?.(compressedFile);
 
-			// Create object URL for preview (memory efficient vs DataURL)
-			if (imagePreview()) {
-				URL.revokeObjectURL(imagePreview());
-			}
-			const objectUrl = URL.createObjectURL(compressedFile);
-			setImagePreview(objectUrl);
-		} catch (compressionError) {
-			if (import.meta.env.DEV) {
-				console.error("Image compression error:", compressionError);
-			}
+      // Create object URL for preview (memory efficient vs DataURL)
+      if (imagePreview()) {
+        URL.revokeObjectURL(imagePreview());
+      }
+      const objectUrl = URL.createObjectURL(compressedFile);
+      setImagePreview(objectUrl);
+    } catch (compressionError) {
+      if (import.meta.env.DEV) {
+        console.error("Image compression error:", compressionError);
+      }
 
-			// Handle HEIC-specific errors
-			if (compressionError instanceof Error) {
-				if (
-					compressionError.message.includes("HEIC file format not supported")
-				) {
-					setError(
-						"この環境ではHEIC形式をサポートしていません。JPEG・PNG形式の画像をご利用ください。",
-					);
-				} else if (compressionError.message.includes("Failed to load image")) {
-					setError(
-						"画像の読み込みに失敗しました。JPEG・PNG形式の画像をご利用ください。",
-					);
-				} else {
-					setError("画像の処理に失敗しました。別の画像をお試しください。");
-				}
-			} else {
-				setError("予期しないエラーが発生しました。");
-			}
-		} finally {
-			setIsCompressing(false);
-		}
-	};
+      // Handle HEIC-specific errors
+      if (compressionError instanceof Error) {
+        if (
+          compressionError.message.includes("HEIC file format not supported")
+        ) {
+          setError(
+            "この環境ではHEIC形式をサポートしていません。JPEG・PNG形式の画像をご利用ください。",
+          );
+        } else if (compressionError.message.includes("Failed to load image")) {
+          setError(
+            "画像の読み込みに失敗しました。JPEG・PNG形式の画像をご利用ください。",
+          );
+        } else {
+          setError("画像の処理に失敗しました。別の画像をお試しください。");
+        }
+      } else {
+        setError("予期しないエラーが発生しました。");
+      }
+    } finally {
+      setIsCompressing(false);
+    }
+  };
 
-	const clearImage = () => {
-		if (imagePreview()) {
-			URL.revokeObjectURL(imagePreview());
-		}
-		setImagePreview("");
-		setError("");
-		setWarning("");
-		setInfo("");
-		setCompressionInfo(null);
-	};
+  const clearImage = () => {
+    if (imagePreview()) {
+      URL.revokeObjectURL(imagePreview());
+    }
+    setImagePreview("");
+    setError("");
+    setWarning("");
+    setInfo("");
+    setCompressionInfo(null);
+  };
 
-	const handleTabChange = (tab: TabType) => {
-		setActiveTab(tab);
-		if (tab === "no-image") {
-			options.onReceiptRemoved?.();
-			clearImage();
-		}
-	};
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab);
+    if (tab === "no-image") {
+      options.onReceiptRemoved?.();
+      clearImage();
+    }
+  };
 
-	// Cleanup on component unmount to prevent memory leaks
-	onCleanup(() => {
-		if (imagePreview()) {
-			URL.revokeObjectURL(imagePreview());
-		}
-	});
+  // Cleanup on component unmount to prevent memory leaks
+  onCleanup(() => {
+    if (imagePreview()) {
+      URL.revokeObjectURL(imagePreview());
+    }
+  });
 
-	return {
-		imagePreview,
-		error,
-		warning,
-		info,
-		activeTab,
-		isCompressing,
-		compressionInfo,
-		setActiveTab: handleTabChange,
-		handleFileSelect,
-		clearImage,
-	};
+  return {
+    imagePreview,
+    error,
+    warning,
+    info,
+    activeTab,
+    isCompressing,
+    compressionInfo,
+    setActiveTab: handleTabChange,
+    handleFileSelect,
+    clearImage,
+  };
 }

@@ -1,75 +1,75 @@
 .wrapper {
-	text-align: center;
+  text-align: center;
 }
 
 .iconWrapper {
-	width: 4rem;
-	height: 4rem;
-	background-color: var(--color-success-50);
-	border-radius: var(--radius-full);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0 auto 1rem;
-	animation: bounce 1s infinite;
+  width: 4rem;
+  height: 4rem;
+  background-color: var(--color-success-50);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  animation: bounce 1s infinite;
 }
 
 @keyframes bounce {
-	0%,
-	100% {
-		transform: translateY(-25%);
-		animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-	}
+  0%,
+  100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
 
-	50% {
-		transform: translateY(0);
-		animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-	}
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
 }
 
 .icon {
-	color: var(--color-success-600);
+  color: var(--color-success-600);
 }
 
 .title {
-	font-weight: 600;
-	margin-bottom: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
 }
 
 .summaryCard {
-	background: linear-gradient(
-		to right,
-		var(--color-success-50),
-		var(--color-emerald-50)
-	);
-	border-radius: var(--radius-lg);
-	padding: 1rem;
-	margin-bottom: 1rem;
+  background: linear-gradient(
+    to right,
+    var(--color-success-50),
+    var(--color-emerald-50)
+  );
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .summaryContent {
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-	text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: center;
 }
 
 .amount {
-	font-size: 1.125rem;
-	font-weight: 700;
-	color: var(--color-success-800);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-success-800);
 }
 
 .details {
-	display: flex;
-	flex-direction: column;
-	gap: 0.75rem;
-	font-size: 0.875rem;
-	background-color: rgb(255 255 255 / 0.8);
-	border-radius: var(--radius-md);
-	padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  background-color: rgb(255 255 255 / 0.8);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
 }
 
 .destination {
-	font-weight: 700;
+  font-weight: 700;
 }

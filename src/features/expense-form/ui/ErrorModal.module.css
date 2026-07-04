@@ -1,50 +1,50 @@
 .wrapper {
-	text-align: center;
+  text-align: center;
 }
 
 .iconWrapper {
-	width: 4rem;
-	height: 4rem;
-	background-color: var(--color-error-50);
-	border-radius: var(--radius-full);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	margin: 0 auto 1rem;
-	animation: bounce 1s infinite;
+  width: 4rem;
+  height: 4rem;
+  background-color: var(--color-error-50);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  animation: bounce 1s infinite;
 }
 
 @keyframes bounce {
-	0%,
-	100% {
-		transform: translateY(-25%);
-		animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-	}
+  0%,
+  100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
 
-	50% {
-		transform: translateY(0);
-		animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-	}
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
 }
 
 .icon {
-	color: var(--color-error-600);
+  color: var(--color-error-600);
 }
 
 .title {
-	font-weight: 600;
-	margin-bottom: 0.75rem;
-	color: var(--color-error-800);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--color-error-800);
 }
 
 .errorBox {
-	background-color: var(--color-error-50);
-	border-radius: var(--radius-lg);
-	padding: 1rem;
-	margin-bottom: 1rem;
+  background-color: var(--color-error-50);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
 
 .errorText {
-	font-size: 0.875rem;
-	color: var(--color-error-700);
+  font-size: 0.875rem;
+  color: var(--color-error-700);
 }
