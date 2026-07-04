@@ -1,10 +1,10 @@
-# CLAUDE.md
+# AGENTS.md
 
-Guidance for Claude Code in this repository. Rules are ordered by importance; when in
-doubt, the earlier section wins.
+Guidance for AI coding agents in this repository. Rules are ordered by importance; when
+in doubt, the earlier section wins.
 
-> **Keep in sync**: `AGENTS.md` is a mirror of this file. Apply any edit made here to
-> `AGENTS.md` as well.
+> **Keep in sync**: `CLAUDE.md` is a mirror of this file. Apply any edit made here to
+> `CLAUDE.md` as well.
 
 ## Project Overview
 
