@@ -7,9 +7,6 @@ export default defineConfig({
   css: {
     transformer: "lightningcss",
   },
-  build: {
-    cssMinify: "lightningcss",
-  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

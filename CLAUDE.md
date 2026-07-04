@@ -21,7 +21,7 @@ pnpm test:watch       # Vitest in watch mode
 ## Tech Stack
 
 - **SolidJS 1.9** — fine-grained reactivity (NOT React; no virtual DOM, no re-renders)
-- **Vite 7** — build tool
+- **Vite 8** — build tool (Rolldown-based bundler)
 - **TypeScript 5.9** — strict mode enabled
 - **CSS Modules + Lightning CSS** — scoped styles, native CSS nesting, auto vendor prefixes
 - **Biome 2** — linter and formatter (no ESLint/Prettier)
