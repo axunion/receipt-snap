@@ -97,7 +97,9 @@ Format:
 - **CSS Modules + Lightning CSS** — scoped styles, native CSS nesting, auto vendor prefixes
 - **Biome 2** — linter and formatter (no ESLint/Prettier)
 - **Vitest 4** — unit tests; `@solidjs/testing-library` + `happy-dom`
-- **pnpm** — package manager (Node 24, versions pinned via `devEngines`)
+- **pnpm** — package manager (exact pnpm version and Node `^24` pinned via `devEngines`
+  with `onFail: "download"`; `.node-version` pins Node for Cloudflare Pages; bump pnpm
+  with `pnpm self-update` — see README "Version management")
 
 ## Architecture
 

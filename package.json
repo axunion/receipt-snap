@@ -8,12 +8,12 @@
     "runtime": {
       "name": "node",
       "version": "^24",
-      "onFail": "warn"
+      "onFail": "download"
     },
     "packageManager": {
       "name": "pnpm",
-      "version": "^11",
-      "onFail": "warn"
+      "version": "11.9.0",
+      "onFail": "download"
     }
   },
   "scripts": {

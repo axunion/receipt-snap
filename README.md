@@ -18,8 +18,7 @@ The frontend is **backend-agnostic** — any server that accepts the JSON payloa
 
 ### Prerequisites
 
-- Node.js 24 (via [Volta](https://volta.sh/) or directly)
-- pnpm
+- [pnpm](https://pnpm.io/installation) — any recent version; it switches to the project's pinned version automatically (see [Version management](#version-management))
 
 ### Setup
 
@@ -36,6 +35,22 @@ pnpm dev
 ```
 
 In development mode the app runs with **mock data** by default — no backend needed.
+
+### Version management
+
+Tool versions are pinned in the repository and applied automatically — no version
+manager (nvm, Volta, corepack) is required:
+
+- **pnpm** — pinned to an exact version in `devEngines.packageManager` with
+  `onFail: "download"`: whichever pnpm you have installed transparently downloads and
+  runs the pinned version. Update the pin with `pnpm self-update`. The version must be
+  exact (not a range) because Cloudflare Pages' build image only accepts an exact
+  semver there.
+- **Node.js** — declared as `^24` in `devEngines.runtime` with `onFail: "download"`:
+  pnpm resolves it to an exact version (recorded with a checksum in `pnpm-lock.yaml`)
+  and runs all package scripts with it.
+- **`.node-version`** — selects Node 24 for Cloudflare Pages builds, which read this
+  file (or `NODE_VERSION`) instead of `devEngines`.
 
 ## Commands
 
